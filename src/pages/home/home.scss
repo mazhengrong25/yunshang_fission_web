@@ -1,0 +1,53 @@
+.home {
+  &__banner {
+    position: relative;
+    height: 540px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    &__background {
+      background: #0f1d42;
+      opacity: 0.6;
+      position: absolute;
+      z-index: 0;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
+    }
+    &__main {
+      max-width: 1200px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      &__ticketBox {
+        width: 712px;
+        height: 460px;
+        background: #ffffff;
+        border-radius: 5px;
+        margin-right: 16px;
+      }
+      &__toolBox {
+        width: 472px;
+        height: 460px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        flex-direction: column;
+        &__weatherCalendar {
+          background: #ffffff;
+          border-radius: 5px;
+          height: 240px;
+          width: 100%;
+        }
+        &__notice {
+          background: #ffffff;
+          border-radius: 5px;
+          height: 204px;
+          width: 100%;
+        }
+      }
+    }
+  }
+}

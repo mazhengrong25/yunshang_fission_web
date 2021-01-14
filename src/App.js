@@ -1,24 +1,29 @@
-import logo from './logo.svg';
-import './App.css';
+/*
+ * @Description: 主模块
+ * @Author: wish.WuJunLong
+ * @Date: 2021-01-11 15:03:54
+ * @LastEditTime: 2021-01-12 17:42:59
+ * @LastEditors: wish.WuJunLong
+ */
+import React, { Fragment } from "react";
+import Login from "./pages/login";
+import Home from "./pages/home";
+import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
+
+import './global.scss'
 
 function App() {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Fragment>
+      <HashRouter>
+        <Switch>
+          <Route path="/login" component={Login} />
+          <Route path="/home" component={Home} />
+          <Route exact path="/" component={Home} />
+          <Redirect to={"/home"} />
+        </Switch>
+      </HashRouter>
+    </Fragment>
   );
 }
 

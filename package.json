@@ -6,13 +6,19 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "antd": "^4.10.1",
+    "axios": "^0.21.1",
+    "core-js": "^3.8.2",
+    "node-sass": "4.14.1",
     "react": "^17.0.1",
+    "react-app-polyfill": "^2.0.0",
     "react-dom": "^17.0.1",
+    "react-router-dom": "^5.2.0",
     "react-scripts": "4.0.1",
     "web-vitals": "^0.2.4"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "serve": "set BROWSER=none&&react-scripts start",
     "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
@@ -27,12 +33,16 @@
     "production": [
       ">0.2%",
       "not dead",
-      "not op_mini all"
+      "not op_mini all",
+      "ie > 9"
     ],
     "development": [
       "last 1 chrome version",
       "last 1 firefox version",
-      "last 1 safari version"
+      "last 1 safari version",
+      "ie > 9"
     ]
-  }
+  },
+  "devDependencies": {},
+  "proxy": "http://192.168.0.187"
 }

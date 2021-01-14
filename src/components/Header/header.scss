@@ -1,0 +1,105 @@
+.header {
+  &__top {
+    height: 30px;
+    background: #3a3b50;
+
+    &__message {
+      height: 100%;
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      &__left {
+        font-size: 12px;
+        font-weight: 400;
+        line-height: 16px;
+        color: #ffffff;
+      }
+      &__right {
+        font-size: 12px;
+        font-weight: bold;
+        line-height: 16px;
+        color: #ffffff;
+        letter-spacing: 2px;
+        display: inline-flex;
+        align-items: center;
+        &::before {
+          content: "";
+          width: 10px;
+          height: 13px;
+          display: inline-block;
+          background: url("../../static/header_phone.png") no-repeat center center;
+          background-size: contain;
+          margin-right: 8px;
+        }
+      }
+    }
+  }
+  &__nav {
+    height: 80px;
+    background: #ffffff;
+    box-shadow: 0px 3px 10px #e8eaee;
+    &__main {
+      max-width: 1200px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 100%;
+      &__logo {
+        width: 153px;
+        height: 60px;
+        object-fit: contain;
+        background: url("../../static/logo.png") no-repeat center center;
+        background-size: contain;
+        cursor: pointer;
+      }
+      &__box {
+        display: inline-flex;
+        align-items: center;
+        height: 100%;
+        &__item {
+          height: 100%;
+          padding: 0 30px;
+          margin: 0 6px;
+          display: inline-flex;
+          align-items: center;
+          font-size: 14px;
+          font-weight: 400;
+          color: #999999;
+          letter-spacing: 2px;
+          cursor: pointer;
+          &.active {
+            font-weight: bold;
+            color: #333;
+          }
+          .ant-badge-count {
+            background: #f36969;
+            box-shadow: 0px 3px 6px rgba(243, 105, 105, 0.3);
+            font-size: 12px;
+            font-weight: 400;
+            color: #ffffff;
+          }
+        }
+        &__userInfo {
+          height: 100%;
+          margin-left: 6px;
+          cursor: pointer;
+
+          font-size: 14px;
+          font-weight: 400;
+          color: #999999;
+          letter-spacing: 2px;
+          &__userBtn {
+            height: 100%;
+            display: inline-flex;
+            align-items: center;
+
+            padding: 0 30px;
+          }
+        }
+      }
+    }
+  }
+}

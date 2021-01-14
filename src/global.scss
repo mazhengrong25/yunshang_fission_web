@@ -1,0 +1,45 @@
+@import "~antd/dist/antd.css";
+
+// antd 样式替换
+
+// 单选按钮
+.ant-radio {
+  .ant-radio-inner {
+    border-color: #afafb5;
+    width: 20px;
+    height: 20px;
+    &::after {
+      top: 5px !important;
+      left: 5px !important;
+      background-color: #fff;
+    }
+  }
+  &.ant-radio-checked {
+    .ant-radio-inner {
+      border-color: #5b7cf0;
+      background-color: #5b7cf0;
+    }
+  }
+}
+
+// 选择器
+.ant-select-single {
+  .ant-select-selector {
+    border: 1px solid #afafb5 !important;
+    height: 40px !important;
+    border-radius: 5px !important;
+    .ant-select-selection-search {
+      .ant-select-selection-search-input {
+        height: 40px !important;
+      }
+    }
+    .ant-select-selection-item,.ant-select-selection-placeholder {
+      line-height: 40px;
+    }
+  }
+  &.ant-select-open {
+    .ant-select-selector {
+      border: 1px solid #5b7cf0 !important;
+    }
+  }
+}
