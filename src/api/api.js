@@ -2,8 +2,13 @@
  * @Description: api封装
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-02-03 17:09:19
+<<<<<<< HEAD
+ * @LastEditTime: 2021-02-04 10:47:28
  * @LastEditors: mzr
+=======
+ * @LastEditTime: 2021-02-04 10:29:15
+ * @LastEditors: wish.WuJunLong
+>>>>>>> 2db26256956680878110125d79af8c0ee5288333
  */
 import axios from "axios";
 
@@ -38,7 +43,7 @@ let httpCode = {
 // http request 拦截器
 instance.interceptors.request.use(
   (config) => {
-    // hide = message.loading({content: 'Loading...', duration: 0});
+    hide = message.loading({content: 'Loading...', duration: 0});
     if (config.url.indexOf("Authenticate") > 0) {
       return config;
     }

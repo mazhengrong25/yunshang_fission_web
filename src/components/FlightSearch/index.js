@@ -2,7 +2,7 @@
  * @Description: 机票搜索
  * @Author: wish.WuJunLong
  * @Date: 2021-01-12 14:07:43
- * @LastEditTime: 2021-01-14 09:21:41
+ * @LastEditTime: 2021-02-03 15:47:46
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -24,7 +24,7 @@ export default class index extends Component {
       flightType: 0, // 机票查询状态 0 单程，1 往返，2 多程
 
       searchCity: {
-        label: "",
+        startAir: "",
       }, // 城市搜索
       searchCityList: [], // 城市搜索框返回值列表
 
@@ -111,57 +111,133 @@ export default class index extends Component {
     let data = {
       range: "CN",
     };
+
     await this.$axios.get("/api/getAirList", { params: data }).then((res) => {
       let cityAirList = res;
       let hotCity = [];
-      // 热门城市组装
-      if (hotCity.length < 1) {
-        cityAirList.forEach((item) => {
-          if (
-            item.air_port_name === "首都" ||
-            item.city_name === "重庆" ||
-            item.city_name === "成都" ||
-            item.city_name === "广州" ||
-            item.city_name === "上海" ||
-            item.city_name === "杭州" ||
-            item.city_name === "乌鲁木齐" ||
-            item.city_name === "深圳"
-          ) {
-            hotCity.push(item);
-          }
-        });
-      }
       let cityList = [];
+      // 热门城市组装
+      cityAirList.forEach((item) => {
+        if (
+          item.air_port_name === "首都" ||
+          item.city_name === "重庆" ||
+          item.city_name === "成都" ||
+          item.city_name === "广州" ||
+          item.city_name === "上海" ||
+          item.city_name === "杭州" ||
+          item.city_name === "乌鲁木齐" ||
+          item.city_name === "深圳"
+        ) {
+          hotCity.push(item);
+        }
+      });
+
+      // 城市首字母组装
+      let unitCityList = [];
       this.state.cityUnitList.forEach((item, index) => {
-        cityList.push({
-          unit: item,
+        unitCityList.push({
+          unit: "",
           data: [],
         });
-        res.forEach((oitem) => {
+        cityAirList.forEach((oitem) => {
           if (
             String(oitem.city_ename[0]).toUpperCase() === item &&
-            oitem.air_port !== "MY2"
+            oitem.air_port !== "MY2" &&
+            item
           ) {
-            // cityList[index]["unit"] = item;
-            cityList[index]["data"].push(oitem);
+            unitCityList[index]["unit"] = item;
+            unitCityList[index]["data"].push(oitem);
           }
         });
-
-        // let hash = {};
-        // cityList[index]["data"] = cityList[index]["data"].reduce((oitem, next) => {
-        //   hash[next.city_name] ? "" : (hash[next.city_name] = true && oitem.push(next));
-        //   return oitem;
-        // }, []);
       });
+
+      console.log(unitCityList);
+
+      // 组装首字母数组
+      let A = "ABCDEF";
+      let G = "GHIJ";
+      let K = "KLMN";
+      let P = "PQRSTUVW";
+      let X = "XYZ";
+
+      let AList = [];
+      let GList = [];
+      let KList = [];
+      let PList = [];
+      let XList = [];
+
+      unitCityList.forEach((item, index) => {
+        if (index < A.length && item.unit) {
+          AList.push(item);
+        }
+        if (index < G.length + A.length && index >= A.length && item.unit) {
+          GList.push(item);
+        }
+        if (
+          index < K.length + A.length + G.length &&
+          index >= G.length + A.length &&
+          item.unit
+        ) {
+          KList.push(item);
+        }
+        if (
+          index <= P.length + A.length + G.length + K.length &&
+          index >= K.length + A.length + G.length &&
+          item.unit
+        ) {
+          PList.push(item);
+        }
+        if (
+          index <= X.length + A.length + G.length + K.length + P.length &&
+          index > P.length + A.length + G.length + K.length &&
+          item.unit
+        ) {
+          XList.push(item);
+        }
+      });
+
+      cityList.push(
+        {
+          unit: A,
+          data: AList,
+        },
+        {
+          unit: G,
+          data: GList,
+        },
+        {
+          unit: K,
+          data: KList,
+        },
+        {
+          unit: P,
+          data: PList,
+        },
+        {
+          unit: X,
+          data: XList,
+        }
+      );
 
       this.setState({
-        cityList,
-        hotCity,
+        hotCity: hotCity,
+        cityList: cityList,
       });
 
-      console.log(hotCity);
-      console.log(cityList);
+      console.log(this.state.cityList);
     });
+  }
+
+  // 获取选中城市数据
+  selectAir(val,label) {
+    let data = this.state.searchCity
+
+    data[label] = val.city_name + `(${val.city_code})`
+
+    this.setState({
+      searchCity: data,
+      cityModal: false 
+    })
   }
 
   render() {
@@ -225,14 +301,14 @@ export default class index extends Component {
                   onSearch={this.selectCitySearch}
                   onChange={this.selectFromCity}
                   notFoundContent={null}
-                  value={{ value: this.state.searchCity.label }}
+                  value={{ value: this.state.searchCity.startAir }}
                   onBlur={this.clearFromCity}
                   onFocus={this.openCityModal}
                 >
                   {this.state.searchCityList.map((e) => (
                     <Option
                       value={e.city_code}
-                      label={e.province + `(${e.city_code})`}
+                      label={e.city_name + `(${e.city_code})`}
                       key={e.id}
                     >
                       <div className="search_city_message">
@@ -271,25 +347,38 @@ export default class index extends Component {
                         <TabPane tab="热门城市" key="hot">
                           <div className="city_list_box">
                             {this.state.hotCity.map((item) => (
-                              <div className="city_list" key={item.id}>
+                              <div
+                                className="city_list"
+                                key={item.id}
+                                onClick={() => this.selectAir(item,'startAir')}
+                              >
                                 {item.city_name}
                               </div>
                             ))}
                           </div>
                         </TabPane>
-                        <TabPane tab="ABCD" key="ABCD">
-                          <div className="city_list_box">
-                            {this.state.cityList.map((item) => (
-                              <div className="list_item">
-                                <div className="item_unit"></div>
-                                <div className="city_list"></div>
-                              </div>
-                            ))}
-                          </div>
-                        </TabPane>
-                        <TabPane tab="Tab 3" key="3">
-                          Content of Tab 3
-                        </TabPane>
+
+                        {this.state.cityList.map((item) => (
+                          <TabPane tab={item.unit} key={item.unit}>
+                            <div className="city_list_box">
+                              {item.data.map((oitem) => (
+                                <div key={oitem.unit}>
+                                  <span>{oitem.unit}</span>
+
+                                  {oitem.data.map((pitem) => (
+                                    <div
+                                      className="city_list"
+                                      key={pitem.id}
+                                      onClick={() => this.selectAir(pitem,'startAir')}
+                                    >
+                                      {pitem.city_name}
+                                    </div>
+                                  ))}
+                                </div>
+                              ))}
+                            </div>
+                          </TabPane>
+                        ))}
                       </Tabs>
                     </div>
                   </div>

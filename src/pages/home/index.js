@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:08:05
- * @LastEditTime: 2021-01-12 17:46:29
+ * @LastEditTime: 2021-02-04 10:45:59
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -25,6 +25,16 @@ export default class index extends Component {
       ],
     };
   }
+
+  componentDidMount(){
+
+  }
+
+  // 获取公告列表
+  getNoticeList(){
+    this.$axios.get('/api/notice')
+  }
+
   render() {
     return (
       <div className="home">
