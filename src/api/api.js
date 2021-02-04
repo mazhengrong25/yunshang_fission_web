@@ -2,7 +2,7 @@
  * @Description: api封装
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-01-12 17:53:50
+ * @LastEditTime: 2021-02-04 10:29:15
  * @LastEditors: wish.WuJunLong
  */
 import axios from "axios";
@@ -39,12 +39,12 @@ let httpCode = {
 instance.interceptors.request.use(
   (config) => {
     hide = message.loading({content: 'Loading...', duration: 0});
-    // if (config.url.indexOf("Authenticate") > 0) {
-    //   return config;
-    // }
+    if (config.url.indexOf("Authenticate") > 0) {
+      return config;
+    }
 
-    // const token = localStorage.getItem("token");
-    // token && (config.headers.Authorization = "Bearer " + token);
+    const token = localStorage.getItem("token");
+    token && (config.headers.Authorization = token);
     return config;
   },
   (error) => {
