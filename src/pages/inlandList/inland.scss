@@ -1,0 +1,212 @@
+.inlandList {
+  height: 100%;
+  .flight_item {
+    position: relative;
+    min-height: calc(100% - 110px);
+    background: rgba(240, 241, 245, 1);
+    padding: 20px 0;
+    .flight_div {
+      width: calc(100% - 720px);
+      margin: 0 auto 20px;
+      background: #ffffff;
+      border-radius: 5px;
+      .flight_title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #3a3b50;
+        border-bottom: 1px solid #dadde2;
+        padding: 16px 24px;
+      }
+      .flight_detail {
+        display: flex;
+        align-items: flex-start;
+        margin-top: 34px;
+        margin-bottom: 21px;
+        .flight_type {
+          background: #5b7cf0;
+          border-radius: 2px;
+          color: #fff;
+          font-weight: 400;
+          font-size: 12px;
+          margin: 12px 24px;
+          padding: 0 5px;
+        }
+        .flight_route {
+          display: flex;
+          flex-direction: column;
+          .flight_address {
+            font-size: 28px;
+            font-weight: bold;
+            color: #333333;
+          }
+          .flight_date {
+            font-size: 14px;
+            font-weight: 400;
+            color: #333333;
+          }
+        }
+        .route_div {
+          display: flex;
+          .center_route {
+            display: flex;
+            flex-direction: column;
+            .flight_airport {
+              font-size: 14px;
+              font-weight: 400;
+              color: #333333;
+            }
+            .flight_time {
+              font-size: 24px;
+              font-weight: bold;
+              color: #333333;
+            }
+          }
+          .flight_icon {
+            width: 154px;
+            height: 28px;
+            object-fit: contain;
+            background: url("../../static/flight_fly.png") no-repeat center
+              center;
+            background-size: contain;
+          }
+        }
+        .flight_entry {
+          display: flex;
+          margin: 23px 24px;
+          .entry_item {
+            font-size: 14px;
+            font-weight: 400;
+            color: #5b7cf0;
+          }
+        }
+      }
+      .open {
+        width: 84px;
+        height: 26px;
+        background: #3a3b50;
+        border-radius: 5px 5px 0px 0px;
+        margin: auto;
+        color: #fff;
+        text-align: center;
+        padding-top: 2px;
+        cursor: pointer;
+      }
+      .open_content {
+        border-radius: 0px 0px 5px 5px;
+        border-top: 2px dotted #dadde2;
+        .content_div {
+          display: flex;
+          margin: 25px 24px;
+          .open_left {
+            display: flex;
+            align-items: center;
+            .left_div {
+              display: flex;
+              flex-direction: column;
+              margin-right: 5px;
+              .open_left_date {
+                font-size: 12px;
+                font-weight: 400;
+                color: #878791;
+                &:first-child {
+                  margin-bottom: 32px;
+                }
+              }
+              .open_left_time {
+                font-size: 14px;
+                font-weight: bold;
+                color: #333333;
+                &:first-child {
+                  margin-bottom: 32px;
+                }
+              }
+              .open_left_address {
+                font-size: 14px;
+                font-weight: bold;
+                color: #333333;
+                &:first-child {
+                  margin-bottom: 32px;
+                }
+              }
+            }
+            .left_icon {
+              width: 14px;
+              height: 56px;
+              object-fit: contain;
+              background: url("../../static/flight_fly_colomn.png") no-repeat
+                center center;
+              background-size: contain;
+            }
+          }
+          .open_middle {
+            display: flex;
+            align-items: center;
+            .middle_icon {
+              width: 24px;
+              height: 24px;
+              object-fit: contain;
+              background: url("../../static/flight_icon.png") no-repeat center
+                center;
+              background-size: contain;
+              margin-right: 8px;
+            }
+            .middle_fly_type {
+              font-size: 12px;
+              font-weight: 400;
+              color: #333333;
+              margin-right: 8px;
+            }
+            .middle_fly_modal {
+              font-size: 12px;
+              font-weight: 400;
+              color: #878791;
+              border-bottom: 1px dotted #afafb5;
+              margin-right: 8px;
+            }
+            .middle_fly_cabin {
+              font-size: 12px;
+              font-weight: 400;
+              color: #333333;
+              margin-right: 8px;
+            }
+            .middle_fly_share {
+              width: 36px;
+              height: 18px;
+              background: #928cd2;
+              border-radius: 2px;
+              color: #fff;
+              padding: 0 3px;
+              margin-right: 8px;
+            }
+            .middle_fly_meal {
+              width: 13px;
+              height: 15px;
+              object-fit: contain;
+              background: url("../../static/flight_meal.png") no-repeat center
+                center;
+              background-size: contain;
+            }
+          }
+          .open_right {
+            display: flex;
+            align-items: center;
+            margin: 47px 104px;
+            .right_icon {
+              width: 16px;
+              height: 16px;
+              object-fit: contain;
+              background: url("../../static/flight_time.png") no-repeat center
+                center;
+              background-size: contain;
+            }
+            .right_consume {
+              font-size: 12px;
+              font-weight: 400;
+              color: #333333;
+            }
+          }
+        }
+      }
+    }
+  }
+}

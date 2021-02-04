@@ -2,12 +2,13 @@
  * @Description: 主模块
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-01-12 17:42:59
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-02-02 09:36:04
+ * @LastEditors: mzr
  */
 import React, { Fragment } from "react";
 import Login from "./pages/login";
 import Home from "./pages/home";
+import InlandList from "./pages/inlandList";
 import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import './global.scss'
@@ -17,6 +18,7 @@ function App() {
     <Fragment>
       <HashRouter>
         <Switch>
+          <Route path="/inlandList" component={InlandList}/>
           <Route path="/login" component={Login} />
           <Route path="/home" component={Home} />
           <Route exact path="/" component={Home} />

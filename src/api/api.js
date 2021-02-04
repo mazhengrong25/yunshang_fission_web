@@ -2,8 +2,8 @@
  * @Description: api封装
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-01-12 17:53:50
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-02-03 17:09:19
+ * @LastEditors: mzr
  */
 import axios from "axios";
 
@@ -38,13 +38,13 @@ let httpCode = {
 // http request 拦截器
 instance.interceptors.request.use(
   (config) => {
-    hide = message.loading({content: 'Loading...', duration: 0});
-    // if (config.url.indexOf("Authenticate") > 0) {
-    //   return config;
-    // }
+    // hide = message.loading({content: 'Loading...', duration: 0});
+    if (config.url.indexOf("Authenticate") > 0) {
+      return config;
+    }
 
-    // const token = localStorage.getItem("token");
-    // token && (config.headers.Authorization = "Bearer " + token);
+    const token = localStorage.getItem("token");
+    token && (config.headers.Authorization = token);
     return config;
   },
   (error) => {
@@ -55,7 +55,7 @@ instance.interceptors.request.use(
 // http response 拦截器
 instance.interceptors.response.use(
   (response) => {
-    hide()
+    // hide()       
     if (response.status === 200) {    
         return Promise.resolve(response.data)
     } else {
@@ -64,7 +64,7 @@ instance.interceptors.response.use(
     }
   },
   (error) => {
-    hide();
+    // hide();
     if (error.response) {
       // 根据请求失败的http状态码去给用户相应的提示
       let tips =
