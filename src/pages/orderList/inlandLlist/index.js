@@ -2,7 +2,7 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
- * @LastEditTime: 2021-02-06 11:41:54
+ * @LastEditTime: 2021-02-06 15:59:54
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -61,9 +61,9 @@ export default class index extends Component {
     }
 
     // 跳转到详情页面
-    // jumpDetail() {
-    //     this.props.history.push("./inlandDetail/index")
-    // }
+    jumpDetail() {
+        this.props.history.push("./inlandDetail/index")
+    }
 
     
     // 选择器搜索
@@ -255,7 +255,7 @@ export default class index extends Component {
                                                     </div>
                                                 :""
                                             }
-                                            <div className="action_detail"></div>
+                                            <div className="action_detail" onClick={() => this.jumpDetail()}></div>
                                         </div>
                                     )
 

@@ -2,13 +2,10 @@
  * @Description: 导航栏
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:43:50
-<<<<<<< HEAD
- * @LastEditTime: 2021-02-04 11:59:39
+ * @LastEditTime: 2021-02-06 16:08:27
  * @LastEditors: mzr
-=======
  * @LastEditTime: 2021-02-06 11:51:24
  * @LastEditors: wish.WuJunLong
->>>>>>> 268a692a201a6f343d9577710790f1c0943090b0
  */
 import React, { Component } from "react";
 

@@ -4,7 +4,7 @@
  * @Date: 2021-01-11 15:03:54
 <<<<<<< HEAD
 <<<<<<< HEAD
- * @LastEditTime: 2021-02-04 10:50:47
+ * @LastEditTime: 2021-02-06 16:06:29
  * @LastEditors: mzr
 =======
  * @LastEditTime: 2021-02-04 10:29:15
@@ -17,7 +17,7 @@ import axios from "axios";
 
 import { message } from "antd";
 
-// let hide = null;
+let hide = null;
 
 // let baseUrl = "";
 // if (process.env.NODE_ENV === "development") {
@@ -46,7 +46,7 @@ let httpCode = {
 // http request 拦截器
 instance.interceptors.request.use(
   (config) => {
-    // hide = message.loading({content: 'Loading...', duration: 0});
+    hide = message.loading({content: 'Loading...', duration: 0});
     if (config.url.indexOf("Authenticate") > 0) {
       return config;
     }
