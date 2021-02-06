@@ -2,7 +2,7 @@
  * @Description: 导航栏
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:43:50
- * @LastEditTime: 2021-02-04 10:42:14
+ * @LastEditTime: 2021-02-06 11:51:24
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -51,6 +51,10 @@ export default class index extends Component {
       if (res.errorcode === 10000) {
         let token = `${res.data.token_type} ${res.data.access_token}`;
         localStorage.setItem("token", token);
+
+        let date = this.$moment().add(res.data.expires_in,'ms').format('x')
+
+        localStorage.setItem("loginDate",date)
         this.setState({
           loginBox: false,
         });
