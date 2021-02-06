@@ -2,7 +2,7 @@
  * @Description: api封装
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-02-06 16:02:52
+ * @LastEditTime: 2021-02-06 16:05:55
  * @LastEditors: wish.WuJunLong
  */
 import axios from "axios";

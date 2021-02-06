@@ -2,12 +2,12 @@
  * @Description: 国内列表呈现
  * @Author: mzr
  * @Date: 2021-02-02 09:30:20
- * @LastEditTime: 2021-02-04 10:46:04
+ * @LastEditTime: 2021-02-05 11:58:56
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
 
-import { Divider } from 'antd';
+import { Divider , Image} from 'antd';
 
 import HeaderTemplate from "../../components/Header"; // 导航栏
 
@@ -36,24 +36,11 @@ export default class index extends Component {
     }
 
     async componentDidMount() {
-        await this.getUserInfo()
         await this.getDataList();
     }
 
 
-    getUserInfo() {
-        let data = {
-            "login_name": "ys_inland_test",                //类型：String  必有字段  备注：分销商名
-            "password": "ys123456"                //类型：String  必有字段  备注：分销商密码
-        }
-        this.$axios.post('/api/login', data)
-            .then(res => {
-                if (res.errorcode === 10000) {
-                    let token = res.data.token_type + ' ' + res.data.access_token
-                    localStorage.setItem("token", token);
-                }
-            })
-    }
+
 
 
     // 获取航班列表
@@ -83,6 +70,7 @@ export default class index extends Component {
             <div className="inlandList">
                 <HeaderTemplate />
                 <div className="flight_item">
+                    {/* 列表 */}
                     {this.state.dataList.map((item, index) => (
                         <div className="flight_div" key={item.id}>
                             <div className="flight_title">航班信息</div>
@@ -164,7 +152,7 @@ export default class index extends Component {
                                     </div>
                                     <div style={{ flex: 1 }}></div>
                                     <div className="open_middle">
-                                        <div className="middle_icon"></div>
+                                        <Image width={ 24 } src={this.$url + item.ticket_segments[0].image}/>
                                         <div className="middle_fly_type">{item.ticket_segments[0].airline_CN}</div>
                                         <div className="middle_fly_modal">
                                             {`${item.ticket_segments[0].flight_no}
@@ -186,10 +174,9 @@ export default class index extends Component {
                             <div className="open" onClick={() => (this.openFoldBar(index))}>{item.isShow ? '收起' : '展开'}</div>
                         </div>
 
-                    ))}
-
+                    ))} 
                 </div>
-
+                
             </div>
         )
     }
