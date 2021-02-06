@@ -2,7 +2,7 @@
  * @Description: api封装
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-02-05 13:58:33
+ * @LastEditTime: 2021-02-06 16:02:52
  * @LastEditors: wish.WuJunLong
  */
 import axios from "axios";
@@ -43,7 +43,16 @@ instance.interceptors.request.use(
       return config;
     }
 
-    console.log(config)
+    console.log(localStorage.getItem("loginDate") >= this.$moment().format("x"))
+    // if (localStorage.getItem("loginDate") >= this.$moment().format("x")) {
+    //   console.log('token超时')
+    //   axios.post("/api/refresh").then((res) => {
+    //     let newToken = `${res.data.token_type} ${res.data.access_token}`;
+    //     localStorage.setItem("token", newToken);
+    //     let date = this.$moment().add(res.data.expires_in, "ms").format("x");
+    //     localStorage.setItem("loginDate", date);
+    //   });
+    // }
 
     const token = localStorage.getItem("token");
     token && (config.headers.Authorization = token);
