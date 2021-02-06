@@ -3,18 +3,21 @@
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @LastEditTime: 2021-02-04 10:50:47
  * @LastEditors: mzr
 =======
  * @LastEditTime: 2021-02-04 10:29:15
+=======
+ * @LastEditTime: 2021-02-05 13:58:33
+>>>>>>> 268a692a201a6f343d9577710790f1c0943090b0
  * @LastEditors: wish.WuJunLong
->>>>>>> 2db26256956680878110125d79af8c0ee5288333
  */
 import axios from "axios";
 
 import { message } from "antd";
 
-let hide = null;
+// let hide = null;
 
 // let baseUrl = "";
 // if (process.env.NODE_ENV === "development") {
@@ -43,10 +46,12 @@ let httpCode = {
 // http request 拦截器
 instance.interceptors.request.use(
   (config) => {
-    hide = message.loading({content: 'Loading...', duration: 0});
+    // hide = message.loading({content: 'Loading...', duration: 0});
     if (config.url.indexOf("Authenticate") > 0) {
       return config;
     }
+
+    console.log(config)
 
     const token = localStorage.getItem("token");
     token && (config.headers.Authorization = token);
@@ -58,14 +63,14 @@ instance.interceptors.request.use(
 );
 
 // http response 拦截器
-instance.interceptors.response.use(
+ instance.interceptors.response.use(
   (response) => {
     hide()       
     if (response.status === 200) {    
-        return Promise.resolve(response.data)
+      return Promise.resolve(response.data)
     } else {
-        message.error('响应超时')
-        return Promise.reject(response.data.message)
+      message.error('响应超时')
+      return Promise.reject(response.data.message)
     }
   },
   (error) => {
@@ -73,9 +78,9 @@ instance.interceptors.response.use(
     if (error.response) {
       // 根据请求失败的http状态码去给用户相应的提示
       let tips =
-        error.response.status in httpCode
-          ? httpCode[error.response.status]
-          : error.response.data.message;
+      error.response.status in httpCode
+      ? httpCode[error.response.status]
+      : error.response.data.message;
       message.error(tips);
       if (error.response.status === 401) {
         //针对框架跳转到登陆页面

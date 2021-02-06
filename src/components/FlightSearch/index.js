@@ -2,14 +2,14 @@
  * @Description: 机票搜索
  * @Author: wish.WuJunLong
  * @Date: 2021-01-12 14:07:43
- * @LastEditTime: 2021-02-03 15:47:46
+ * @LastEditTime: 2021-02-06 10:02:56
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
 
 import "./flightSearch.scss";
 
-import { Radio, Select, message, Modal, Tabs } from "antd";
+import { Radio, Select, message, Modal, Tabs, DatePicker, Button } from "antd";
 const { Option } = Select;
 const { TabPane } = Tabs;
 
@@ -25,10 +25,17 @@ export default class index extends Component {
 
       searchCity: {
         startAir: "",
+        startCode: "",
+        endAir: "",
+        endCode: "",
+        startDate: ""
       }, // 城市搜索
       searchCityList: [], // 城市搜索框返回值列表
 
+      switchStyle: false, // 切换城市动画
+
       cityModal: false, // 城市弹窗
+      cityToModal: false, // 返回城市弹窗
 
       cityList: [], // 城市列表
       hotCity: [], // 热门城市列表
@@ -48,20 +55,22 @@ export default class index extends Component {
   }
   // 单程往返多程切换
   changeFlightType = (e) => {
-    console.log("航班状态切换", e.target.value);
     this.setState({ flightType: e.target.value });
   };
 
   // 出发城市选择器
-  selectFromCity = (e) => {
+  selectFromCity = (label, e) => {
     console.log(e);
-    this.setState({ searchCity: e });
+    let newData = this.state.searchCity;
+    console.log(newData);
+    newData[`${label}Air`] = e.label;
+    newData[`${label}Code`] = e.value;
+    this.setState({ searchCity: newData });
   };
   // 城市搜索框
   selectCitySearch = async (e) => {
-    console.log("搜索框", e);
     if (e) {
-      await this.setState({ searchCity: e, cityModal: false });
+      await this.setState({ cityModal: false, cityToModal: false });
       await this.fetch(e, (searchCityList) => {
         console.log(searchCityList);
         this.setState({ searchCityList });
@@ -84,7 +93,6 @@ export default class index extends Component {
         range: "CN",
       };
       _that.$axios.get("/api/searchAirs", { params: data }).then((res) => {
-        console.log(res.data);
         if (res.errorcode === 10000) {
           if (currentValue === val) {
             callback(res.data);
@@ -102,8 +110,8 @@ export default class index extends Component {
   };
 
   // 城市选择器获取焦点时
-  openCityModal = async () => {
-    await this.setState({ cityModal: true });
+  openCityModal = async (val) => {
+    await this.setState({ cityModal: val === "start", cityToModal: val === "end" });
   };
 
   // 获取机场列表
@@ -150,8 +158,6 @@ export default class index extends Component {
           }
         });
       });
-
-      console.log(unitCityList);
 
       // 组装首字母数组
       let A = "ABCDEF";
@@ -223,21 +229,59 @@ export default class index extends Component {
         hotCity: hotCity,
         cityList: cityList,
       });
-
-      console.log(this.state.cityList);
     });
   }
 
   // 获取选中城市数据
-  selectAir(val,label) {
-    let data = this.state.searchCity
-
-    data[label] = val.city_name + `(${val.city_code})`
-
+  selectAir(val, label) {
+    let data = this.state.searchCity;
+    console.log(val, label);
+    data[`${label}Air`] = val.city_name + `(${val.city_code})`;
+    data[`${label}Code`] = val.city_code;
+    console.log(data);
     this.setState({
       searchCity: data,
-      cityModal: false 
+      cityModal: false,
+      cityToModal: false,
+    });
+  }
+
+  // 交换往返数据
+  switchTicket() {
+    let data = this.state.searchCity;
+    console.log(data);
+    let newData = {
+      endAir: data.startAir,
+      endCode: data.startCode,
+      startAir: data.endAir,
+      startCode: data.endCode,
+    };
+
+    this.setState({
+      switchStyle: true,
+      searchCity: newData,
+    });
+    setTimeout(() => {
+      this.setState({
+        switchStyle: false,
+      });
+    }, 500);
+  }
+
+  // 选择时间
+  dateSelect = (date, dateString) => {
+    let data = this.state.searchCity
+    data.startDate = dateString
+    this.setState({
+      searchCity:data
     })
+    console.log(date, dateString);
+  }
+
+  // 航班搜索
+  searchSubmit() {
+    let url = `/flightList?start=${this.state.searchCity.startCode}&end=${this.state.searchCity.endCode}&date=${this.state.searchCity.startDate}` 
+    this.props.history.push(url)
   }
 
   render() {
@@ -271,6 +315,7 @@ export default class index extends Component {
         </div>
 
         <div className="flightSearch__main">
+          {/* 航班类型选择 */}
           <div className="flightSearch__main__list">
             <div className="flightSearch__main__list__item">
               <div className="flightSearch__main__list__item__title">航班类型</div>
@@ -285,6 +330,7 @@ export default class index extends Component {
               </div>
             </div>
           </div>
+          {/* 航班选择 */}
           <div className="flightSearch__main__list">
             <div className="flightSearch__main__list__item">
               <div className="flightSearch__main__list__item__title">起飞城市</div>
@@ -299,11 +345,11 @@ export default class index extends Component {
                   showArrow={false}
                   filterOption={false}
                   onSearch={this.selectCitySearch}
-                  onChange={this.selectFromCity}
+                  onChange={this.selectFromCity.bind(this, "start")}
                   notFoundContent={null}
                   value={{ value: this.state.searchCity.startAir }}
                   onBlur={this.clearFromCity}
-                  onFocus={this.openCityModal}
+                  onFocus={() => this.openCityModal("start")}
                 >
                   {this.state.searchCityList.map((e) => (
                     <Option
@@ -329,7 +375,7 @@ export default class index extends Component {
                   footer={null}
                   visible={this.state.cityModal}
                   onCancel={() => this.setState({ cityModal: false })}
-                  width="640px"
+                  width="670px"
                 >
                   <div className="citySelectModal">
                     <div className="citySelectModal__header">
@@ -350,7 +396,7 @@ export default class index extends Component {
                               <div
                                 className="city_list"
                                 key={item.id}
-                                onClick={() => this.selectAir(item,'startAir')}
+                                onClick={() => this.selectAir(item, "start")}
                               >
                                 {item.city_name}
                               </div>
@@ -362,14 +408,14 @@ export default class index extends Component {
                           <TabPane tab={item.unit} key={item.unit}>
                             <div className="city_list_box">
                               {item.data.map((oitem) => (
-                                <div key={oitem.unit}>
+                                <div className="city_list_main" key={oitem.unit}>
                                   <span>{oitem.unit}</span>
 
                                   {oitem.data.map((pitem) => (
                                     <div
                                       className="city_list"
                                       key={pitem.id}
-                                      onClick={() => this.selectAir(pitem,'startAir')}
+                                      onClick={() => this.selectAir(pitem, "start")}
                                     >
                                       {pitem.city_name}
                                     </div>
@@ -385,6 +431,142 @@ export default class index extends Component {
                 </Modal>
               </div>
             </div>
+
+            <div className="flightSearch__main__list__checked">
+              <div
+                className={`flightSearch__main__list__checked__switchBtn ${
+                  this.state.switchStyle ? "active" : ""
+                }`}
+                onClick={() => this.switchTicket()}
+              ></div>
+            </div>
+
+            <div className="flightSearch__main__list__item">
+              <div className="flightSearch__main__list__item__title">到达城市</div>
+              <div className="flightSearch__main__list__item__input">
+                <Select
+                  showSearch
+                  labelInValue
+                  style={{ width: "200px" }}
+                  placeholder="请选择"
+                  optionLabelProp="label"
+                  defaultActiveFirstOption={false}
+                  showArrow={false}
+                  filterOption={false}
+                  onSearch={this.selectCitySearch}
+                  onChange={this.selectFromCity.bind(this, "end")}
+                  notFoundContent={null}
+                  value={{ value: this.state.searchCity.endAir }}
+                  onBlur={this.clearFromCity}
+                  onFocus={() => this.openCityModal("end")}
+                >
+                  {this.state.searchCityList.map((e) => (
+                    <Option
+                      value={e.city_code}
+                      label={e.city_name + `(${e.city_code})`}
+                      key={e.id}
+                    >
+                      <div className="search_city_message">
+                        <span>{e.province}</span>
+                        <span>{e.air_port_name}</span>
+                        <span>{e.city_code}</span>
+                      </div>
+                    </Option>
+                  ))}
+                </Select>
+                <Modal
+                  title={false}
+                  mask={false}
+                  maskClosable={false}
+                  keyboard={false}
+                  getContainer={false}
+                  closable={false}
+                  footer={null}
+                  visible={this.state.cityToModal}
+                  onCancel={() => this.setState({ cityToModal: false })}
+                  width="670px"
+                >
+                  <div className="citySelectModal">
+                    <div className="citySelectModal__header">
+                      <div className="citySelectModal__header__title">
+                        <span>支持中文/拼音/简拼/三字输入</span>
+                        <div
+                          className="citySelectModal__header__title__closeBtn"
+                          onClick={() => this.setState({ cityToModal: false })}
+                        ></div>
+                      </div>
+                    </div>
+
+                    <div className="citySelectModal__cityChecked">
+                      <Tabs tabPosition="left" tabBarGutter={0}>
+                        <TabPane tab="热门城市" key="hot">
+                          <div className="city_list_box">
+                            {this.state.hotCity.map((item) => (
+                              <div
+                                className="city_list"
+                                key={item.id}
+                                onClick={() => this.selectAir(item, "end")}
+                              >
+                                {item.city_name}
+                              </div>
+                            ))}
+                          </div>
+                        </TabPane>
+
+                        {this.state.cityList.map((item) => (
+                          <TabPane tab={item.unit} key={item.unit}>
+                            <div className="city_list_box">
+                              {item.data.map((oitem) => (
+                                <div className="city_list_main" key={oitem.unit}>
+                                  <span>{oitem.unit}</span>
+
+                                  {oitem.data.map((pitem) => (
+                                    <div
+                                      className="city_list"
+                                      key={pitem.id}
+                                      onClick={() => this.selectAir(pitem, "end")}
+                                    >
+                                      {pitem.city_name}
+                                    </div>
+                                  ))}
+                                </div>
+                              ))}
+                            </div>
+                          </TabPane>
+                        ))}
+                      </Tabs>
+                    </div>
+                  </div>
+                </Modal>
+              </div>
+            </div>
+          </div>
+          {/* 时间选择 */}
+          <div className="flightSearch__main__list">
+            <div className="flightSearch__main__list__item">
+              <div className="flightSearch__main__list__item__title">起飞时间</div>
+              <div className="flightSearch__main__list__item__input">
+                <DatePicker onChange={this.dateSelect} />
+              </div>
+            </div>
+            <div className="flightSearch__main__list__checked"></div>
+            <div className="flightSearch__main__list__item">
+              <div className="flightSearch__main__list__item__title">到达时间</div>
+              <div className="flightSearch__main__list__item__input">
+                <DatePicker
+                  disabled={this.state.checkActive === "inland"}
+                  onChange={this.dateSelect}
+                />
+              </div>
+            </div>
+          </div>
+
+          {/* 搜索按钮 */}
+
+          <div className="flightSearch__main__list">
+            <Button type="primary" onClick={() => this.searchSubmit()}>
+              搜索航班
+            </Button>
           </div>
         </div>
       </div>

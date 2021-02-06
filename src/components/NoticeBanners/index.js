@@ -2,7 +2,7 @@
  * @Description: 公告横幅
  * @Author: wish.WuJunLong
  * @Date: 2021-01-12 11:23:43
- * @LastEditTime: 2021-01-12 11:28:57
+ * @LastEditTime: 2021-02-04 11:30:23
  * @LastEditors: wish.WuJunLong
  */
 
@@ -15,7 +15,14 @@ import "./noticeBanners.scss";
 export default class index extends Component {
   constructor(props) {
     super(props);
-    this.state = {};
+    this.state = {
+      noticeId: null,
+    };
+  }
+
+  // 跳转公告详情
+  jumpNoticeDetail(){
+    console.log(this.state.noticeId)
   }
   render() {
     return (
@@ -29,14 +36,14 @@ export default class index extends Component {
             className="notice__main__message"
             autoplay
           >
-            {this.props.noticeMessage.map((item, index) => (
-              <div className="notice__main__message" key={index}>
-                {item}
+            {this.props.noticeMessage.map((item) => (
+              <div className="notice__main__message" key={item.id}>
+                {`${item.title}： ${item.content.replace(/<[^>]+>/g,"").replace(/&nbsp;/ig, "")}`}
               </div>
             ))}
           </Carousel>
 
-          <div className="notice__main__message_btn">查看详情</div>
+          <div className="notice__main__message_btn" onClick={() => this.jumpNoticeDetail()}>查看详情</div>
         </div>
       </div>
     );

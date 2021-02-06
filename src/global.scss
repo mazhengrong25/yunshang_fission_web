@@ -33,7 +33,8 @@
         height: 40px !important;
       }
     }
-    .ant-select-selection-item,.ant-select-selection-placeholder {
+    .ant-select-selection-item,
+    .ant-select-selection-placeholder {
       line-height: 40px;
     }
   }
@@ -69,3 +70,17 @@
 
 
  
+// 日期选择器
+.ant-picker {
+  width: 200px;
+  height: 40px;
+
+  border: 1px solid #afafb5 !important;
+  border-radius: 5px;
+  &.ant-picker-focused {
+    border: 1px solid #5b7cf0 !important;
+  }
+  &.ant-picker-disabled{
+    opacity: .4;
+  }
+}
