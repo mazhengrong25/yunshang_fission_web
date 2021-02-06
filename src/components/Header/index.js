@@ -2,8 +2,8 @@
  * @Description: 导航栏
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:43:50
- * @LastEditTime: 2021-02-04 10:42:14
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-02-04 11:59:39
+ * @LastEditors: mzr
  */
 import React, { Component } from "react";
 
@@ -26,8 +26,8 @@ export default class index extends Component {
 
       loginStatus: false, // 账号登录状态
 
-      account: "",
-      password: "",
+      account: "ys_inland_test",
+      password: "ys123456",
 
       loginBox: false, // 登录窗口
 

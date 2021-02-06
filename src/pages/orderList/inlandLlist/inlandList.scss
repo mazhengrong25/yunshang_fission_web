@@ -1,0 +1,179 @@
+.inlandList {
+    height: 100%;
+    .content_div {
+        min-height: calc(100% - 110px);
+        background: rgba(240, 241, 245, 1);
+        padding: 18px 360px;
+        display: flex;
+        .filter_div {
+            width: 216px;
+            margin-right: 16px;
+            .nav_top {
+                height: 56px;
+                background: #3A3B50;
+                font-size: 18px;
+                font-weight: bold;
+                color: #FFFFFF;
+                padding: 16px 24px;
+                border-radius: 5px;         
+            }
+            .nav_bottom {
+                margin-top: 12px;
+                padding-top: 24px;
+                height: 808px;
+                background-color: #FFFFFF;
+                box-shadow: 0px 50px 80px #EBEDF2;
+                border-radius: 5px;
+                .nav_div {
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    margin:auto;
+                    width: 184px;
+                    height: 56px;
+                    background: #FFFFFF;
+                    box-shadow: 0px 0px 20px #EBEDF2;
+                    border-radius: 5px;
+                    cursor: pointer;
+                    .div_icon {
+                        width: 16px;
+                        height: 17px;
+                        object-fit: contain;
+                        background: url("../../../static/inland_icon.png") no-repeat center center;
+                        background-size: contain;
+                    }
+                    .div_title {
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: #333333;
+                    }
+                    .icon_drop {
+                        width: 8px;
+                        height: 4px;
+                        object-fit: contain;
+                        background: url("../../../static/inland_icon.png") no-repeat center center;
+                        background-size: contain;
+                    }
+                }
+            }
+            
+        }
+        .list_div {
+            width: 968px;
+            background-color: #fff;
+            box-shadow: 0px 50px 80px #EBEDF2;
+            border-radius: 5px;
+            .list_title {
+                
+                font-size: 16px;
+                font-weight: bold;
+                color: #333333;
+                border-bottom: 1px solid #DADDE2;
+                padding: 21px 24px;
+            }
+            .list_nav {
+                display: flex;
+                flex-wrap: wrap;
+                padding: 34px 24px;
+                .nav_item {
+                    display: flex;
+                    align-items: center;
+                    margin: 0px 14px 23px 0px;
+                    .item_title {
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: #333333;
+                        margin-right: 10px;
+                    }
+                    .ant-btn {
+                        width: 112px;
+                        height: 40px;
+                        background: #5B7CF0;
+                        opacity: 1;
+                        border-radius: 5px;
+                        color: #FFFFFF;
+                    }
+                }
+            }
+            .order_table {
+                padding: 24px;
+            }
+            .route {
+                font-size: 12px;
+                font-weight: 400;
+                color: #333333;
+                display: flex;
+                .single_direction {
+                    width: 11px;
+                    height: 2px;
+                    margin-top: 9px;
+                    background: url("../../../static/single_direction.png") no-repeat center center;
+                    
+                }
+                .mul_direction {
+                    width: 11px;
+                    height: 2px;
+                    margin-top: 9px;
+                    background: url("../../../static/mul_direction.png") no-repeat center center;
+                }
+            }
+            .route_time {
+                display: flex;
+                flex-direction: column;
+                font-size: 12px;
+                font-weight: 400;
+                color: #333333;
+
+
+            }
+            .action_div {
+                display: flex;
+                .action_detail {
+                    width: 40px;
+                    height: 22px;
+                    background: url("../../../static/action_detail.png") no-repeat center center;
+                    border-radius: 11px;
+                    border: 1px solid #DADDE2;
+                    background-size: 15px 3px;
+                    cursor: pointer;
+                    &:hover {
+                        background-color: #5B7CF0;
+                        color: #fff;
+                    }
+                }
+                .ant-tag {
+                    width: 40px;
+                    height: 22px;
+                    background: #F87C2E;
+                    border-radius: 11px;
+                    font-weight: 400;                  
+                    font-size: 12px;
+                    cursor: pointer;
+                }
+                .ticket_issue {
+                    .ant-tag {
+                        background: #fff;
+                        &:hover {
+                            background-color: #5B7CF0;
+                            color: #fff;
+                        }
+                    }
+                   
+                }
+            }
+            .table_passenger{
+                width: 86px;
+                overflow:hidden;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                .table_passenger_list{
+                    &:not(:last-child){
+                        &::after{
+                            content: '/';
+                        }
+                    }
+                }
+            }
+        }
+    }
+}

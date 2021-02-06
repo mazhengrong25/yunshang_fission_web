@@ -3,7 +3,7 @@
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
 <<<<<<< HEAD
- * @LastEditTime: 2021-02-04 10:47:28
+ * @LastEditTime: 2021-02-04 10:50:47
  * @LastEditors: mzr
 =======
  * @LastEditTime: 2021-02-04 10:29:15
@@ -60,7 +60,7 @@ instance.interceptors.request.use(
 // http response 拦截器
 instance.interceptors.response.use(
   (response) => {
-    // hide()       
+    hide()       
     if (response.status === 200) {    
         return Promise.resolve(response.data)
     } else {
@@ -69,7 +69,7 @@ instance.interceptors.response.use(
     }
   },
   (error) => {
-    // hide();
+    hide();
     if (error.response) {
       // 根据请求失败的http状态码去给用户相应的提示
       let tips =

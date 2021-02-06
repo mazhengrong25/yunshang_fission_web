@@ -2,13 +2,13 @@
  * @Description: 主模块
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-02-02 09:36:04
+ * @LastEditTime: 2021-02-06 10:54:50
  * @LastEditors: mzr
  */
 import React, { Fragment } from "react";
 import Login from "./pages/login";
 import Home from "./pages/home";
-import InlandList from "./pages/inlandList";
+import InlandList from "./pages/orderList/inlandLlist";
 import { HashRouter, Route, Switch, Redirect } from "react-router-dom";
 
 import './global.scss'
