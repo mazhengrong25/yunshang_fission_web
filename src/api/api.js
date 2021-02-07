@@ -4,6 +4,7 @@
  * @Date: 2021-01-11 15:03:54
 <<<<<<< HEAD
 <<<<<<< HEAD
+<<<<<<< HEAD
  * @LastEditTime: 2021-02-06 16:06:29
  * @LastEditors: mzr
 =======
@@ -11,6 +12,9 @@
 =======
  * @LastEditTime: 2021-02-05 13:58:33
 >>>>>>> 268a692a201a6f343d9577710790f1c0943090b0
+=======
+ * @LastEditTime: 2021-02-06 16:05:55
+>>>>>>> 6fd7411b7778367aee210368220410b93b6b720e
  * @LastEditors: wish.WuJunLong
  */
 import axios from "axios";
@@ -51,7 +55,16 @@ instance.interceptors.request.use(
       return config;
     }
 
-    console.log(config)
+    console.log(localStorage.getItem("loginDate") >= this.$moment().format("x"))
+    // if (localStorage.getItem("loginDate") >= this.$moment().format("x")) {
+    //   console.log('token超时')
+    //   axios.post("/api/refresh").then((res) => {
+    //     let newToken = `${res.data.token_type} ${res.data.access_token}`;
+    //     localStorage.setItem("token", newToken);
+    //     let date = this.$moment().add(res.data.expires_in, "ms").format("x");
+    //     localStorage.setItem("loginDate", date);
+    //   });
+    // }
 
     const token = localStorage.getItem("token");
     token && (config.headers.Authorization = token);
@@ -65,7 +78,7 @@ instance.interceptors.request.use(
 // http response 拦截器
  instance.interceptors.response.use(
   (response) => {
-    hide()       
+    // hide()       
     if (response.status === 200) {    
       return Promise.resolve(response.data)
     } else {
@@ -74,7 +87,7 @@ instance.interceptors.request.use(
     }
   },
   (error) => {
-    hide();
+    // hide();
     if (error.response) {
       // 根据请求失败的http状态码去给用户相应的提示
       let tips =
