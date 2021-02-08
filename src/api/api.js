@@ -5,7 +5,7 @@
 <<<<<<< HEAD
 <<<<<<< HEAD
 <<<<<<< HEAD
- * @LastEditTime: 2021-02-06 16:06:29
+ * @LastEditTime: 2021-02-07 14:20:18
  * @LastEditors: mzr
 =======
  * @LastEditTime: 2021-02-04 10:29:15
@@ -21,7 +21,7 @@ import axios from "axios";
 
 import { message } from "antd";
 
-let hide = null;
+// let hide = null;
 
 // let baseUrl = "";
 // if (process.env.NODE_ENV === "development") {
@@ -50,12 +50,12 @@ let httpCode = {
 // http request 拦截器
 instance.interceptors.request.use(
   (config) => {
-    hide = message.loading({content: 'Loading...', duration: 0});
+    // hide = message.loading({content: 'Loading...', duration: 0});
     if (config.url.indexOf("Authenticate") > 0) {
       return config;
     }
 
-    console.log(localStorage.getItem("loginDate") >= this.$moment().format("x"))
+    // console.log(localStorage.getItem("loginDate") >= this.$moment().format("x"))
     // if (localStorage.getItem("loginDate") >= this.$moment().format("x")) {
     //   console.log('token超时')
     //   axios.post("/api/refresh").then((res) => {

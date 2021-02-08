@@ -2,7 +2,7 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
- * @LastEditTime: 2021-02-06 15:59:54
+ * @LastEditTime: 2021-02-07 14:11:23
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -62,7 +62,7 @@ export default class index extends Component {
 
     // 跳转到详情页面
     jumpDetail() {
-        this.props.history.push("./inlandDetail/index")
+        this.props.history.push('/inlandDetail')
     }
 
     

@@ -1,0 +1,192 @@
+.inlandDetail {
+    height: 100%;
+    .content_div {
+        min-height: calc(100% - 110px);
+        background: rgba(240, 241, 245, 1);
+        padding: 18px 360px;
+        display: flex;
+        flex-direction: column;
+        .content_nav {
+            
+            font-size: 12px;
+            font-weight: 400;
+            color: #878791;
+            margin-bottom: 16px;
+            &:hover {
+                
+                font-weight: 400;
+                color: #3A3B50;
+                cursor: pointer;
+            }
+        }
+        .content_status {
+            
+            height: 112px;
+            background: #FFFFFF;
+            border-radius: 5px;
+            margin-bottom: 16px;
+            .order_space {
+                display: flex;
+                align-items: flex-start;
+                .order_div {
+                    display: flex;
+                    align-items: center;
+                    padding: 13px 24px;
+                    .order_number {
+                        
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: #878791;
+                        margin-right: 10px;
+                    }
+                    .input_number_crease {
+                        font-size: 18px;
+                        font-weight: bold;
+                        color: #333333;
+                    }
+                    .input_number {
+                        
+                        font-size: 18px;
+                        font-weight: bold;
+                        color: #333333;
+                        margin-right: 10px;
+                    }
+                    .number_copy {
+                        width: 16px;
+                        height: 17px;
+                        background: url("../../../static/number_copy.png") no-repeat center center;
+                        background-size: contain;
+                        cursor: pointer;
+                    }
+                }
+                .order_status {
+                                    
+                    font-size: 18px;
+                    font-weight: bold;
+                    color: #F36969;
+                    padding: 20px 24px 0;
+                }
+            }
+        }
+        .content_item {
+            
+            background: #FFFFFF;
+            border-radius: 5px;
+            margin-bottom: 16px;
+            .item_title {
+                font-size: 18px;
+                font-weight: bold;
+                color: #3a3b50;
+                border-bottom: 1px solid #dadde2;
+                padding: 16px 24px;
+            }
+            .passenger_message{
+                padding: 24px;
+                .message_nav {
+                    display: flex;
+                    justify-content: space-between;
+                    .passenger_number {
+                        
+                        font-size: 16px;
+                        font-weight: bold;
+                        color: #3A3B50;
+                    }
+                }
+                .message_div {
+                    display: flex;
+                    flex-direction: column;
+                    height: 112px;
+                    background:rgba(243, 243, 247, 0.7);
+                    margin-top: 13px;
+                    padding: 21px 16px;
+                    .item_space {
+                        display: inline-flex;
+                        .message_item {
+                            display: inline-flex;
+                            margin-right: 40px;
+                            .message_head {
+                                width: 32px;
+                                height: 32px;
+                                background: url("../../../static/message_head.png") no-repeat center center;
+                                background-color: #000;
+                                background-size: initial;                
+                                border-radius: 50%;  
+                                margin-right: 10px;   
+                            }
+                            .passenger_name {
+                                
+                                font-size: 16px;
+                                font-weight: bold;
+                                color: #3A3B50;
+                                margin-right: 10px;   
+                            }
+                            .passenger_identity {
+                                
+                                font-size: 14px;
+                                font-weight: 400;
+                                color: #878791;
+                            }
+                        }
+                        .div_item {
+                            display: inline-flex;
+                            margin-right: 40px;
+                            .div_title {
+                                
+                                font-size: 14px;
+                                font-weight: 400;
+                                color: #878791;
+                                margin-right: 8px;
+                            }
+                            .div_input {
+    
+                                font-size: 14px;
+                                font-weight: 400;
+                                color: #333333;
+                            }
+                        }
+                    }
+                }
+            }
+            .contact_div {
+                display: flex;
+                flex-direction: column;
+                padding: 24px;
+                .item_space {
+                    display: inline-flex;
+                    margin-bottom: 26px;
+                    .div_item {
+                        display: inline-flex;
+                        margin-right: 40px;
+                        .div_title {
+                            
+                            font-size: 14px;
+                            font-weight: 400;
+                            color: #878791;
+                            margin-right: 8px;
+                        }
+                        .div_input {
+    
+                            font-size: 14px;
+                            font-weight: 400;
+                            color: #333333;
+                        }
+                    }
+                }
+            }
+            .price_div {
+                padding: 24px;
+                .price_button {
+                    
+                }
+            }
+            .payment_div {
+                padding: 24px;
+                display: inline-flex;
+                flex-direction: column;
+                .payment_button {
+                    display: inline-flex;
+                }
+            }
+        }
+    }
+}
