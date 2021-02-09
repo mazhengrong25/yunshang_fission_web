@@ -2,8 +2,8 @@
  * @Description: 机票搜索
  * @Author: wish.WuJunLong
  * @Date: 2021-01-12 14:07:43
- * @LastEditTime: 2021-02-06 10:02:56
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-02-08 09:59:37
+ * @LastEditors: mzr
  */
 import React, { Component } from "react";
 
@@ -43,7 +43,7 @@ export default class index extends Component {
     };
   }
 
-  async componentDidMount() {
+  async componentDidMount() { 
     this.getAirList();
   }
 

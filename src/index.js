@@ -2,7 +2,7 @@
  * @Description: 入口文件
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-02-06 16:15:12
+ * @LastEditTime: 2021-02-08 17:44:15
  * @LastEditors: mzr
  */
 import "core-js/es";
@@ -18,6 +18,8 @@ import "moment/locale/zh-cn";
 
 React.Component.prototype.$axios = axios;
 React.Component.prototype.$moment = moment;
+React.Component.prototype.$url = 'https://fxxcx.ystrip.cn';
+
 
 // 拆分地址栏参数
 React.$filterUrlParams = (val) => {
