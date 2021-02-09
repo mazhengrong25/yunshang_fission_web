@@ -2,8 +2,8 @@
  * @Description: api封装
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-02-08 15:12:27
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-02-09 09:55:46
+ * @LastEditors: mzr
  */
 import axios from "axios";
 
@@ -35,24 +35,24 @@ let httpCode = {
   504: "网关超时",
 };
 
-function getNewToken() {
-  return axios({
-    url: "/api/refresh",
-    method: "post",
-    headers: {
-      Authorization: localStorage.getItem("token"),
-    },
-  })
-    .then((res) => {
-      let newToken = `${res.data.token_type} ${res.data.access_token}`;
-      localStorage.setItem("token", newToken);
-      let date = this.$moment().add(res.data.expires_in, "ms").format("x");
-      localStorage.setItem("loginDate", date);
-    })
-    .catch(() => {
-      return Promise.reject();
-    });
-}
+// function getNewToken() {
+//   return axios({
+//     url: "/api/refresh",
+//     method: "post",
+//     headers: {
+//       Authorization: localStorage.getItem("token"),
+//     },
+//   })
+//     .then((res) => {
+//       let newToken = `${res.data.token_type} ${res.data.access_token}`;
+//       localStorage.setItem("token", newToken);
+//       let date = this.$moment().add(res.data.expires_in, "ms").format("x");
+//       localStorage.setItem("loginDate", date);
+//     })
+//     .catch(() => {
+//       return Promise.reject();
+//     });
+// }
 
 // http request 拦截器
 instance.interceptors.request.use(
@@ -72,9 +72,9 @@ instance.interceptors.request.use(
 
 
 // 是否正在刷新的标记
-let isRefreshing = false;
+// let isRefreshing = false;
 // 重试队列，每一项将是一个待执行的函数形式
-let requests = [];
+// let requests = [];
 
 // http response 拦截器
 instance.interceptors.response.use(

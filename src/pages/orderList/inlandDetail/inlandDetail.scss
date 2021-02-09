@@ -93,6 +93,11 @@
                     color: #F36969;
                     padding: 20px 24px 0;
                 }
+                .order_not_pay {
+                    display: flex;
+                    align-items: center;
+                    padding: 4px 24px;
+                }
             }
         }
         .content_item {
@@ -208,20 +213,69 @@
                     background-color: #5B7CF0;
                     border-color:#5B7CF0;
                 }
+                .not_insure {
+                    
+                    font-size: 16px;
+                    font-weight: 400;
+                    color: #333333;
+                }
                 
             }
             .price_div {
                 padding: 24px;
                 .price_button {
-
+                    display: flex;
+                    justify-content: center;
+                    margin:24px 10px;                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
+                    .back_btn {
+                        margin-right: 16px;
+                        .ant-btn {
+                            width: 112px;
+                            height: 40px;
+                            border: 1px solid #DADDE2;
+                            border-radius: 5px;
+                            
+                        }
+                    }
+                    .btn_item {
+                        margin-right: 16px;
+                        .ant-btn {
+                            width: 112px;
+                            height: 40px;
+                            border: 1px solid #DADDE2;
+                            border-radius: 5px;
+                            background: #5B7CF0;
+                            color: #fff;
+                        }
+                    }
                 }
             }
             .payment_div {
                 padding: 24px;
-                display: inline-flex;
-                flex-direction: column;
-                .payment_button {
-                    display: inline-flex;
+                display: flex;
+                justify-content: center;
+                .cancel_btn {
+                    margin-right: 16px;
+                    .ant-btn {
+                        width: 112px;
+                        height: 40px;
+                        border: 1px solid #DADDE2;
+                        border-radius: 5px;
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: #333333;
+                    }
+                }
+                .pay_btn {
+                    .ant-btn {
+                        width: 160px;
+                        height: 40px;
+                        background: #F87C2E;
+                        border-radius: 5px;
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: #FFFFFF;
+                    }
                 }
             }
             .voucher_div {
@@ -250,6 +304,39 @@
                         background:rgba(243, 243, 247, 0.7);
                     }
                 }
+            }
+            .insure_div {
+                display: flex;
+                flex-direction: column;
+                padding: 24px;
+                .insure_space {
+                    display: inline-flex;
+                    justify-content: space-between;
+                    .space_title {
+                        
+                        font-size: 16px;
+                        font-weight: 400;
+                        color: #333333;
+                    }
+                    .space_amount {
+                        
+                        font-size: 24px;
+                        font-weight: bold;
+                        color: #5B7CF0;
+                    }
+                    .insure_item {
+                        display: inline-flex;
+                        .insure_icon {
+                            width: 16px;
+                            height: 16px;
+                            background: url("../../../static/insure_icon.png") no-repeat center center;
+                            background-size: contain;
+                        }
+                    }
+                }
+            }
+            .insure_table {
+                padding: 24px;
             }
         }
         .flight_div {
