@@ -1,6 +1,9 @@
 @import "~antd/dist/antd.css";
 
 // antd 样式替换
+body {
+  background: #f0f1f5;
+}
 
 // 单选按钮
 .ant-radio {
@@ -50,7 +53,7 @@
   width: 200px;
   height: 40px;
   border-radius: 5px;
-  border: 1px solid #AFAFB5;    
+  border: 1px solid #afafb5;
 }
 
 // 日期选择框
@@ -58,7 +61,7 @@
   width: 222px;
   height: 40px;
   border-radius: 5px;
-  border: 1px solid #AFAFB5;
+  border: 1px solid #afafb5;
 }
 
 // 选择器
@@ -68,8 +71,6 @@
   border-radius: 5px;
 }
 
-
- 
 // 日期选择器
 .ant-picker {
   width: 200px;
@@ -80,7 +81,7 @@
   &.ant-picker-focused {
     border: 1px solid #5b7cf0 !important;
   }
-  &.ant-picker-disabled{
-    opacity: .4;
+  &.ant-picker-disabled {
+    opacity: 0.4;
   }
 }

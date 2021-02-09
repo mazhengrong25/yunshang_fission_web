@@ -2,7 +2,7 @@
  * @Description: 机票搜索
  * @Author: wish.WuJunLong
  * @Date: 2021-01-12 14:07:43
- * @LastEditTime: 2021-02-06 10:02:56
+ * @LastEditTime: 2021-02-08 15:28:21
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -28,7 +28,7 @@ export default class index extends Component {
         startCode: "",
         endAir: "",
         endCode: "",
-        startDate: ""
+        startDate: "",
       }, // 城市搜索
       searchCityList: [], // 城市搜索框返回值列表
 
@@ -112,6 +112,11 @@ export default class index extends Component {
   // 城市选择器获取焦点时
   openCityModal = async (val) => {
     await this.setState({ cityModal: val === "start", cityToModal: val === "end" });
+    // if (val === "start") {
+    //   this.startInput.focus();
+    // } else {
+    //   this.endInput.focus();
+    // }
   };
 
   // 获取机场列表
@@ -270,18 +275,19 @@ export default class index extends Component {
 
   // 选择时间
   dateSelect = (date, dateString) => {
-    let data = this.state.searchCity
-    data.startDate = dateString
+    let data = this.state.searchCity;
+    data.startDate = dateString;
     this.setState({
-      searchCity:data
-    })
+      searchCity: data,
+    });
     console.log(date, dateString);
-  }
+  };
 
   // 航班搜索
   searchSubmit() {
-    let url = `/flightList?start=${this.state.searchCity.startCode}&end=${this.state.searchCity.endCode}&date=${this.state.searchCity.startDate}` 
-    this.props.history.push(url)
+    let url = `/flightList?start=${this.state.searchCity.startCode}&startAddress=${this.state.searchCity.startAir}&end=${this.state.searchCity.endCode}&endAddress=${this.state.searchCity.endAir}&date=${this.state.searchCity.startDate}`;
+
+    this.props.history.push(encodeURI(url));
   }
 
   render() {
@@ -350,6 +356,7 @@ export default class index extends Component {
                   value={{ value: this.state.searchCity.startAir }}
                   onBlur={this.clearFromCity}
                   onFocus={() => this.openCityModal("start")}
+                  ref={(input) => (this.startInput = input)}
                 >
                   {this.state.searchCityList.map((e) => (
                     <Option
@@ -459,6 +466,7 @@ export default class index extends Component {
                   value={{ value: this.state.searchCity.endAir }}
                   onBlur={this.clearFromCity}
                   onFocus={() => this.openCityModal("end")}
+                  ref={(input) => (this.endInput = input)}
                 >
                   {this.state.searchCityList.map((e) => (
                     <Option

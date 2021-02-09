@@ -2,19 +2,7 @@
  * @Description: api封装
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
-<<<<<<< HEAD
-<<<<<<< HEAD
-<<<<<<< HEAD
- * @LastEditTime: 2021-02-07 14:20:18
- * @LastEditors: mzr
-=======
- * @LastEditTime: 2021-02-04 10:29:15
-=======
- * @LastEditTime: 2021-02-05 13:58:33
->>>>>>> 268a692a201a6f343d9577710790f1c0943090b0
-=======
- * @LastEditTime: 2021-02-06 16:05:55
->>>>>>> 6fd7411b7778367aee210368220410b93b6b720e
+ * @LastEditTime: 2021-02-08 15:12:27
  * @LastEditors: wish.WuJunLong
  */
 import axios from "axios";
@@ -47,6 +35,25 @@ let httpCode = {
   504: "网关超时",
 };
 
+function getNewToken() {
+  return axios({
+    url: "/api/refresh",
+    method: "post",
+    headers: {
+      Authorization: localStorage.getItem("token"),
+    },
+  })
+    .then((res) => {
+      let newToken = `${res.data.token_type} ${res.data.access_token}`;
+      localStorage.setItem("token", newToken);
+      let date = this.$moment().add(res.data.expires_in, "ms").format("x");
+      localStorage.setItem("loginDate", date);
+    })
+    .catch(() => {
+      return Promise.reject();
+    });
+}
+
 // http request 拦截器
 instance.interceptors.request.use(
   (config) => {
@@ -54,18 +61,6 @@ instance.interceptors.request.use(
     if (config.url.indexOf("Authenticate") > 0) {
       return config;
     }
-
-    // console.log(localStorage.getItem("loginDate") >= this.$moment().format("x"))
-    // if (localStorage.getItem("loginDate") >= this.$moment().format("x")) {
-    //   console.log('token超时')
-    //   axios.post("/api/refresh").then((res) => {
-    //     let newToken = `${res.data.token_type} ${res.data.access_token}`;
-    //     localStorage.setItem("token", newToken);
-    //     let date = this.$moment().add(res.data.expires_in, "ms").format("x");
-    //     localStorage.setItem("loginDate", date);
-    //   });
-    // }
-
     const token = localStorage.getItem("token");
     token && (config.headers.Authorization = token);
     return config;
@@ -75,15 +70,57 @@ instance.interceptors.request.use(
   }
 );
 
+
+// 是否正在刷新的标记
+let isRefreshing = false;
+// 重试队列，每一项将是一个待执行的函数形式
+let requests = [];
+
 // http response 拦截器
- instance.interceptors.response.use(
+instance.interceptors.response.use(
+  // (response) => {
+  //   if (response.data.msg.indexOf("Token") > -1) {
+  //     const config = response.config;
+  //     if (!isRefreshing) {
+  //       isRefreshing = true;
+  //       return getNewToken()
+  //         .then(() => {
+  //           let access_token = localStorage.getItem("token");
+  //           config.headers.Authorization = `bearer ${access_token}`;
+  //           // 已经刷新了token，将所有队列中的请求进行重试
+  //           requests.forEach((cb) => cb(access_token));
+  //           requests = [];
+  //           return instance(config);
+  //         })
+  //         .catch(() => {
+  //           localStorage.clear();
+  //           // this.props.history.push("/")
+  //           return Promise.reject();
+  //         })
+  //         .finally(() => {
+  //           isRefreshing = false;
+  //         });
+  //     } else {
+  //       // 正在刷新token，将返回一个未执行resolve的promise
+  //       return new Promise((resolve) => {
+  //         // 将resolve放进队列，用一个函数形式来保存，等token刷新后直接执行
+  //         requests.push((token) => {
+  //           config.headers.Authorization = `bearer ${token}`;
+  //           resolve(instance(config));
+  //         });
+  //       });
+  //     }
+  //   }
+  //   return response.data;
+  // },
+
   (response) => {
-    // hide()       
-    if (response.status === 200) {    
-      return Promise.resolve(response.data)
+    // hide()
+    if (response.status === 200) {
+      return Promise.resolve(response.data);
     } else {
-      message.error('响应超时')
-      return Promise.reject(response.data.message)
+      message.error("响应超时");
+      return Promise.reject(response.data.message);
     }
   },
   (error) => {
@@ -91,13 +128,13 @@ instance.interceptors.request.use(
     if (error.response) {
       // 根据请求失败的http状态码去给用户相应的提示
       let tips =
-      error.response.status in httpCode
-      ? httpCode[error.response.status]
-      : error.response.data.message;
+        error.response.status in httpCode
+          ? httpCode[error.response.status]
+          : error.response.data.message;
       message.error(tips);
       if (error.response.status === 401) {
         //针对框架跳转到登陆页面
-        // this.props.history.push(LOGIN);
+        // this.props.history.push("/");
       }
       return Promise.reject(error);
     } else {

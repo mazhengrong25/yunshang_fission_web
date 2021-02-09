@@ -2,8 +2,8 @@
  * @Description: 导航栏
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:43:50
- * @LastEditTime: 2021-02-06 16:08:27
- * @LastEditors: mzr
+ * @LastEditTime: 2021-02-08 15:26:20
+ * @LastEditors: wish.WuJunLong
  * @LastEditTime: 2021-02-06 11:51:24
  * @LastEditors: wish.WuJunLong
  */
@@ -61,6 +61,7 @@ export default class index extends Component {
           loginBox: false,
         });
         this.getUserInfo();
+        window.location.reload()
       }
     });
   }

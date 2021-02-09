@@ -1,0 +1,282 @@
+.flightList {
+  max-width: 1200px;
+  margin: 0 auto;
+  .flight_list_header {
+    width: 100%;
+    height: 216px;
+    background: #3a3b50;
+    border-radius: 5px;
+    -webkit-border-radius: 5px;
+    -moz-border-radius: 5px;
+    -ms-border-radius: 5px;
+    -o-border-radius: 5px;
+    padding: 24px;
+    margin-bottom: 24px;
+    .header_message {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .message_info {
+        position: relative;
+        padding-left: 60px;
+        &::before {
+          content: "";
+          position: absolute;
+          left: 0;
+          top: 50%;
+          margin-top: -20px;
+          display: block;
+          background: url("../../static/flight_icon.png") no-repeat center center #fff;
+          background-size: 25px 25px;
+          width: 40px;
+          height: 40px;
+          border-radius: 50%;
+        }
+        .info_address {
+          font-size: 16px;
+          font-weight: bold;
+          color: #ffffff;
+          margin-bottom: 11px;
+        }
+        .info_date {
+          font-size: 14px;
+          font-family: Microsoft YaHei;
+          font-weight: bold;
+          line-height: 19px;
+          color: #ffffff;
+          opacity: 0.6;
+          display: flex;
+          align-items: center;
+          p {
+            margin: 0;
+            &:last-child {
+              &::before {
+                content: "|";
+                color: #fff;
+                opacity: 0.2;
+                margin: 0 10px;
+                font-weight: normal;
+              }
+            }
+          }
+        }
+      }
+      .edit_search {
+        width: 112px;
+        height: 40px;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+        -o-border-radius: 5px;
+        font-size: 14px;
+        font-weight: bold;
+        color: #3a3b50;
+      }
+    }
+    .header_search {
+      margin-top: 35px;
+      .search_type {
+        margin-bottom: 20px;
+        .ant-radio-group {
+          .ant-radio-wrapper {
+            font-size: 14px;
+            font-weight: 400;
+            color: #ffffff;
+          }
+        }
+      }
+    }
+  }
+
+  .flight_content {
+    display: flex;
+    .flight_search {
+      width: 256px;
+      background: #ffffff;
+      box-shadow: 0px 50px 80px #ebedf2;
+      border-radius: 5px;
+      overflow: hidden;
+      margin-right: 24px;
+      .header_title {
+        height: 48px;
+        background: #3a3b50;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 16px;
+        font-weight: 400;
+        color: #ffffff;
+        width: 100%;
+        margin-bottom: 35px;
+      }
+    }
+
+    .flight_main {
+      flex: 1;
+      .main_header {
+        height: 48px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-bottom: 8px;
+        .flight_number {
+          font-size: 14px;
+          font-weight: 400;
+          color: #3a3b50;
+        }
+        .flight_sort {
+          width: 160px;
+          .ant-select {
+            width: 100%;
+            .ant-select-selector {
+              border: none !important;
+              box-shadow: none !important;
+              background: #ffffff;
+              .ant-select-selection-placeholder {
+                font-size: 14px;
+                font-weight: 400;
+                color: #333333;
+              }
+            }
+          }
+        }
+      }
+      .main_list {
+        .list_card {
+          height: 128px;
+          background: #ffffff;
+          box-shadow: 0px 5px 20px #ebedf2;
+          position: relative;
+          overflow: hidden;
+          margin-bottom: 8px;
+          padding: 32px 24px 24px;
+          display: flex;
+          justify-content: space-between;
+          &::after {
+            content: "";
+            display: block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            -ms-border-radius: 50%;
+            -o-border-radius: 50%;
+            box-shadow: inset 0px 4px 10px #ebedf2;
+            right: 135px;
+            position: absolute;
+            top: -8px;
+            background: #f0f1f5;
+          }
+          &::before {
+            content: "";
+            display: block;
+            width: 16px;
+            height: 16px;
+            border-radius: 50%;
+            -webkit-border-radius: 50%;
+            -moz-border-radius: 50%;
+            -ms-border-radius: 50%;
+            -o-border-radius: 50%;
+            box-shadow: inset 0px 4px 10px #ebedf2;
+            right: 135px;
+            position: absolute;
+            bottom: -8px;
+            background: #f0f1f5;
+          }
+
+          .card_air {
+            display: flex;
+            align-items: flex-start;
+            .air_icon {
+              width: 32px;
+              height: 32px;
+              object-fit: contain;
+            }
+            .air_message {
+              margin-left: 16px;
+              .air_name {
+                font-size: 12px;
+                font-weight: 400;
+                color: #333333;
+                margin-bottom: 3px;
+              }
+              .air_number {
+                font-size: 12px;
+                font-weight: 400;
+                color: #878791;
+                margin-bottom: 7px;
+                border-bottom: 1px dashed #afafb5;
+              }
+              .air_meals {
+                width: 14px;
+                height: 16px;
+                background: url("../../static/flight_meal.png") no-repeat center center;
+                background-size: contain;
+              }
+            }
+          }
+          .flight_message {
+            display: flex;
+            .message_info {
+              text-align: center;
+              .time {
+                font-size: 24px;
+                font-weight: bold;
+                color: #333333;
+                margin-bottom: 5px;
+              }
+              .address {
+                font-size: 12px;
+                font-weight: 400;
+                color: #333333;
+              }
+            }
+            .message_time {
+              position: relative;
+              margin: 0 40px;
+              .time_date {
+                position: absolute;
+                top: -15px;
+                width: 100%;
+                text-align: center;
+
+                font-size: 12px;
+                font-weight: 400;
+                color: #878791;
+              }
+              .time_icon {
+                background: url("../../static/flight_fly.png") no-repeat center center;
+                background-size: contain;
+                width: 155px;
+                height: 30px;
+                margin-top: 5px;
+              }
+            }
+          }
+
+          .flight_account {
+            font-weight: bold;
+            color: #5b7cf0;
+            display: flex;
+            align-items: baseline;
+            p {
+              margin: 0;
+              font-size: 20px;
+            }
+            div {
+              font-size: 28px;
+              font-weight: bold;
+              margin: 0 6px 0 3px;
+            }
+            span {
+              font-size: 14px;
+              font-weight: 400;
+            }
+          }
+        }
+      }
+    }
+  }
+}
