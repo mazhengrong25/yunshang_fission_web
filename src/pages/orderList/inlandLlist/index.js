@@ -2,12 +2,12 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
- * @LastEditTime: 2021-02-07 14:11:23
+ * @LastEditTime: 2021-02-09 09:47:36
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
 
-import { Radio, Input, DatePicker, Select, Button, Table, Tag , Pagination } from 'antd';
+import { Input, DatePicker, Select, Button, Table, Tag , Pagination } from 'antd';
 
 import HeaderTemplate from "../../../components/Header"; // 导航栏
 
@@ -26,6 +26,7 @@ export default class index extends Component {
             searchFrom: {
                 status:"", //状态
                 passengerName:"", //乘机人
+                "created_at": "2020-02-18",
             }
         }
     }
@@ -37,23 +38,21 @@ export default class index extends Component {
     // 获取航班列表
     getDataList() {
         
-        let data = {
-            // "status":"-1",                //类型：String  可有字段  备注：订单状态 -1：全部 0：过期 1：正常 3：已出票 默认：-1
-            "created_at": "2020-02-18",                //类型：String  可有字段  备注：起飞时间 默认：今天00:00
-            // "created_at_end":"",                //类型：String  可有字段  备注：到达时间 默认：今天23:59
-            // "pnr_code":"",                //类型：String  可有字段  备注：PNR编码
-            // "order_no":"",                //类型：String  可有字段  备注：订单号
-            // "departure":"",                //类型：String  可有字段  备注：出发机场三字码
-            // "arrive":"",                //类型：String  可有字段  备注：到达机场三字码
-            // "flight_no":"",                //类型：String  可有字段  备注：航班号
-            // "book_user":""                //类型：String  可有字段  备注：订票员
-        }
-        let searchData = JSON.parse(JSON.stringify(this.state.searchFrom));
-        this.$axios.post("/api/orders/list", data).then(res => {
+        // let data = {
+        //     // "status":"-1",                //类型：String  可有字段  备注：订单状态 -1：全部 0：过期 1：正常 3：已出票 默认：-1
+        //     // "created_at": "2020-02-18",                //类型：String  可有字段  备注：起飞时间 默认：今天00:00
+        //     // "created_at_end":"",                //类型：String  可有字段  备注：到达时间 默认：今天23:59
+        //     // "pnr_code":"",                //类型：String  可有字段  备注：PNR编码
+        //     // "order_no":"",                //类型：String  可有字段  备注：订单号
+        //     // "departure":"",                //类型：String  可有字段  备注：出发机场三字码
+        //     // "arrive":"",                //类型：String  可有字段  备注：到达机场三字码
+        //     // "flight_no":"",                //类型：String  可有字段  备注：航班号
+        //     // "book_user":""                //类型：String  可有字段  备注：订票员
+        // }
+        this.$axios.post("/api/orders/list", this.state.searchFrom).then(res => {
             if (res.result === 10000) {
                 this.setState({
                     dataList: res.data.data,
-                    searchFrom:searchData
                 })
                 console.log(this.state.dataList)
             }
@@ -61,8 +60,9 @@ export default class index extends Component {
     }
 
     // 跳转到详情页面
-    jumpDetail() {
-        this.props.history.push('/inlandDetail')
+    jumpDetail(val) {
+        console.log(val)
+        this.props.history.push(`/inlandDetail?detail=${val}`)
     }
 
     
@@ -80,7 +80,7 @@ export default class index extends Component {
     // 输入框搜索  
     InputItem (label,val) {
         
-        let data = JSON.parse(JSON.stringify(this.state.searchFrom));
+        let data = this.state.searchFrom;
         data[label] = val.target.value;
         console.log(data[label])
         this.setState({
@@ -118,13 +118,13 @@ export default class index extends Component {
                     <div className="list_div">
                         <div className="list_title">机票订单</div>
                         <div className="list_nav">
-                            <div className="nav_item">
+                            {/* <div className="nav_item">
                                 <div className="item_title">出行类型</div>
                                 <Radio.Group defaultValue={1}>
                                     <Radio value={1}>因公出行</Radio>
                                     <Radio value={2}>因私出行</Radio>
                                 </Radio.Group>
-                            </div>
+                            </div> */}
                             <div className="nav_item">
                                 <div className="item_title">乘机人</div>
                                 <Input placeholder="请填写" onChange={this.InputItem.bind(this, "passengerName")}/>
@@ -135,7 +135,7 @@ export default class index extends Component {
                             </div>
                             <div className="nav_item">
                                 <div className="item_title">订单号/票号</div>
-                                <Input placeholder="请输入订单号/票号" />
+                                <Input placeholder="请输入订单号/票号" onChange={this.InputItem.bind(this, "order_no")}/>
                             </div>
                             <div className="nav_item">
                                 <div className="item_title">订单状态</div>
@@ -255,7 +255,7 @@ export default class index extends Component {
                                                     </div>
                                                 :""
                                             }
-                                            <div className="action_detail" onClick={() => this.jumpDetail()}></div>
+                                            <div className="action_detail" onClick={() => this.jumpDetail(render.order_no)}></div>
                                         </div>
                                     )
 
