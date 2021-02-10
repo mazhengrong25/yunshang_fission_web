@@ -2,7 +2,7 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-02-09 17:51:17
+ * @LastEditTime: 2021-02-10 15:27:10
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -13,6 +13,10 @@ import HeaderTemplate from "../../../components/Header"; // 导航栏
 
 import './inlandDetail.scss'
 import Column from 'antd/lib/table/Column';
+
+// 日期处理
+import moment from 'moment'
+import 'moment/locale/zh-cn';
 
 export default class index extends Component {
 
@@ -70,9 +74,14 @@ export default class index extends Component {
                     detailInsure: res.data.insurance_msg,
                     insurancePassenger: insuranceList
                 })
-                console.log(this.state.insurancePassenger)
+                console.log(this.state.detailPassenger)
             }
         })
+    }
+
+    // 返回到列表
+    backList() {
+        this.props.history.push('/inlandList')
     }
 
     render() {
@@ -169,7 +178,7 @@ export default class index extends Component {
                                     </div>
                                     <div className="flight_date">
                                         {item.departure_time.substring(0, 10)}
-                                        {/* {moment(item.departure_time).format('ddd')} */}
+                                        {moment(item.departure_time).format('ddd')}
                                     </div>
                                 </div>
 
@@ -261,9 +270,10 @@ export default class index extends Component {
                         <div className="item_title">乘机人信息</div>
 
                         {this.state.detailPassenger.map((item, index) => (
-                            <div className="passenger_message">
+                            <div className="passenger_message" key={index.id}>
                                 <div className="message_nav">
                                     <div className="passenger_number">乘机人{index + 1}</div>
+                                    
                                     <Button type="link">给该乘机人发送行程通知（短信，邮件）</Button>
                                 </div>
                                 <div className="message_div">
@@ -337,7 +347,7 @@ export default class index extends Component {
                                 </div>
                             </div>
                             <div className="item_space">
-                                <Button type="link">给该乘机人发送行程通知（短信，邮件）</Button>
+                                <Button type="link" style={{ padding: 0}}>给该乘机人发送行程通知（短信，邮件）</Button>
                             </div>
                         </div>
                     </div>
@@ -356,19 +366,13 @@ export default class index extends Component {
                     <div className="content_item">
                         <div className="item_title">保险服务</div>
 
-                        {this.state.detailPassenger['insurance_total'] !== 0 ?
+                        {this.state.insurancePassenger.length > 0 ?
                             (<div className="insure_table">
                                 <Table
                                     pagination={false}
                                     dataSource={this.state.insurancePassenger}
                                 >
                                     <Column title="乘客姓名" dataIndex="PassengerName" />
-                                    {/* <Column title="保单号"
-                                        render={() => {
-                                            return this.state.detailInsure.insure_desc
-                                        }}
-
-                                    /> */}
                                     <Column title="保险名称" 
                                        render= {() => {
                                             return this.state.detailInsure.insure_desc
@@ -464,10 +468,16 @@ export default class index extends Component {
                                     }
                                 />
                                 <Column title="共计" 
-                                    
-                                    // render={(text,row,index) => {
-                                       
-                                    // }}
+                                    dataIndex="ticket_price"
+                                    render={(text,col,index) => {
+                                        return {
+                                            children: text,
+                                            props: {
+                                                colSpan: col['ticket_price&colSpan '],
+                                            }
+                                        }
+                                        
+                                    }}
                                 />
 
                             </Table>
@@ -475,7 +485,7 @@ export default class index extends Component {
                             {this.state.detailData.status === 1 ? 
                                 (   
                                     <div className="price_button">
-                                        <div className="back_btn"><Button>返回</Button></div>
+                                        <div className="back_btn" onClick={() => (this.backList())}><Button>返回</Button></div>
                                         <div className="btn_item"><Button>退票</Button></div>
                                         <div className="btn_item"><Button>改签</Button></div>
                                     </div>
