@@ -102,12 +102,17 @@
       }
     }
   }
-  &__loginBox{
-    &__inputBox{
+  &__loginBox {
+    &__inputBox {
       margin-bottom: 20px;
-      input{
+      input {
         width: 100%;
       }
     }
+  }
+}
+.header + div {
+  &:not(.home) {
+    margin-top: 26px;
   }
 }

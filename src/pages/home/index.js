@@ -7,7 +7,6 @@
  */
 import React, { Component } from "react";
 
-import HeaderTemplate from "../../components/Header"; // 导航栏
 import NoticeBanners from "../../components/NoticeBanners"; // 通栏公告
 
 import FlightSearch from "../../components/FlightSearch"; // 机票搜索
@@ -41,7 +40,6 @@ export default class index extends Component {
   render() {
     return (
       <div className="home">
-        <HeaderTemplate />
         <NoticeBanners noticeMessage={this.state.notice} />
         <div className="home__banner">
           <div className="home__banner__background"></div>

@@ -2,7 +2,7 @@
  * @Description: 导航栏
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:43:50
- * @LastEditTime: 2021-02-09 14:30:12
+ * @LastEditTime: 2021-02-10 12:01:18
  * @LastEditors: wish.WuJunLong
  * @LastEditTime: 2021-02-06 11:51:24
  * @LastEditors: wish.WuJunLong
@@ -93,7 +93,7 @@ export default class index extends Component {
       <div className="header">
         <div className="header__top">
           <div className="header__top__message">
-            <div className="header__top__message__left">下午好，云上航空科技</div>
+            <div className="header__top__message__left">{this.$moment().format('A')}好，云上航空科技</div>
             <div className="header__top__message__right">023-6865-1111</div>
           </div>
         </div>
