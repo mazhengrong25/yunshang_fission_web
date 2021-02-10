@@ -2,7 +2,7 @@
  * @Description: api封装
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-02-10 10:01:42
+ * @LastEditTime: 2021-02-10 10:13:47
  * @LastEditors: wish.WuJunLong
  */
 import axios from "axios";
@@ -42,16 +42,16 @@ function getNewToken() {
     headers: {
       Authorization: localStorage.getItem("token"),
     },
-  })
-    // .then((res) => {
-    //   let newToken = `${res.data.token_type} ${res.data.access_token}`;
-    //   localStorage.setItem("token", newToken);
-    //   let date = this.$moment().add(res.data.expires_in, "ms").format("x");
-    //   localStorage.setItem("loginDate", date);
-    // })
-    // .catch(() => {
-    //   return Promise.reject();
-    // });
+  });
+  // .then((res) => {
+  //   let newToken = `${res.data.token_type} ${res.data.access_token}`;
+  //   localStorage.setItem("token", newToken);
+  //   let date = this.$moment().add(res.data.expires_in, "ms").format("x");
+  //   localStorage.setItem("loginDate", date);
+  // })
+  // .catch(() => {
+  //   return Promise.reject();
+  // });
 }
 
 // http request 拦截器
@@ -70,7 +70,6 @@ instance.interceptors.request.use(
   }
 );
 
-
 // 是否正在刷新的标记
 let isRefreshing = false;
 // 重试队列，每一项将是一个待执行的函数形式
@@ -79,18 +78,28 @@ let requests = [];
 // http response 拦截器
 instance.interceptors.response.use(
   (response) => {
-    if (response.data.msg && response.data.msg.indexOf("Token") > -1) {
+    if (response.config.url !== "/api/logout" && response.data.msg && response.data.msg.indexOf("Token") > -1) {
       const config = response.config;
       if (!isRefreshing) {
         isRefreshing = true;
         return getNewToken()
-          .then(() => {
-            let access_token = localStorage.getItem("token");
-            config.headers.Authorization = `bearer ${access_token}`;
-            // 已经刷新了token，将所有队列中的请求进行重试
-            requests.forEach((cb) => cb(access_token));
-            requests = [];
-            return instance(config);
+          .then((res) => {
+            if (res.data.msg && res.data.msg.indexOf("Token") > -1) {
+              return message.warning('登录失效，请重新登录')
+            } else {
+              let access_token = `${res.data.token_type} ${res.data.access_token}`;
+              localStorage.setItem("token", access_token);
+
+              let date = this.$moment().add(res.data.expires_in, "ms").format("x");
+
+              localStorage.setItem("loginDate", date);
+              config.headers.Authorization = access_token;
+              // 已经刷新了token，将所有队列中的请求进行重试
+              requests.forEach((cb) => cb(access_token));
+              requests = [];
+              return instance(config);
+            }
+            
           })
           .catch(() => {
             // localStorage.clear();
