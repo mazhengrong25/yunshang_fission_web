@@ -2,7 +2,7 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
- * @LastEditTime: 2021-02-09 09:47:36
+ * @LastEditTime: 2021-02-10 10:59:26
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -182,7 +182,7 @@ export default class index extends Component {
                                     render={(text, render, index) =>
                                         <div className="table_passenger">
                                             {render.ticket_passenger.map(item => (
-                                                <span className="table_passenger_list">{item.PassengerName}</span>
+                                                <span key={item.id} className="table_passenger_list">{item.PassengerName}</span>
                                             ))}
                                         </div>
                                     }
