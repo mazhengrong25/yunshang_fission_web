@@ -2,7 +2,7 @@
  * @Description: api封装
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-02-09 18:59:32
+ * @LastEditTime: 2021-02-10 10:00:41
  * @LastEditors: wish.WuJunLong
  */
 import axios from "axios";
@@ -72,9 +72,9 @@ instance.interceptors.request.use(
 
 
 // 是否正在刷新的标记
-let isRefreshing = false;
+// let isRefreshing = false;
 // 重试队列，每一项将是一个待执行的函数形式
-let requests = [];
+// let requests = [];
 
 // http response 拦截器
 instance.interceptors.response.use(

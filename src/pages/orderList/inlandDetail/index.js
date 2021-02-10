@@ -2,12 +2,12 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-02-09 09:50:11
+ * @LastEditTime: 2021-02-09 17:51:17
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
 
-import { Table, Radio , Divider , Image , Button , Breadcrumb } from "antd"
+import { Table, Divider, Image, Button, Breadcrumb } from "antd"
 
 import HeaderTemplate from "../../../components/Header"; // 导航栏
 
@@ -24,6 +24,9 @@ export default class index extends Component {
             detailData: {}, //详情数据
             detailPassenger: [], //乘机人信息
             detailSegment: [], //航班信息
+            detailInsure: {}, //保险信息
+
+            insurancePassenger: [], // 有保险的乘客
         };
     }
 
@@ -54,12 +57,20 @@ export default class index extends Component {
         }
         this.$axios.post('/api/order/details', data).then(res => {
             if (res.result === 10000) {
+                let insuranceList = []
+                res.data.ticket_passenger.forEach(item => {
+                    if (item.insurance_total > 0) {
+                        insuranceList.push(item)
+                    }
+                })
                 this.setState({
                     detailData: res.data,
                     detailPassenger: res.data.ticket_passenger,
-                    detailSegment: res.data.ticket_segments
+                    detailSegment: res.data.ticket_segments,
+                    detailInsure: res.data.insurance_msg,
+                    insurancePassenger: insuranceList
                 })
-                console.log(this.state.detailData)
+                console.log(this.state.insurancePassenger)
             }
         })
     }
@@ -77,9 +88,9 @@ export default class index extends Component {
                         </Breadcrumb>
                     </div>
                     {/* 待支付 */}
-                    {this.state.detailData.status === 1 ? 
+                    {this.state.detailData.status === 1 ?
                         (<div className="pay_div">
-                            <div className="pay_title">订单请在15分钟内完成支付</div>
+                            <div className="pay_title">订单请在{this.state.detailData.left_min}分钟内完成支付</div>
                             <div className="pay_time">12:52</div>
                         </div>) : ''}
                     {/* 订单信息 */}
@@ -94,14 +105,14 @@ export default class index extends Component {
                             <div className="order_status"
                                 style={{
                                     color: this.state.detailData.status === 1 ? "#F36969"
-                                        :this.state.detailData.status === 2 ? "#5B7CF0"
+                                        : this.state.detailData.status === 2 ? "#5B7CF0"
                                             : this.state.detailData.status === 3 ? "#32D197"
                                                 : this.state.detailData.status === 5 ? "#3A3B50" : ""
                                 }}
 
                             >
                                 {this.state.detailData.status === 1 ? "待支付"
-                                    :this.state.detailData.status === 2 ? "出票中"
+                                    : this.state.detailData.status === 2 ? "出票中"
                                         : this.state.detailData.status === 3 ? "已出票"
                                             : this.state.detailData.status === 5 ? "已取消" : ""}
                             </div>
@@ -111,10 +122,29 @@ export default class index extends Component {
                                 <div className="order_number">预定人</div>
                                 <div className="input_number_crease">{this.state.detailData.book_user}</div>
                             </div>
-                            <div className="order_div">
-                                <div className="order_number">下单时间</div>
-                                <div className="input_number_crease">{this.state.detailData.created_at}</div>
-                            </div>
+                            {this.state.detailData.status === 1 ?
+                                (
+                                    <div className="order_div">
+                                        <div className="order_number">下单时间</div>
+                                        <div className="input_number_crease">{this.state.detailData.created_at}</div>
+                                    </div>
+                                ) :
+                                (
+                                    <div className="order_not_pay">
+
+                                        <div className="order_div">
+                                            <div className="order_number">支付时间</div>
+                                            <div className="input_number_crease">{this.state.detailData.pay_time}</div>
+                                        </div>
+                                        <div className="order_div">
+                                            <div className="order_number">支付方式</div>
+                                            <div className="input_number_crease">{this.state.detailData.pay_type}</div>
+                                        </div>
+                                    </div>
+
+                                )
+                            }
+
                             <div style={{ flex: 1 }}></div>
                             <div className="order_div">
                                 <div className="order_number">金额</div>
@@ -123,7 +153,7 @@ export default class index extends Component {
                         </div>
                     </div>
                     {/* 航班信息 */}
-                    {this.state.detailSegment.map((item,index) => (
+                    {this.state.detailSegment.map((item, index) => (
                         <div className="flight_div" key={item.id}>
                             <div className="flight_title">航班信息</div>
                             <div className="flight_detail">
@@ -138,7 +168,7 @@ export default class index extends Component {
                                             ${item.arrive_CN.city_name}`}
                                     </div>
                                     <div className="flight_date">
-                                        {item.departure_time.substring(0,10)}
+                                        {item.departure_time.substring(0, 10)}
                                         {/* {moment(item.departure_time).format('ddd')} */}
                                     </div>
                                 </div>
@@ -147,7 +177,7 @@ export default class index extends Component {
                                 <div className="route_div">
                                     <div className="center_route">
                                         <div className="flight_time">
-                                            {item.departure_time.substring(11,16)}
+                                            {item.departure_time.substring(11, 16)}
                                         </div>
                                         <div className="flight_airport">
                                             {`${item.departure_CN.city_name}${item.departure_CN.air_port_name}机场${item.departure_terminal}`}
@@ -156,7 +186,7 @@ export default class index extends Component {
                                     <div className="flight_icon"></div>
                                     <div className="center_route">
                                         <div className="flight_time">
-                                            {item.arrive_time.substring(11,16)}
+                                            {item.arrive_time.substring(11, 16)}
                                         </div>
                                         <div className="flight_airport">
                                             {`${item.arrive_CN.city_name}${item.arrive_CN.air_port_name}机场${item.arrive_terminal}`}
@@ -176,18 +206,18 @@ export default class index extends Component {
                                     <div className="open_left">
                                         <div className="left_div">
                                             <div className="open_left_date">
-                                                {item.departure_time.substring(5,10)}
+                                                {item.departure_time.substring(5, 10)}
                                             </div>
                                             <div className="open_left_date">
-                                                {item.arrive_time.substring(5,10)}
+                                                {item.arrive_time.substring(5, 10)}
                                             </div>
                                         </div>
                                         <div className="left_div">
                                             <div className="open_left_time">
-                                                {item.departure_time.substring(11,16)}
+                                                {item.departure_time.substring(11, 16)}
                                             </div>
                                             <div className="open_left_time">
-                                                {item.arrive_time.substring(11,16)}
+                                                {item.arrive_time.substring(11, 16)}
                                             </div>
                                         </div>
                                         <div className="left_icon"></div>
@@ -204,7 +234,7 @@ export default class index extends Component {
                                     </div>
                                     <div style={{ flex: 1 }}></div>
                                     <div className="open_middle">
-                                        <Image width={ 24 } src={this.$url + item.image}/>
+                                        <Image width={24} src={this.$url + item.image} />
                                         <div className="middle_fly_type">{item.airline_CN}</div>
                                         <div className="middle_fly_modal">
                                             {`${item.flight_no}
@@ -233,7 +263,7 @@ export default class index extends Component {
                         {this.state.detailPassenger.map((item, index) => (
                             <div className="passenger_message">
                                 <div className="message_nav">
-                                    <div className="passenger_number">乘机人{index+1}</div>
+                                    <div className="passenger_number">乘机人{index + 1}</div>
                                     <Button type="link">给该乘机人发送行程通知（短信，邮件）</Button>
                                 </div>
                                 <div className="message_div">
@@ -267,14 +297,14 @@ export default class index extends Component {
                                             <div className="div_input">{item.ticket_department}</div>
                                         </div>
                                     </div>
-                                    <div className="item_space">
+                                    <div className="item_space" style={{ marginLeft: 44 }}>
                                         <div className="div_item">
                                             <div className="div_title">手机:</div>
                                             <div className="div_input">{item.phone}</div>
                                         </div>
                                         <div className="div_item">
                                             <div className="div_title">邮箱:</div>
-                                            <div className="div_input">{item.email}</div>
+                                            <div className="div_input">{item.email || '无'}</div>
                                         </div>
                                     </div>
                                 </div>
@@ -306,37 +336,59 @@ export default class index extends Component {
                                     <div className="div_input">无</div>
                                 </div>
                             </div>
-                            <Button type="link">给该乘机人发送行程通知（短信，邮件）</Button>
+                            <div className="item_space">
+                                <Button type="link">给该乘机人发送行程通知（短信，邮件）</Button>
+                            </div>
                         </div>
                     </div>
                     {/* 保险服务 */}
-                    <div className="content_item">
-                        <div className="item_title">保险服务</div>
-                        <div className="contact_div">
-                            <div className="item_space">
-                                <div className="div_item">
-                                    <div className="div_title">姓名:</div>
-                                    <div className="div_input">赵玲艺</div>
-                                </div>
-                                <div className="div_item">
-                                    <div className="div_title">手机:</div>
-                                    <div className="div_input">15123826971</div>
-                                </div>
-                                <div className="div_item">
-                                    <div className="div_title">邮箱:</div>
-                                    <div className="div_input">296324796@qq.com</div>
-                                </div>
-                            </div>
-                            <div className="item_space">
-                                <div className="div_item">
-                                    <div className="div_title">备注:</div>
-                                    <div className="div_input">无</div>
-                                </div>
+                    {/* <div className="insure_div">
+                        <div className="insure_space">
+                            <div className="space_title">{this.state.detailInsure.insure_desc}</div>
+                            <div className="space_amount">&yen;{20}</div>
+                        </div>
+                        <div className="insure_space">
+                            <div className="insure_item">
+                                <div className="insure_icon"></div>
                             </div>
                         </div>
+                    </div> */}
+                    <div className="content_item">
+                        <div className="item_title">保险服务</div>
+
+                        {this.state.detailPassenger['insurance_total'] !== 0 ?
+                            (<div className="insure_table">
+                                <Table
+                                    pagination={false}
+                                    dataSource={this.state.insurancePassenger}
+                                >
+                                    <Column title="乘客姓名" dataIndex="PassengerName" />
+                                    {/* <Column title="保单号"
+                                        render={() => {
+                                            return this.state.detailInsure.insure_desc
+                                        }}
+
+                                    /> */}
+                                    <Column title="保险名称" 
+                                       render= {() => {
+                                            return this.state.detailInsure.insure_desc
+                                        }}
+                                    />
+                                    <Column title="保险单价"
+                                        render={() => {
+                                            return this.state.detailInsure.default_dis_price
+                                        }}
+                                    />
+
+                                </Table>
+                            </div>) :
+                            (<div className="contact_div">
+                                <div className="not_insure">订单未购买保险服务</div>
+                            </div>)
+                        }
                     </div>
                     {/* 报销凭证 */}
-                    <div className="content_item">
+                    {/* <div className="content_item">
                         <div className="item_title">报销凭证</div>
                         <div className="voucher_div">
                             <div className="item_space">
@@ -353,7 +405,7 @@ export default class index extends Component {
                                 <div className="address_div"></div>
                             </div>
                         </div>
-                    </div>
+                    </div> */}
                     {/* 价格明细 */}
                     <div className="content_item">
                         <div className="item_title">价格明细</div>
@@ -376,39 +428,84 @@ export default class index extends Component {
                                         </>
                                     }
                                 />
-                                <Column title="票价" dataIndex="ticket_price" 
-                                    // render={(text) => 
-                                        
-                                    // }
+                                <Column title="票价" dataIndex="ticket_price"
+                                    render={(text) => (
+                                        <>&yen;{text}</>
+                                    )
+
+                                    }
                                 />
-                                <Column title="机建" dataIndex="build_total" />
-                                <Column title="燃油" dataIndex="fuel_total" />
-                                <Column title="保险" dataIndex="insurance_total" />
-                                <Column title="服务费" dataIndex="service_price" />
-                                <Column title="共计" />
+                                <Column title="机建" dataIndex="build_total"
+                                    render={(text) => (
+                                        <>&yen;{text}</>
+                                    )
+
+                                    }
+                                />
+                                <Column title="燃油" dataIndex="fuel_total"
+                                    render={(text) => (
+                                        <>&yen;{text}</>
+                                    )
+
+                                    }
+                                />
+                                <Column title="保险" dataIndex="insurance_total"
+                                    render={(text) => (
+                                        <>&yen;{text}</>
+                                    )
+
+                                    }
+                                />
+                                <Column title="服务费" dataIndex="service_price"
+                                    render={(text) => (
+                                        <>&yen;{text}</>
+                                    )
+
+                                    }
+                                />
+                                <Column title="共计" 
+                                    
+                                    // render={(text,row,index) => {
+                                       
+                                    // }}
+                                />
 
                             </Table>
-                            {/* <div className="price_button">
-                                <Button>返回</Button>
-                                <Button>退票</Button>
-                                <Button>改签</Button>
-                            </div> */}
+                            
+                            {this.state.detailData.status === 1 ? 
+                                (   
+                                    <div className="price_button">
+                                        <div className="back_btn"><Button>返回</Button></div>
+                                        <div className="btn_item"><Button>退票</Button></div>
+                                        <div className="btn_item"><Button>改签</Button></div>
+                                    </div>
+                                ):
+                                this.state.detailData.status === 5 ? 
+                                (
+                                    <div className="price_button">
+                                        <Button>返回</Button>
+                                    </div>
+                                ):""
+                            }
+                           
                         </div>
                     </div>
                     {/* 支付方式 */}
-                    <div className="content_item">
-                        <div className="item_title">支付方式</div>
-                        <div className="payment_div">
-                            <Radio.Group>
-                                <Radio value={1}>方式待定</Radio>
-                                <Radio value={2}>待定</Radio>
-                            </Radio.Group>
-                            {/* <div className="payment_button">
-                                <Button>取消订单</Button>
-                                <Button>立即支付</Button>
-                            </div> */}
-                        </div>
-                    </div>
+                    {this.state.detailData.status === 1 ?
+                        (
+                            <div className="content_item">
+                                <div className="item_title">支付方式</div>
+                                <div className="payment_div">
+                                    <div className="cancel_btn">
+                                        <Button>取消订单</Button>
+                                    </div>
+                                    <div className="pay_btn">
+                                        <Button>立即支付</Button>
+                                    </div>
+                                </div>
+                            </div>
+                        ):''
+                    }
                 </div>
             </div>
         )
