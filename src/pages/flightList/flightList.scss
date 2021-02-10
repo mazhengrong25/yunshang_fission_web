@@ -83,7 +83,36 @@
             font-size: 14px;
             font-weight: 400;
             color: #ffffff;
+            .ant-radio{
+              .ant-radio-inner{
+                background-color: transparent;
+                &::after{
+                  background-color: #5B7CF0;
+                }
+              }
+            }
           }
+        }
+      }
+      .search_input {
+        .ant-input {
+          width: 240px;
+          background: #53566f;
+          border: 1px solid #5d6078;
+          border-radius: 5px;
+          color: #fff;
+          margin-right: 24px;
+          &:focus {
+            box-shadow: none;
+            border-color: #5B7CF0;
+          }
+        }
+        .search_btn {
+          width: 152px;
+          height: 40px;
+          background: #5b7cf0;
+          border-radius: 5px;
+          border-color: #5b7cf0;
         }
       }
     }
@@ -108,7 +137,26 @@
         font-weight: 400;
         color: #ffffff;
         width: 100%;
-        margin-bottom: 35px;
+      }
+      .search_content {
+        padding: 20px 24px;
+
+        .search_list {
+          .list_title {
+            font-size: 16px;
+            font-weight: bold;
+            line-height: 21px;
+            color: #333333;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            cursor: pointer;
+            .anticon {
+              font-size: 12px;
+              font-weight: normal;
+            }
+          }
+        }
       }
     }
 
@@ -153,6 +201,7 @@
           padding: 32px 24px 24px;
           display: flex;
           justify-content: space-between;
+          z-index: 1;
           &::after {
             content: "";
             display: block;
@@ -189,6 +238,8 @@
           .card_air {
             display: flex;
             align-items: flex-start;
+            width: 25%;
+            padding-top: 10px;
             .air_icon {
               width: 32px;
               height: 32px;
@@ -219,8 +270,11 @@
           }
           .flight_message {
             display: flex;
+            justify-content: center;
+            flex: 1;
             .message_info {
               text-align: center;
+              flex: 1;
               .time {
                 font-size: 24px;
                 font-weight: bold;
@@ -238,7 +292,7 @@
               margin: 0 40px;
               .time_date {
                 position: absolute;
-                top: -15px;
+                top: -20px;
                 width: 100%;
                 text-align: center;
 
@@ -256,11 +310,21 @@
             }
           }
 
+          .not_cabin {
+            display: flex;
+            width: 25%;
+            justify-content: flex-end;
+            font-size: 30px;
+            color: #ccc;
+          }
+
           .flight_account {
             font-weight: bold;
             color: #5b7cf0;
             display: flex;
             align-items: baseline;
+            width: 25%;
+            justify-content: flex-end;
             p {
               margin: 0;
               font-size: 20px;
@@ -273,6 +337,111 @@
             span {
               font-size: 14px;
               font-weight: 400;
+            }
+          }
+
+          .cabin_switch {
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            margin-left: -42px;
+            width: 84px;
+            height: 26px;
+            background: #3a3b50;
+            border-radius: 5px 5px 0px 0px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 400;
+            color: #ffffff;
+            cursor: pointer;
+            border: none;
+            &:hover {
+              border: none;
+            }
+          }
+        }
+        .cabin_content {
+          background: rgba($color: #fff, $alpha: 0.8);
+          border-radius: 5px;
+          padding: 16px 24px 0;
+          position: relative;
+          top: -16px;
+          z-index: 0;
+
+          .cabin_list {
+            display: flex;
+            align-items: center;
+            height: 96px;
+            &::before {
+              content: "";
+              display: block;
+              width: 25%;
+            }
+            &:not(:last-child) {
+              border-bottom: 1px solid #dadde2;
+            }
+
+            .list_info {
+              flex: 1;
+              display: flex;
+              align-items: center;
+              justify-content: space-between;
+              .list_name {
+                font-size: 14px;
+                font-weight: bold;
+                color: #333333;
+                .anticon {
+                  margin-left: 5px;
+                  svg {
+                    transition: all 0.3s;
+                    -webkit-transition: all 0.3s;
+                    -moz-transition: all 0.3s;
+                    -ms-transition: all 0.3s;
+                    -o-transition: all 0.3s;
+                  }
+                }
+              }
+              .list_message {
+                display: inline-flex;
+                align-items: center;
+                font-size: 14px;
+                font-weight: 400;
+                color: #5b7cf0;
+              }
+            }
+            .list_option {
+              width: 25%;
+              display: inline-flex;
+              align-items: center;
+              justify-content: flex-end;
+              .list_account {
+                width: 70px;
+                text-align: left;
+                > div {
+                  font-size: 24px;
+                  font-weight: bold;
+                  color: #5b7cf0;
+                  span {
+                    font-size: 16px;
+                  }
+                }
+                > p {
+                  font-size: 12px;
+                  font-weight: 400;
+                  color: #f36969;
+                  margin: 0;
+                }
+              }
+              .list_btn {
+                width: 72px;
+                height: 32px;
+                border-color: #5b7cf0;
+                background: #5b7cf0;
+                border-radius: 5px;
+                margin-left: 16px;
+              }
             }
           }
         }

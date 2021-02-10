@@ -105,6 +105,9 @@
   &__loginBox{
     &__inputBox{
       margin-bottom: 20px;
+      input{
+        width: 100%;
+      }
     }
   }
 }

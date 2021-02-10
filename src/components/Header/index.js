@@ -2,7 +2,7 @@
  * @Description: 导航栏
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:43:50
- * @LastEditTime: 2021-02-08 15:26:20
+ * @LastEditTime: 2021-02-09 14:30:12
  * @LastEditors: wish.WuJunLong
  * @LastEditTime: 2021-02-06 11:51:24
  * @LastEditors: wish.WuJunLong
@@ -44,26 +44,25 @@ export default class index extends Component {
   }
 
   // 账号登录
-  loginBtn() {
+  async loginBtn() {
     let data = {
       login_name: this.state.account,
       password: this.state.password,
     };
-    this.$axios.post("/api/login", data).then((res) => {
+    await this.$axios.post("/api/login", data).then((res) => {
       if (res.errorcode === 10000) {
         let token = `${res.data.token_type} ${res.data.access_token}`;
         localStorage.setItem("token", token);
 
-        let date = this.$moment().add(res.data.expires_in,'ms').format('x')
+        let date = this.$moment().add(res.data.expires_in, "ms").format("x");
 
-        localStorage.setItem("loginDate",date)
+        localStorage.setItem("loginDate", date);
         this.setState({
           loginBox: false,
         });
-        this.getUserInfo();
-        window.location.reload()
       }
     });
+    this.getUserInfo();
   }
 
   // 获取用户信息
@@ -72,8 +71,9 @@ export default class index extends Component {
       localStorage.setItem("userName", res.company_name);
       this.setState({
         userName: res.company_name,
-        loginStatus: true
+        loginStatus: true,
       });
+      window.location.reload();
     });
   }
 
@@ -82,9 +82,9 @@ export default class index extends Component {
     this.$axios.post("/api/logout").then((res) => {
       localStorage.clear();
       this.setState({
-        userName: '',
-        loginStatus: false
-      })
+        userName: "",
+        loginStatus: false,
+      });
     });
   }
 
@@ -129,7 +129,12 @@ export default class index extends Component {
                   </Dropdown>
                 </div>
               ) : (
-                <div className="header__nav__main__box__item" onClick={() => this.setState({loginBox: true})}>登录系统</div>
+                <div
+                  className="header__nav__main__box__item"
+                  onClick={() => this.setState({ loginBox: true })}
+                >
+                  登录系统
+                </div>
               )}
             </div>
           </div>
