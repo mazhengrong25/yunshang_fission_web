@@ -18,6 +18,8 @@
                 border-radius: 5px;         
             }
             .nav_bottom {
+                display: flex;
+                justify-content: center;
                 margin-top: 12px;
                 padding-top: 24px;
                 height: 808px;
@@ -55,6 +57,27 @@
                         background-size: contain;
                     }
                 }
+                .ant-menu-item-selected {
+                    color: #5B7CF0;
+                }
+                .ant-menu-item-active {
+                    color: #5B7CF0;
+                }
+                .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+                    background-color: #fff;
+                }
+                .ant-menu-vertical .ant-menu-item::after, .ant-menu-vertical-left .ant-menu-item::after, .ant-menu-vertical-right .ant-menu-item::after, .ant-menu-inline .ant-menu-item::after {
+                    border-right: none;
+                }
+                .ant-menu-submenu-selected {
+                    color: #5B7CF0;
+                    background: #fff;
+                    box-shadow: 0px 0px 20px #ebedf2;
+                }
+                .menu_icon {
+                    width: 17px;
+                    height: 17px;
+                }
             }
             
         }
@@ -74,7 +97,9 @@
             .list_nav {
                 display: flex;
                 flex-wrap: wrap;
-                padding: 34px 24px;
+                // padding: 34px 24px;
+                padding-left: 24px;
+                padding-top: 34px;
                 .nav_item {
                     display: flex;
                     align-items: center;
@@ -92,11 +117,51 @@
                         opacity: 1;
                         border-radius: 5px;
                         color: #FFFFFF;
+                        font-weight: bold;
+                    }
+                    .ant-picker-input > input {
+                        font-size: 12px;
+                    }
+                    .item_import {
+                        width: 200px;
+                        .ant-input-affix-wrapper {
+                            height: 40px;
+                        }
+                        .ant-select {
+                            width: 200px;
+                            height: 40px;
+                        }
                     }
                 }
             }
             .order_table {
-                padding: 24px;
+                // padding: 24px;
+                padding-left: 24px;
+                padding-right: 24px;
+                .table_pagination {
+                    display: flex;
+                    justify-content: flex-end;
+                    padding: 30px;
+                }
+                .ant-table-thead > tr > th {
+                    
+                    background: #EBEDF2;
+                }
+                .ant-pagination-prev, .ant-pagination-next, .ant-pagination-jump-prev, .ant-pagination-jump-next {
+                    width: 24px;
+                    height: 24px;
+                    line-height: 24px;
+                    background: #F0F1F5;
+                }
+                .ant-pagination-item {
+                    width: 24px;
+                    height: 24px;
+                    line-height: 24px;
+                    background: #F0F1F5;
+                }
+                .ant-pagination-item-active {
+                    font-weight: 400;
+                }
             }
             .route {
                 font-size: 12px;

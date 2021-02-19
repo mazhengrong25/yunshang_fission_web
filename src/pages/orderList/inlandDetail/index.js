@@ -2,21 +2,17 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-02-10 15:27:10
+ * @LastEditTime: 2021-02-19 09:18:33
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
 
-import { Table, Divider, Image, Button, Breadcrumb } from "antd"
+import { Table, Divider, Image, Button, Breadcrumb, Modal } from "antd"
 
-import HeaderTemplate from "../../../components/Header"; // 导航栏
+// import HeaderTemplate from "../../../components/Header"; // 导航栏
 
 import './inlandDetail.scss'
 import Column from 'antd/lib/table/Column';
-
-// 日期处理
-import moment from 'moment'
-import 'moment/locale/zh-cn';
 
 export default class index extends Component {
 
@@ -29,8 +25,8 @@ export default class index extends Component {
             detailPassenger: [], //乘机人信息
             detailSegment: [], //航班信息
             detailInsure: {}, //保险信息
-
             insurancePassenger: [], // 有保险的乘客
+            showModal: false, //弹出发送短信
         };
     }
 
@@ -54,6 +50,13 @@ export default class index extends Component {
         })
     }
 
+    // 发送短信的收起展开
+    openModal() {
+        this.setState({
+            showModal: true
+        })
+    }
+
     // 获取详情
     getDetail() {
         let data = {
@@ -69,12 +72,12 @@ export default class index extends Component {
                 })
                 this.setState({
                     detailData: res.data,
-                    detailPassenger: res.data.ticket_passenger,
                     detailSegment: res.data.ticket_segments,
+                    detailPassenger: res.data.ticket_passenger,
                     detailInsure: res.data.insurance_msg,
                     insurancePassenger: insuranceList
                 })
-                console.log(this.state.detailPassenger)
+                console.log(this.state.detailSegment)
             }
         })
     }
@@ -87,7 +90,7 @@ export default class index extends Component {
     render() {
         return (
             <div className="inlandDetail">
-                <HeaderTemplate />
+                {/* <HeaderTemplate /> */}
                 <div className="content_div">
                     <div className="content_nav">
                         <Breadcrumb separator="<">
@@ -178,7 +181,7 @@ export default class index extends Component {
                                     </div>
                                     <div className="flight_date">
                                         {item.departure_time.substring(0, 10)}
-                                        {moment(item.departure_time).format('ddd')}
+                                        {this.$moment(item.departure_time).format('ddd')}
                                     </div>
                                 </div>
 
@@ -244,7 +247,7 @@ export default class index extends Component {
                                     <div style={{ flex: 1 }}></div>
                                     <div className="open_middle">
                                         <Image width={24} src={this.$url + item.image} />
-                                        <div className="middle_fly_type">{item.airline_CN}</div>
+                                        <div className="middle_fly_type">{item.airline_CN.air_name}</div>
                                         <div className="middle_fly_modal">
                                             {`${item.flight_no}
                                                 机型${item.model}`}
@@ -274,7 +277,7 @@ export default class index extends Component {
                                 <div className="message_nav">
                                     <div className="passenger_number">乘机人{index + 1}</div>
                                     
-                                    <Button type="link">给该乘机人发送行程通知（短信，邮件）</Button>
+                                    <Button type="link" onClick={() => (this.openModal)}>给该乘机人发送行程通知（短信，邮件）</Button>
                                 </div>
                                 <div className="message_div">
                                     <div className="item_space">
@@ -347,7 +350,7 @@ export default class index extends Component {
                                 </div>
                             </div>
                             <div className="item_space">
-                                <Button type="link" style={{ padding: 0}}>给该乘机人发送行程通知（短信，邮件）</Button>
+                                <Button type="link" style={{ padding: 0}} onClick={() => (this.openModal())}>给该乘机人发送行程通知（短信，邮件）</Button>
                             </div>
                         </div>
                     </div>
@@ -516,6 +519,16 @@ export default class index extends Component {
                             </div>
                         ):''
                     }
+                    {/* 发送短信弹出 */}
+                    <Modal
+                        title="发送短信"
+                        visible
+                        centered
+                        onCancel={() => this.setState({ showModal: false})}
+                        width={800}
+                    >
+                       
+                    </Modal>
                 </div>
             </div>
         )
