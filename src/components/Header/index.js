@@ -2,12 +2,14 @@
  * @Description: 导航栏
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:43:50
- * @LastEditTime: 2021-02-19 09:34:17
- * @LastEditors: mzr
+ * @LastEditTime: 2021-02-19 10:15:53
+ * @LastEditors: wish.WuJunLong
  * @LastEditTime: 2021-02-06 11:51:24
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
+
+import { withRouter } from "react-router-dom";
 
 import { Menu, Dropdown, Badge, Modal, Input, Button } from "antd";
 import {
@@ -20,7 +22,10 @@ import {
 
 import "./header.scss";
 
-export default class index extends Component {
+import { createBrowserHistory } from "history";
+const history = createBrowserHistory();
+
+class Index extends React.Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -34,11 +39,14 @@ export default class index extends Component {
       loginBox: false, // 登录窗口
 
       userName: localStorage.getItem("userName") || "",
+
+      activeUrl: "/",
     };
   }
 
   componentDidMount() {
     this.setState({
+      activeUrl: this.props.history.location.pathname || "/",
       loginStatus: localStorage.getItem("token"),
     });
   }
@@ -88,12 +96,22 @@ export default class index extends Component {
     });
   }
 
+  // 地址跳转
+  jumpUrl(val) {
+    this.props.history.push(val);
+    this.setState({
+      activeUrl: val,
+    });
+  }
+
   render() {
     return (
       <div className="header">
         <div className="header__top">
           <div className="header__top__message">
-            <div className="header__top__message__left">{this.$moment().format('A')}好，云上航空科技</div>
+            <div className="header__top__message__left">
+              {this.$moment().format("A")}好，云上航空科技
+            </div>
             <div className="header__top__message__right">023-6865-1111</div>
           </div>
         </div>
@@ -101,8 +119,24 @@ export default class index extends Component {
           <div className="header__nav__main">
             <div className="header__nav__main__logo"></div>
             <div className="header__nav__main__box">
-              <div className="header__nav__main__box__item active">首页</div>
-              <div className="header__nav__main__box__item">
+              <div
+                className={[
+                  this.state.activeUrl === "/" || this.state.activeUrl === "/home"
+                    ? "header__nav__main__box__item active"
+                    : "header__nav__main__box__item",
+                ]}
+                onClick={() => this.jumpUrl("/home")}
+              >
+                首页
+              </div>
+              <div
+                className={[
+                  this.state.activeUrl === "/inlandList"
+                    ? "header__nav__main__box__item active"
+                    : "header__nav__main__box__item",
+                ]}
+                onClick={() => this.jumpUrl("/inlandList")}
+              >
                 <Badge count={this.state.badgeNumber} offset={[5, -3]}>
                   我的订单
                 </Badge>
@@ -178,3 +212,5 @@ export default class index extends Component {
     );
   }
 }
+
+export default withRouter(Index);
