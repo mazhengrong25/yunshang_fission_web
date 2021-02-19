@@ -2,7 +2,7 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-02-19 09:18:33
+ * @LastEditTime: 2021-02-19 10:01:40
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -52,6 +52,7 @@ export default class index extends Component {
 
     // 发送短信的收起展开
     openModal() {
+        console.log("短信")
         this.setState({
             showModal: true
         })
@@ -277,7 +278,7 @@ export default class index extends Component {
                                 <div className="message_nav">
                                     <div className="passenger_number">乘机人{index + 1}</div>
                                     
-                                    <Button type="link" onClick={() => (this.openModal)}>给该乘机人发送行程通知（短信，邮件）</Button>
+                                    <Button type="link" onClick={() => this.openModal()}>给该乘机人发送行程通知（短信，邮件）</Button>
                                 </div>
                                 <div className="message_div">
                                     <div className="item_space">
@@ -350,7 +351,7 @@ export default class index extends Component {
                                 </div>
                             </div>
                             <div className="item_space">
-                                <Button type="link" style={{ padding: 0}} onClick={() => (this.openModal())}>给该乘机人发送行程通知（短信，邮件）</Button>
+                                <Button type="link" style={{ padding: 0}} onClick={() => this.openModal()}>给该乘机人发送行程通知（短信，邮件）</Button>
                             </div>
                         </div>
                     </div>
@@ -522,9 +523,9 @@ export default class index extends Component {
                     {/* 发送短信弹出 */}
                     <Modal
                         title="发送短信"
-                        visible
+                        visible={() => this.state.showModal}
                         centered
-                        onCancel={() => this.setState({ showModal: false})}
+                        onCancel={() => this.state.showModal}
                         width={800}
                     >
                        

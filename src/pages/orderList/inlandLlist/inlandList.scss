@@ -3,8 +3,9 @@
     .content_div {
         min-height: calc(100% - 110px);
         background: rgba(240, 241, 245, 1);
-        padding: 18px 360px;
+        padding: 18px 0px;
         display: flex;
+        justify-content: center;
         .filter_div {
             width: 216px;
             margin-right: 16px;
@@ -62,6 +63,7 @@
                 }
                 .ant-menu-item-active {
                     color: #5B7CF0;
+                    
                 }
                 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
                     background-color: #fff;
@@ -73,6 +75,10 @@
                     color: #5B7CF0;
                     background: #fff;
                     box-shadow: 0px 0px 20px #ebedf2;
+                    cursor: auto;
+                }
+                .ant-menu-submenu-active {
+                    background-color: #333333;
                 }
                 .menu_icon {
                     width: 17px;
