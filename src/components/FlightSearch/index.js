@@ -2,7 +2,7 @@
  * @Description: 机票搜索
  * @Author: wish.WuJunLong
  * @Date: 2021-01-12 14:07:43
- * @LastEditTime: 2021-02-09 09:53:00
+ * @LastEditTime: 2021-02-18 18:12:09
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -43,7 +43,7 @@ export default class index extends Component {
     };
   }
 
-  async componentDidMount() { 
+  async componentDidMount() {
     this.getAirList();
   }
 
@@ -283,10 +283,20 @@ export default class index extends Component {
     console.log(date, dateString);
   };
 
+  encode(str){
+    // 对字符串进行编码
+    var encode = encodeURI(str);
+    // 对编码的字符串转化base64
+    var base64 = btoa(encode);
+    return base64;
+}
+
   // 航班搜索
   searchSubmit() {
     let url = `/flightList?start=${this.state.searchCity.startCode}&startAddress=${this.state.searchCity.startAir}&end=${this.state.searchCity.endCode}&endAddress=${this.state.searchCity.endAir}&date=${this.state.searchCity.startDate}`;
 
+    console.log(this.encode(url))
+    
     this.props.history.push(encodeURI(url));
   }
 
@@ -571,11 +581,13 @@ export default class index extends Component {
 
           {/* 搜索按钮 */}
 
-          <div className="flightSearch__main__list">
-            <Button type="primary" onClick={() => this.searchSubmit()}>
-              搜索航班
-            </Button>
-          </div>
+          <Button
+            className="flightSearch__main__list__searchBtn"
+            type="primary"
+            onClick={() => this.searchSubmit()}
+          >
+            搜索航班
+          </Button>
         </div>
       </div>
     );

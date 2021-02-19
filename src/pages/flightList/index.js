@@ -2,14 +2,25 @@
  * @Description: 机票列表
  * @Author: wish.WuJunLong
  * @Date: 2021-02-05 18:31:03
- * @LastEditTime: 2021-02-10 14:38:44
+ * @LastEditTime: 2021-02-18 19:09:55
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
 
-import { Button, Radio, Input, Select, Checkbox } from "antd";
+import {
+  Button,
+  Radio,
+  Input,
+  Select,
+  Checkbox,
+  Affix,
+  Skeleton,
+  Result,
+  Popover,
+  message,
+} from "antd";
 
-import { DownOutlined } from "@ant-design/icons";
+import { DownOutlined, SmileOutlined } from "@ant-design/icons";
 
 import QueueAnim from "rc-queue-anim";
 
@@ -34,6 +45,9 @@ export default class index extends Component {
       flightList: [], // 航班列表
       isFlightListStatus: false,
 
+      skeletonList: [1, 2, 3], // 骨架屏数量
+      flightListStatus: true, // 查询航班列表状态
+
       fileKey: "", // 行程缓存
       segmentsKey: "", // 舱位缓存
       cabinList: [], // 舱位列表
@@ -42,14 +56,16 @@ export default class index extends Component {
       openCabinIndex: 5, // 舱位列表打开下标
 
       searchTime: "notTime", // 时间筛选
+      searchCabin: [1], // 舱位筛选
     };
   }
   async componentDidMount() {
+    console.log(this.props.location.search)
     await this.setState({
       urlData: React.$filterUrlParams(decodeURI(this.props.location.search)),
     });
 
-    // await this.getFlightList();
+    await this.getFlightList();
   }
 
   // 获取航班列表
@@ -66,6 +82,11 @@ export default class index extends Component {
         this.setState({
           fileKey: res.data.IBE.file_key,
           flightList: res.data.IBE.list,
+          skeletonList: [],
+        });
+      } else {
+        this.setState({
+          flightListStatus: false,
         });
       }
     });
@@ -107,6 +128,8 @@ export default class index extends Component {
             segmentsKey: val,
             cabinList: cabinList,
           });
+        } else {
+          message.warning(res.data);
         }
       });
     } else {
@@ -161,6 +184,21 @@ export default class index extends Component {
     });
   };
 
+  // 筛选栏 舱位筛选
+  changeSearchCabin = (e) => {
+    let newData = e;
+
+    console.log(newData);
+    this.setState({
+      searchCabin: newData,
+    });
+  };
+
+  // 预定机票
+  jumpTicketDetail(val) {
+    console.log(val);
+  }
+
   render() {
     return (
       <div className="flightList">
@@ -199,270 +237,477 @@ export default class index extends Component {
         </div>
 
         <div className="flight_content">
-          <div className="flight_search">
-            <div className="header_title">航班筛选</div>
+          <Affix offsetTop={0}>
+            <div className="flight_search">
+              <div className="header_title">航班筛选</div>
 
-            <div className="search_content">
-              <div className="search_list fiy_time">
-                <div className="list_title">
-                  起飞时段 <DownOutlined />
+              <div className="search_content">
+                <div className="search_list fiy_time">
+                  <div className="list_title">
+                    起飞时段 <DownOutlined />
+                  </div>
+
+                  <Radio.Group
+                    className="list_box"
+                    value={this.state.searchTime}
+                    buttonStyle="solid"
+                    onChange={this.searchTime}
+                  >
+                    <Radio.Button className="box_item" value="notTime">
+                      <img
+                        alt="不限"
+                        src={
+                          this.state.searchTime === "notTime"
+                            ? searchNotTime
+                            : searchNotTimeActive
+                        }
+                      />{" "}
+                      不限
+                    </Radio.Button>
+                    <Radio.Button className="box_item" value="morning">
+                      <img
+                        alt="上午"
+                        src={
+                          this.state.searchTime === "morning"
+                            ? searchMorning
+                            : searchMorningActive
+                        }
+                      />
+                      06:00-12:00
+                    </Radio.Button>
+                    <Radio.Button className="box_item" value="afternoon">
+                      <img
+                        alt="下午"
+                        src={
+                          this.state.searchTime === "afternoon"
+                            ? searchAfternoon
+                            : searchAfternoonActive
+                        }
+                      />
+                      12:00-18:00
+                    </Radio.Button>
+                    <Radio.Button className="box_item" value="night">
+                      <img
+                        alt="晚上"
+                        src={
+                          this.state.searchTime === "night"
+                            ? searchNight
+                            : searchNightActive
+                        }
+                      />
+                      18:00-24:00
+                    </Radio.Button>
+                  </Radio.Group>
                 </div>
 
-                <Radio.Group
-                  className="list_box"
-                  value={this.state.searchTime}
-                  buttonStyle="solid"
-                  onChange={this.searchTime}
-                >
-                  <Radio.Button className="box_item" value="notTime">
-                    <img
-                      alt="不限"
-                      src={
-                        this.state.searchTime === "notTime"
-                          ? searchNotTime
-                          : searchNotTimeActive
-                      }
-                    />{" "}
-                    不限
-                  </Radio.Button>
-                  <Radio.Button className="box_item" value="morning">
-                    <img
-                      alt="上午"
-                      src={
-                        this.state.searchTime === "morning"
-                          ? searchMorning
-                          : searchMorningActive
-                      }
-                    />
-                    06:00-12:00
-                  </Radio.Button>
-                  <Radio.Button className="box_item" value="afternoon">
-                    <img
-                      alt="下午"
-                      src={
-                        this.state.searchTime === "afternoon"
-                          ? searchAfternoon
-                          : searchAfternoonActive
-                      }
-                    />
-                    12:00-18:00
-                  </Radio.Button>
-                  <Radio.Button className="box_item" value="night">
-                    <img
-                      alt="晚上"
-                      src={
-                        this.state.searchTime === "night"
-                          ? searchNight
-                          : searchNightActive
-                      }
-                    />
-                    18:00-24:00
-                  </Radio.Button>
-                </Radio.Group>
-              </div>
+                <div className="search_list">
+                  <div className="list_title">
+                    舱位 <DownOutlined />
+                  </div>
 
-              <div className="search_list">
-                <div className="list_title">
-                  舱位 <DownOutlined />
+                  <Checkbox.Group
+                    className="list_box"
+                    value={this.state.searchCabin}
+                    onChange={this.changeSearchCabin}
+                  >
+                    <Checkbox className="box_item" value={1}>
+                      不限舱位
+                    </Checkbox>
+                    <Checkbox className="box_item" value={2}>
+                      经济舱
+                    </Checkbox>
+                    <Checkbox className="box_item" value={3}>
+                      公务舱
+                    </Checkbox>
+                    <Checkbox className="box_item" value={4}>
+                      头等舱
+                    </Checkbox>
+                  </Checkbox.Group>
                 </div>
-
-                <Checkbox.Group  className="list_box">
-                  <Checkbox className="box_item" value={1}>不限舱位</Checkbox>
-                  <Checkbox className="box_item" value={2}>经济舱</Checkbox>
-                  <Checkbox className="box_item" value={3}>公务舱</Checkbox>
-                  <Checkbox className="box_item" value={4}>头等舱</Checkbox>
-                </Checkbox.Group>
               </div>
             </div>
-          </div>
+          </Affix>
 
           <div className="flight_main">
-            <div className="main_header">
-              <div className="flight_number">共{this.state.flightList.length}条航班</div>
+            <Affix offsetTop={0}>
+              <div className="main_header">
+                <div className="flight_number">
+                  共{this.state.flightList.length}条航班
+                </div>
 
-              <div className="flight_sort">
-                <Select placeholder="排序" onChange={this.sortFlightList}>
-                  <Option value="time">时间早晚</Option>
-                  <Option value="price">价格高低</Option>
-                </Select>
+                <div className="flight_sort">
+                  <Select placeholder="排序" onChange={this.sortFlightList}>
+                    <Option value="time">时间早晚</Option>
+                    <Option value="price">价格高低</Option>
+                  </Select>
+                </div>
               </div>
-            </div>
+            </Affix>
             <div className="main_list">
               <QueueAnim>
-                {this.state.flightList.map((item, index) => (
-                  <div key={index}>
-                    <div className="list_card">
-                      <div className="card_air">
-                        <img
-                          className="air_icon"
-                          src={`${this.$url}` + item.segments[0].image}
-                          alt="航班logo"
-                        />
+                {this.state.flightListStatus &&
+                  this.state.flightList.map((item, index) => (
+                    <div key={index}>
+                      <div className="list_card">
+                        <div className="card_air">
+                          <img
+                            className="air_icon"
+                            src={`${this.$url}` + item.segments[0].image}
+                            alt="航班logo"
+                          />
 
-                        <div className="air_message">
-                          <div className="air_name">{item.segments[0].airline_CN}</div>
-                          <div className="air_number">
-                            {item.segments[0].flightNumber} 机型{" "}
-                            {item.segments[0].aircraftCode}
-                          </div>
-                          {item.segments[0].hasMeal ? (
-                            <div className="air_meals"></div>
-                          ) : (
-                            ""
-                          )}
-                        </div>
-                      </div>
+                          <div className="air_message">
+                            <div className="air_name">
+                              {item.segments[0].airline_info.airline.replace(
+                                /航空.*/,
+                                "航空"
+                              )}
+                            </div>
 
-                      <div className="flight_message">
-                        <div className="message_info">
-                          <div className="time">
-                            {this.$moment(item.segments[0].depTime).format("HH:mm")}
-                          </div>
-                          <div className="address">
-                            {item.segments[0].depAirport_CN.city_name}
-                            {item.segments[0].depAirport_CN.air_port_name}
-                            {item.segments[0].depTerminal}
-                          </div>
-                        </div>
-                        <div className="message_time">
-                          <div className="time_date">
-                            {Math.floor(item.segments[0].duration / 60)}h
-                            {Math.floor(item.segments[0].duration % 60)}m
-                          </div>
-                          <div className="time_icon"></div>
-                        </div>
-                        <div className="message_info">
-                          <div className="time">
-                            {this.$moment(
-                              item.segments[item.segments.length - 1].arrTime
-                            ).format("HH:mm")}
-                          </div>
-                          <div className="address">
-                            {
-                              item.segments[item.segments.length - 1].arrAirport_CN
-                                .city_name
-                            }
-                            {
-                              item.segments[item.segments.length - 1].arrAirport_CN
-                                .air_port_name
-                            }
-                            {item.segments[item.segments.length - 1].arrTerminal}
-                          </div>
-                        </div>
-                      </div>
-
-                      {item.available_cabin > 0 ? (
-                        <>
-                          <div className="flight_account">
-                            <p>&yen;</p>
-                            <div>{item.min_price}</div>
-                            <span>起</span>
-                          </div>
-                          <Button
-                            className="cabin_switch"
-                            onClick={() => this.openCabinBox(item.segments_key)}
-                            loading={
-                              item.segments_key === this.state.segmentsKey &&
-                              this.state.cabinList.length < 1
-                            }
-                          >
-                            {this.state.segmentsKey === item.segments_key &&
-                            this.state.cabinList.length > 1
-                              ? "收起"
-                              : this.state.segmentsKey === item.segments_key &&
-                                this.state.cabinList.length < 1
-                              ? "加载中"
-                              : "展开"}
-                          </Button>
-                        </>
-                      ) : (
-                        <div className="not_cabin">售罄</div>
-                      )}
-                    </div>
-
-                    {this.state.cabinList.length > 0 &&
-                    this.state.segmentsKey === item.segments_key ? (
-                      <div className="cabin_content">
-                        {this.state.cabinList.map((oitem) =>
-                          oitem.data.map((pitem, pindex) =>
-                            (pindex < this.state.openCabinIndex &&
-                              item.segments_key + oitem.name ===
-                                this.state.openCabinName) ||
-                            pindex === 0 ? (
-                              <>
-                                <div className="cabin_list" key={oitem.name + pindex}>
-                                  <div className="list_info">
-                                    <div
-                                      className="list_name"
-                                      style={{
-                                        cursor:
-                                          pindex === 0 && oitem.data.length > 1
-                                            ? "pointer"
-                                            : "",
-                                      }}
-                                      onClick={() =>
-                                        this.openMoreCabin(item.segments_key + oitem.name)
-                                      }
-                                    >
-                                      {oitem.name} {pitem.discount}
-                                      {pindex === 0 && oitem.data.length > 1 ? (
-                                        <DownOutlined
-                                          rotate={
-                                            item.segments_key + oitem.name ===
-                                            this.state.openCabinName
-                                              ? 180
-                                              : 0
-                                          }
-                                        />
-                                      ) : (
-                                        ""
-                                      )}
+                            <Popover
+                              placement="bottomLeft"
+                              color="#fff"
+                              overlayClassName="air_popover"
+                              content={() => (
+                                <div className="air_info">
+                                  <div className="info_title">
+                                    <img
+                                      className="title_icon"
+                                      src={`${this.$url}` + item.segments[0].image}
+                                      alt="航班logo"
+                                    />
+                                    {item.segments[0].airline_info.airline.replace(
+                                      /航空.*/,
+                                      "航空"
+                                    ) + item.segments[0].flightNumber}
+                                  </div>
+                                  <div className="info_main">
+                                    <div className="info_main_list">
+                                      <div className="info_main_list_title">机型</div>
+                                      <div className="info_main_list_message">
+                                        {item.segments[0].aircraftCode}
+                                      </div>
                                     </div>
-                                    <div className="list_message">
-                                      {pitem.cabinInfo.baggage}
+
+                                    <div className="info_main_list">
+                                      <div className="info_main_list_title">机型代码</div>
+                                      <div className="info_main_list_message">
+                                        {item.segments[0].aircraft_code}
+                                      </div>
+                                    </div>
+
+                                    <div className="info_main_list">
+                                      <div className="info_main_list_title">经停次数</div>
+                                      <div className="info_main_list_message">
+                                        {item.segments[0].stopCount > 0
+                                          ? `${item.segments[0].stopCount} 次`
+                                          : "直达"}
+                                      </div>
+                                    </div>
+
+                                    <div className="info_main_list">
+                                      <div className="info_main_list_title">飞行时长</div>
+                                      <div className="info_main_list_message">
+                                        {Math.floor(item.segments[0].duration / 60)}小时
+                                        {Math.floor(item.segments[0].duration % 60)}分钟
+                                      </div>
+                                    </div>
+
+                                    <div className="info_main_list">
+                                      <div className="info_main_list_title">
+                                        是否有餐食
+                                      </div>
+                                      <div className="info_main_list_message">
+                                        {item.segments[0].hasMeal ? "有" : "无"}
+                                      </div>
+                                    </div>
+
+                                    <div className="info_main_list">
+                                      <div className="info_main_list_title">餐食等级</div>
+                                      <div className="info_main_list_message">
+                                        {item.segments[0].MealCode || '无'}
+                                      </div>
                                     </div>
                                   </div>
 
-                                  <div className="list_option">
-                                    <div className="list_account">
-                                      <div>
-                                        <span>&yen;</span>
-                                        {pitem.cabinPrices.ADT.price}
-                                      </div>
-                                      <p>余 3 张</p>
-                                    </div>
-                                    <Button className="list_btn" type="primary">
-                                      预定
-                                    </Button>
+                                  <div className="info_bottom">
+                                    机型仅供参考，具体请以实际执行航班为准
                                   </div>
                                 </div>
+                              )}
+                            >
+                              <div className="air_number">
+                                {item.segments[0].flightNumber} 机型{" "}
+                                {item.segments[0].aircraftCode}
+                              </div>
+                            </Popover>
 
-                                {this.state.openCabinIndex < oitem.data.length &&
-                                this.state.openCabinIndex - 1 === pindex &&
-                                pindex !== 0 ? (
-                                  <div
-                                    key={oitem.name + "_" + pindex}
-                                    className="open_more_cabin_btn"
-                                  >
-                                    <span onClick={() => this.openCabinIndexStatus()}>
-                                      展开更多
-                                    </span>
-                                  </div>
-                                ) : (
-                                  ""
-                                )}
-                              </>
+                            {item.segments[0].hasMeal ? (
+                              <div className="air_meals"></div>
                             ) : (
                               ""
-                            )
-                          )
+                            )}
+                          </div>
+                        </div>
+
+                        <div className="flight_message">
+                          <div className="message_info">
+                            <div className="time">
+                              {this.$moment(item.segments[0].depTime).format("HH:mm")}
+                            </div>
+                            <div className="address">
+                              {item.segments[0].depAirport_CN.city_name}
+                              {item.segments[0].depAirport_CN.air_port_name}
+                              {item.segments[0].depTerminal}
+                            </div>
+                          </div>
+                          <div className="message_time">
+                            <div className="time_date">
+                              {Math.floor(item.segments[0].duration / 60)}h
+                              {Math.floor(item.segments[0].duration % 60)}m
+                            </div>
+                            <div className="time_icon"></div>
+                          </div>
+                          <div className="message_info">
+                            <div className="time">
+                              {this.$moment(
+                                item.segments[item.segments.length - 1].arrTime
+                              ).format("HH:mm")}
+                            </div>
+                            <div className="address">
+                              {
+                                item.segments[item.segments.length - 1].arrAirport_CN
+                                  .city_name
+                              }
+                              {
+                                item.segments[item.segments.length - 1].arrAirport_CN
+                                  .air_port_name
+                              }
+                              {item.segments[item.segments.length - 1].arrTerminal}
+                            </div>
+                          </div>
+                        </div>
+
+                        {item.available_cabin > 0 ? (
+                          <>
+                            <div className="flight_account">
+                              <p>&yen;</p>
+                              <div>{item.min_price}</div>
+                              <span>起</span>
+                            </div>
+                            <Button
+                              className="cabin_switch"
+                              onClick={() => this.openCabinBox(item.segments_key)}
+                              loading={
+                                item.segments_key === this.state.segmentsKey &&
+                                this.state.cabinList.length < 1
+                              }
+                            >
+                              {this.state.segmentsKey === item.segments_key &&
+                              this.state.cabinList.length > 1
+                                ? "收起"
+                                : this.state.segmentsKey === item.segments_key &&
+                                  this.state.cabinList.length < 1
+                                ? "加载中"
+                                : "展开"}
+                            </Button>
+                          </>
+                        ) : (
+                          <div className="not_cabin">售罄</div>
                         )}
                       </div>
-                    ) : (
-                      ""
-                    )}
-                  </div>
-                ))}
+
+                      {this.state.cabinList.length > 0 &&
+                      this.state.segmentsKey === item.segments_key ? (
+                        <div className="cabin_content">
+                          {this.state.cabinList.map((oitem) =>
+                            oitem.data.map((pitem, pindex) =>
+                              (pindex < this.state.openCabinIndex &&
+                                item.segments_key + oitem.name ===
+                                  this.state.openCabinName) ||
+                              pindex === 0 ? (
+                                <>
+                                  <div
+                                    className="cabin_list"
+                                    key={oitem.name + "__" + pindex}
+                                  >
+                                    <div className="list_info">
+                                      <div
+                                        className="list_name"
+                                        style={{
+                                          cursor:
+                                            pindex === 0 && oitem.data.length > 1
+                                              ? "pointer"
+                                              : "",
+                                        }}
+                                        onClick={() =>
+                                          this.openMoreCabin(
+                                            item.segments_key + oitem.name
+                                          )
+                                        }
+                                      >
+                                        {oitem.name} {pitem.cabinInfo.cabinCode}{" "}
+                                        {pitem.discount}
+                                        {pindex === 0 && oitem.data.length > 1 ? (
+                                          <DownOutlined
+                                            rotate={
+                                              item.segments_key + oitem.name ===
+                                              this.state.openCabinName
+                                                ? 180
+                                                : 0
+                                            }
+                                          />
+                                        ) : (
+                                          ""
+                                        )}
+                                      </div>
+                                      <div className="list_message">
+                                        {pitem.ruleInfos.refund ? (
+                                          <Popover
+                                            placement="bottomRight"
+                                            color="#fff"
+                                            overlayClassName="refund_popover"
+                                            content={() => (
+                                              <div className="refund_box">
+                                                <div className="refund_title">
+                                                  退改签说明
+                                                </div>
+                                                <div className="refund_main">
+                                                  <div className="refund_main_title">
+                                                    退票
+                                                  </div>
+                                                  {pitem.ruleInfos.refund.map(
+                                                    (ritem, rindex) => (
+                                                      <div
+                                                        className="refund_main_box"
+                                                        key={rindex}
+                                                      >
+                                                        <p>{ritem.title}</p>
+                                                        <p>
+                                                          {ritem.value
+                                                            ? Number(ritem.value)
+                                                              ? Number(ritem.value) + "%"
+                                                              : ritem.value
+                                                            : ""}
+                                                        </p>
+                                                      </div>
+                                                    )
+                                                  )}
+                                                </div>
+                                                <div className="refund_main">
+                                                  <div className="refund_main_title">
+                                                    改签
+                                                  </div>
+                                                  {pitem.ruleInfos.change &&
+                                                    pitem.ruleInfos.change.map(
+                                                      (ritem, rindex) => (
+                                                        <div
+                                                          className="refund_main_box"
+                                                          key={rindex}
+                                                        >
+                                                          <p>{ritem.title}</p>
+                                                          <p>
+                                                            {ritem.value
+                                                              ? Number(ritem.value)
+                                                                ? Number(ritem.value) +
+                                                                  "%"
+                                                                : ritem.value
+                                                              : ""}
+                                                          </p>
+                                                        </div>
+                                                      )
+                                                    )}
+                                                </div>
+                                              </div>
+                                            )}
+                                          >
+                                            <p>
+                                              {pitem.ruleInfos.refund[0].value &&
+                                              pitem.ruleInfos.refund[
+                                                pitem.ruleInfos.refund.length - 1
+                                              ].value
+                                                ? `退票${
+                                                    pitem.ruleInfos.refund[0].value
+                                                  }%-${
+                                                    pitem.ruleInfos.refund[
+                                                      pitem.ruleInfos.refund.length - 1
+                                                    ].value
+                                                  }%`
+                                                : "根据航司规定"}
+                                            </p>
+                                          </Popover>
+                                        ) : (
+                                          <p className="not_rule">根据航司规定</p>
+                                        )}
+                                        <span></span>
+                                        <p className="not_rule">{pitem.cabinInfo.baggage}</p>
+                                      </div>
+                                    </div>
+
+                                    <div className="list_option">
+                                      <div className="list_account">
+                                        <div>
+                                          <span>&yen;</span>
+                                          {pitem.cabinPrices.ADT.price}
+                                        </div>
+                                        {pitem.cabinInfo.cabinNum < 9 ? (
+                                          <p>余 {pitem.cabinInfo.cabinNum} 张</p>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </div>
+                                      <Button
+                                        className="list_btn"
+                                        type="primary"
+                                        onClick={() => this.jumpTicketDetail(pitem)}
+                                      >
+                                        预定
+                                      </Button>
+                                    </div>
+                                  </div>
+
+                                  {this.state.openCabinIndex < oitem.data.length &&
+                                  this.state.openCabinIndex - 1 === pindex &&
+                                  pindex !== 0 ? (
+                                    <div
+                                      key={oitem.name + "_" + pindex}
+                                      className="open_more_cabin_btn"
+                                    >
+                                      <span onClick={() => this.openCabinIndexStatus()}>
+                                        展开更多
+                                      </span>
+                                    </div>
+                                  ) : (
+                                    ""
+                                  )}
+                                </>
+                              ) : (
+                                ""
+                              )
+                            )
+                          )}
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  ))}
+                {/* 骨架屏 */}
+                {this.state.flightListStatus &&
+                  this.state.skeletonList.map((item) => (
+                    <div className="list_card skeleton_card" key={item}>
+                      <Skeleton active paragraph={{ rows: 2 }} />
+                    </div>
+                  ))}
+                {/* 获取失败 */}
+                {!this.state.flightListStatus ? (
+                  <Result
+                    icon={<SmileOutlined />}
+                    title="暂无航班信息，请更换日期进行查询"
+                  />
+                ) : (
+                  ""
+                )}
               </QueueAnim>
             </div>
           </div>
