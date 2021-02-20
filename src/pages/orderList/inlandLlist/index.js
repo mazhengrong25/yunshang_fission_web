@@ -2,16 +2,16 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
- * @LastEditTime: 2021-02-19 09:21:52
+ * @LastEditTime: 2021-02-20 16:32:19
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
 
 import { Input, DatePicker, Select, Button, Table, Tag, Pagination, Menu } from 'antd';
 
-import inland_icon from '../../../static/inland_icon.png';
-
-// import HeaderTemplate from "../../../components/Header"; // 导航栏
+// 菜单栏图标
+import InlandIcon from '../../../static/inland_icon.png';
+import InterIcon from '../../../static/inter_icon.png';
 
 import './inlandList.scss'
 import Column from 'antd/lib/table/Column';
@@ -33,9 +33,9 @@ export default class index extends Component {
                 "created_at": this.$moment().subtract(3, 'days').format('YYYY-MM-DD'),
             },
             paginationData: {
-                current_page: "", //当前页数
-                per_page: "", //每页条数	
-                total: ""
+                current_page: 1, //当前页数
+                per_page: 5, //每页条数	
+                total: 0
             },
         }
     }
@@ -47,24 +47,19 @@ export default class index extends Component {
     // 获取航班列表
     getDataList() {
 
-        // let data = {
-        //     // "status":"-1",                //类型：String  可有字段  备注：订单状态 -1：全部 0：过期 1：正常 3：已出票 默认：-1
-        //     // "created_at": "2020-02-18",                //类型：String  可有字段  备注：起飞时间 默认：今天00:00
-        //     // "created_at_end":"",                //类型：String  可有字段  备注：到达时间 默认：今天23:59
-        //     // "pnr_code":"",                //类型：String  可有字段  备注：PNR编码
-        //     // "order_no":"",                //类型：String  可有字段  备注：订单号
-        //     // "departure":"",                //类型：String  可有字段  备注：出发机场三字码
-        //     // "arrive":"",                //类型：String  可有字段  备注：到达机场三字码
-        //     // "flight_no":"",                //类型：String  可有字段  备注：航班号
-        //     // "book_user":""                //类型：String  可有字段  备注：订票员
-        // }
-        
-        this.$axios.post("/api/orders/list", this.state.searchFrom).then(res => {
+        let data = this.state.searchFrom
+        data['page'] = this.state.paginationData.page
+        data['limit'] = this.state.paginationData.per_page
+
+        this.$axios.post("/api/orders/list", data).then(res => {
             if (res.result === 10000) {
+
+                let newPage = this.state.paginationData
+                newPage.total = res.data.total
+                newPage.current_page = res.data.current_page
                 this.setState({
                     dataList: res.data.data,
-                    paginationData: res.data,
-
+                    paginationData: newPage,
                 })
                 console.log(this.state.paginationData)
                 console.log(this.state.dataList)
@@ -79,13 +74,18 @@ export default class index extends Component {
     }
 
     // 分页
-    async changePagination(page, pageSize) {
-        console.log(123)
-        let data = JSON.parse(JSON.stringify(this.state.paginationData))
-        data.current_page = page;
-        data.per_page = pageSize;
+    changePagination = async (page, pageSize) => {
+
+        console.log(page, pageSize)
+        
+        let data = this.state.paginationData
+        data['page'] = page;
+        data['limit'] = pageSize;
+
+        console.log(data)
+
         await this.setState({
-            paginationData:data,
+            paginationData: data,
         })
         await this.getDataList();
     }
@@ -93,7 +93,7 @@ export default class index extends Component {
 
     // 选择器搜索
     SelectItem(label, val) {
-        let data = JSON.parse(JSON.stringify(this.state.searchFrom));
+        let data = this.state.searchFrom
         data[label] = val ? val.value : 0;
         this.setState({
             searchFrom: data,
@@ -113,9 +113,9 @@ export default class index extends Component {
     // 日期搜索
     PickerItem(start, end, val, stringVal) {
         console.log(start, end, stringVal)
-        let newData= this.state.searchFrom
-        newData[start] = stringVal[0]? stringVal[0]: this.$moment().subtract(3, 'days').format('YYYY-MM-DD')
-        newData[end] = stringVal[1]? stringVal[1]:  this.$moment().format('YYYY-MM-DD')
+        let newData = this.state.searchFrom
+        newData[start] = stringVal[0] ? stringVal[0] : this.$moment().subtract(3, 'days').format('YYYY-MM-DD')
+        newData[end] = stringVal[1] ? stringVal[1] : this.$moment().format('YYYY-MM-DD')
         this.setState({
             searchFrom: newData
         })
@@ -131,7 +131,6 @@ export default class index extends Component {
     render() {
         return (
             <div className="inlandList">
-                {/* <HeaderTemplate /> */}
                 <div className="content_div">
                     <div className="filter_div">
                         <div className="nav_top">我的订单</div>
@@ -151,12 +150,15 @@ export default class index extends Component {
                                 style={{ width: 184 }}
                                 mode="inline"
                             >
-                                <SubMenu key="inland" title="国内机票" icon={<inland_icon className="menu_icon" />}>
+                                <SubMenu key="inland" title="国内机票"
+                                    icon={<div className="menu_icon"><img src={InlandIcon} alt="" /></div>}>
                                     <Menu.Item key="inland_ticket">机票订单</Menu.Item>
                                     <Menu.Item key="inland_change">改签订单</Menu.Item>
                                     <Menu.Item key="inland_refund">退票订单</Menu.Item>
                                 </SubMenu>
-                                <SubMenu key="inter" title="国际机票">
+                                <SubMenu key="inter" title="国际机票"
+                                    icon={<div className="menu_icon"><img src={InterIcon} alt="" /></div>}>
+
                                     <Menu.Item key="inter_ticket">机票订单</Menu.Item>
                                     <Menu.Item key="inter_change">改签订单</Menu.Item>
                                     <Menu.Item key="inter_refund">退票订单</Menu.Item>
@@ -206,8 +208,6 @@ export default class index extends Component {
 
                         </div>
                         <div className="order_table">
-
-
                             <Table
                                 rowKey="key_id"
                                 pagination={false}
@@ -216,6 +216,7 @@ export default class index extends Component {
                                 <Column
                                     title="类型"
                                     dataIndex="segment_type"
+                                    key="segment_type"
                                     render={(text) =>
                                         <>
                                             {
@@ -229,6 +230,7 @@ export default class index extends Component {
                                 <Column
                                     title="乘机人"
                                     dataIndex="passengerName"
+                                    key="passengerName"
                                     render={(text, render, index) =>
                                         <div className="table_passenger">
                                             {render.ticket_passenger.map(item => (
@@ -239,6 +241,7 @@ export default class index extends Component {
                                 ></Column>
                                 <Column
                                     title="行程"
+                                    key="route"
                                     render={(text, render) =>
                                         <>
                                             {
@@ -258,6 +261,7 @@ export default class index extends Component {
                                 <Column
                                     title="行程时间"
                                     dataIndex="route_time"
+                                    key="route_time"
                                     render={(text, render) =>
                                         <>
                                             {
@@ -274,10 +278,12 @@ export default class index extends Component {
                                 <Column
                                     title="金额"
                                     dataIndex="total_price"
+                                    key="total_price"
                                 ></Column>
                                 <Column
                                     title="状态"
                                     dataIndex="status"
+                                    key="status"
                                     render={(text) =>
                                         <>
                                             {
@@ -293,6 +299,7 @@ export default class index extends Component {
                                 <Column
                                     title="操作"
                                     dataIndex="action"
+                                    key="action"
                                     render={(text, render) => (
 
                                         <div className="action_div">
@@ -314,11 +321,13 @@ export default class index extends Component {
                             </Table>
                             {/* 分页 */}
                             <div className="table_pagination">
+
                                 <Pagination
-                                    total={this.state.paginationData.total}
-                                    current={this.state.paginationData.current_page}
-                                    pageSize={this.state.paginationData.per_page}
-                                    // onChange={() => this.changePagination()}
+                                    showSizeChanger
+                                    showTitle={false}
+                                    total={Number(this.state.paginationData.total)}
+                                    current={Number(this.state.paginationData.current_page)}
+                                    pageSize={Number(this.state.paginationData.per_page)}
                                     onChange={this.changePagination}
                                 />
                             </div>

@@ -58,13 +58,12 @@
                         background-size: contain;
                     }
                 }
-                .ant-menu-item-selected {
-                    color: #5B7CF0;
-                }
-                .ant-menu-item-active {
-                    color: #5B7CF0;
-                    
-                }
+                // .ant-menu-item-selected {
+                //     color: #5B7CF0;
+                // }
+                // .ant-menu-item-active {
+                //     color: #5B7CF0;
+                // }
                 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
                     background-color: #fff;
                 }
@@ -77,12 +76,24 @@
                     box-shadow: 0px 0px 20px #ebedf2;
                     cursor: auto;
                 }
-                .ant-menu-submenu-active {
-                    background-color: #333333;
+                .ant-menu-submenu-title {
+                    display: flex;
+                }
+                .ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left  {
+                    border-right: none;
+                }
+                .ant-menu-submenu, .ant-menu-submenu-inline{
+                    // background-color: #5B7CF0;
                 }
                 .menu_icon {
                     width: 17px;
                     height: 17px;
+                    margin-right: 5px;
+                    img {
+                        width: 100%;
+                        height: 100%;
+                        object-fit: contain;
+                    }
                 }
             }
             
@@ -103,8 +114,6 @@
             .list_nav {
                 display: flex;
                 flex-wrap: wrap;
-                // padding: 34px 24px;
-                padding-left: 24px;
                 padding-top: 34px;
                 .nav_item {
                     display: flex;
@@ -115,6 +124,8 @@
                         font-weight: 400;
                         color: #333333;
                         margin-right: 10px;
+                        width: 77px;
+                        text-align: right;
                     }
                     .ant-btn {
                         width: 112px;
@@ -141,32 +152,40 @@
                 }
             }
             .order_table {
-                // padding: 24px;
                 padding-left: 24px;
                 padding-right: 24px;
                 .table_pagination {
                     display: flex;
                     justify-content: flex-end;
                     padding: 30px;
+
+                    .ant-pagination-item {
+                        
+                        background: #F0F1F5;
+                        border:none;
+                        // &:active {
+                            
+                        //     background-color: #5B7CF0;
+                        //     color: #fff;
+                        // }
+                    }
+                    
+                    .ant-pagination-prev .ant-pagination-item-link, .ant-pagination-next .ant-pagination-item-link {
+                        border-radius: 0px;       
+                        background-color: #F0F1F5;
+                        border: none;
+                    }
+                    .ant-select-single .ant-select-selector {
+                        display: flex;
+                        align-items: center;
+                        border: 1px solid #DADDE2 !important;
+                        height: 24px !important;
+                        border-radius: none !important;
+                    }
                 }
                 .ant-table-thead > tr > th {
                     
                     background: #EBEDF2;
-                }
-                .ant-pagination-prev, .ant-pagination-next, .ant-pagination-jump-prev, .ant-pagination-jump-next {
-                    width: 24px;
-                    height: 24px;
-                    line-height: 24px;
-                    background: #F0F1F5;
-                }
-                .ant-pagination-item {
-                    width: 24px;
-                    height: 24px;
-                    line-height: 24px;
-                    background: #F0F1F5;
-                }
-                .ant-pagination-item-active {
-                    font-weight: 400;
                 }
             }
             .route {

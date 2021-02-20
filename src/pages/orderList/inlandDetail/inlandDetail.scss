@@ -1,11 +1,12 @@
 .inlandDetail {
     height: 100%;
+    background: rgba(240, 241, 245, 1);
+    padding: 18px 0px;
+    display: flex;
+    align-items: center;
+    flex-direction: column;
     .content_div {
-        min-height: calc(100% - 110px);
-        background: rgba(240, 241, 245, 1);
-        padding: 18px 360px;
-        display: flex;
-        flex-direction: column;
+        min-width: calc(100% - 720px);
         .content_nav {
             
             font-size: 12px;
@@ -40,10 +41,12 @@
                 height: 32px;
                 background: #FFFFFF;
                 border-radius: 5px;
-                font-size: 18px;
-                font-weight: bold;
-                color: #F36969;
                 text-align: center;
+                .ant-statistic-content {
+                  font-size: 18px;
+                  font-weight: bold;
+                  color: #F36969;
+                }
             }
         }
         .content_status {
@@ -225,6 +228,12 @@
             }
             .price_div {
                 padding: 24px;
+                .ticket_price {
+                  
+                  font-size: 24px;
+                  font-weight: bold;
+                  color: #5B7CF0;
+                }
                 .price_button {
                     display: flex;
                     justify-content: center;
@@ -266,6 +275,7 @@
                         font-size: 14px;
                         font-weight: 400;
                         color: #333333;
+                        letter-spacing: 2px;
                     }
                 }
                 .pay_btn {
@@ -277,6 +287,14 @@
                         font-size: 14px;
                         font-weight: 400;
                         color: #FFFFFF;
+                        letter-spacing: 2px;
+                        border: none;
+                    }
+                    .pay_money {
+                      margin-left: 5px;
+                      font-size: 18px;
+                      font-weight: bold;
+                      color: #FFFFFF;
                     }
                 }
             }
@@ -477,11 +495,11 @@
                   .middle_icon {
                     width: 24px;
                     height: 24px;
-                    object-fit: contain;
-                    background: url("../../../static/flight_icon.png") no-repeat center
-                      center;
-                    background-size: contain;
-                    margin-right: 8px;
+                    img {
+                      width: 100%;
+                      height: 100%;
+                      object-fit: contain;
+                    }
                   }
                   .middle_fly_type {
                     font-size: 12px;
@@ -540,6 +558,22 @@
                 }
               }
             }
+        }
+        .modal_box {
+          display: inline-flex;
+          .modal_item {
+            display: inline-flex;
+            .modal_title {
+              margin-right: 8px;
+            }
+            .modal_content {
+
+            }
+          }
+        }
+        .ant-modal-content .ant-modal-header {
+            text-align: center;
+           
         }
     }
 }
