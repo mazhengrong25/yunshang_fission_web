@@ -2,17 +2,18 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-02-19 10:01:40
+ * @LastEditTime: 2021-02-20 19:37:47
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
 
-import { Table, Divider, Image, Button, Breadcrumb, Modal } from "antd"
-
-// import HeaderTemplate from "../../../components/Header"; // 导航栏
+import { Table, Divider, Button, Breadcrumb, Modal, Radio, Input, Statistic } from "antd"
 
 import './inlandDetail.scss'
 import Column from 'antd/lib/table/Column';
+
+const { TextArea } = Input;
+const { Countdown } = Statistic;
 
 export default class index extends Component {
 
@@ -52,7 +53,6 @@ export default class index extends Component {
 
     // 发送短信的收起展开
     openModal() {
-        console.log("短信")
         this.setState({
             showModal: true
         })
@@ -71,8 +71,15 @@ export default class index extends Component {
                         insuranceList.push(item)
                     }
                 })
+
+                // 判断当前订单支付状态以及剩余支付时间
+                let data = res.data
+                if (data.status === 1 && data.left_min <= 0) {
+                    data.status = 5
+                }
+
                 this.setState({
-                    detailData: res.data,
+                    detailData: data,
                     detailSegment: res.data.ticket_segments,
                     detailPassenger: res.data.ticket_passenger,
                     detailInsure: res.data.insurance_msg,
@@ -88,10 +95,19 @@ export default class index extends Component {
         this.props.history.push('/inlandList')
     }
 
+
+    // 支付时间结束 关闭订单
+    closeOrderStatus = () => {
+        let data = this.state.detailData
+        data.status = 5
+        this.setState({
+            detailData: data
+        })
+    }
+
     render() {
         return (
             <div className="inlandDetail">
-                {/* <HeaderTemplate /> */}
                 <div className="content_div">
                     <div className="content_nav">
                         <Breadcrumb separator="<">
@@ -101,10 +117,16 @@ export default class index extends Component {
                         </Breadcrumb>
                     </div>
                     {/* 待支付 */}
-                    {this.state.detailData.status === 1 ?
+                    {(this.state.detailData.status === 1 && this.state.detailData.left_min > 0) ?
                         (<div className="pay_div">
                             <div className="pay_title">订单请在{this.state.detailData.left_min}分钟内完成支付</div>
-                            <div className="pay_time">12:52</div>
+
+                            <div className="pay_time">
+                                <Countdown format="mm:ss"
+                                    value={this.$moment().add(this.state.detailData.left_min, 'm')}
+                                    onFinish={this.closeOrderStatus}
+                                />
+                            </div>
                         </div>) : ''}
                     {/* 订单信息 */}
                     <div className="content_status">
@@ -247,15 +269,22 @@ export default class index extends Component {
                                     </div>
                                     <div style={{ flex: 1 }}></div>
                                     <div className="open_middle">
-                                        <Image width={24} src={this.$url + item.image} />
+                                        <div className="middle_icon">
+                                            <img src={this.$url + item.image} alt=""/>
+                                        </div>
                                         <div className="middle_fly_type">{item.airline_CN.air_name}</div>
                                         <div className="middle_fly_modal">
                                             {`${item.flight_no}
                                                 机型${item.model}`}
                                         </div>
-                                        <div className="middle_fly_cabin">经济舱</div>
-                                        <div className="middle_fly_share">共享</div>
-                                        <div className="middle_fly_meal"></div>
+                                        <div className="middle_fly_cabin">
+                                            {
+                                                item.cabin_level === "ECONOMY"?"经济舱":
+                                                    item.cabin_level === "FIRST"?"头等舱":
+                                                        item.cabin_level === "BUSINESS"?"公务舱":""
+                                            }
+                                         </div>
+                                        <div class                                                                                                                                                                                                                                                                                                                                                        Name="middle_fly_meal"></div>
                                     </div>
                                     <div style={{ flex: 1 }}></div>
                                     <div className="open_right">
@@ -274,10 +303,9 @@ export default class index extends Component {
                         <div className="item_title">乘机人信息</div>
 
                         {this.state.detailPassenger.map((item, index) => (
-                            <div className="passenger_message" key={index.id}>
+                            <div className="passenger_message" key={item.id}>
                                 <div className="message_nav">
                                     <div className="passenger_number">乘机人{index + 1}</div>
-                                    
                                     <Button type="link" onClick={() => this.openModal()}>给该乘机人发送行程通知（短信，邮件）</Button>
                                 </div>
                                 <div className="message_div">
@@ -351,7 +379,7 @@ export default class index extends Component {
                                 </div>
                             </div>
                             <div className="item_space">
-                                <Button type="link" style={{ padding: 0}} onClick={() => this.openModal()}>给该乘机人发送行程通知（短信，邮件）</Button>
+                                <Button type="link" style={{ padding: 0 }} onClick={() => this.openModal()}>给该乘机人发送行程通知（短信，邮件）</Button>
                             </div>
                         </div>
                     </div>
@@ -377,8 +405,8 @@ export default class index extends Component {
                                     dataSource={this.state.insurancePassenger}
                                 >
                                     <Column title="乘客姓名" dataIndex="PassengerName" />
-                                    <Column title="保险名称" 
-                                       render= {() => {
+                                    <Column title="保险名称"
+                                        render={() => {
                                             return this.state.detailInsure.insure_desc
                                         }}
                                     />
@@ -419,12 +447,14 @@ export default class index extends Component {
                         <div className="item_title">价格明细</div>
                         <div className="price_div">
                             <Table
+                                rowKey="key_id"
                                 pagination={false}
                                 dataSource={this.state.detailPassenger}
                             >
-                                <Column title="姓名" dataIndex="PassengerName" />
+                                <Column title="姓名" dataIndex="PassengerName" key="PassengerName" />
                                 <Column title="类型"
                                     dataIndex="PassengerType"
+                                    key="PassengerType"
                                     render={(text) =>
                                         <>
                                             {
@@ -436,76 +466,85 @@ export default class index extends Component {
                                         </>
                                     }
                                 />
-                                <Column title="票价" dataIndex="ticket_price"
+                                <Column title="票价" dataIndex="ticket_price" key="ticket_price"
                                     render={(text) => (
                                         <>&yen;{text}</>
                                     )
 
                                     }
                                 />
-                                <Column title="机建" dataIndex="build_total"
+                                <Column title="机建" dataIndex="build_total" key="build_total"
                                     render={(text) => (
                                         <>&yen;{text}</>
                                     )
 
                                     }
                                 />
-                                <Column title="燃油" dataIndex="fuel_total"
+                                <Column title="燃油" dataIndex="fuel_total" key="fuel_total"
                                     render={(text) => (
                                         <>&yen;{text}</>
                                     )
 
                                     }
                                 />
-                                <Column title="保险" dataIndex="insurance_total"
+                                <Column title="保险" dataIndex="insurance_total" key="insurance_total"
                                     render={(text) => (
                                         <>&yen;{text}</>
                                     )
 
                                     }
                                 />
-                                <Column title="服务费" dataIndex="service_price"
+                                <Column title="服务费" dataIndex="service_price" key="service_price"
                                     render={(text) => (
                                         <>&yen;{text}</>
                                     )
 
                                     }
                                 />
-                                <Column title="共计" 
-                                    dataIndex="ticket_price"
-                                    render={(text,col,index) => {
-                                        return {
-                                            children: text,
-                                            props: {
-                                                colSpan: col['ticket_price&colSpan '],
+                                <Column 
+                                    title="共计"
+                                  dataIndex="ticket_price"
+                                    render={(text, col, index) => {
+                                        if (index === 0) {
+                                            return {
+                                                children: <div className="ticket_price">&yen;{text}</div>,
+                                                props: {
+                                                    rowSpan: this.state.detailPassenger.length,
+                                                }
+                                            }
+                                        } else {
+                                            return {
+                                                props: {
+                                                    rowSpan: 0,
+                                                }
                                             }
                                         }
-                                        
+
                                     }}
                                 />
 
                             </Table>
-                            
-                            {this.state.detailData.status === 1 ? 
-                                (   
+
+                            {this.state.detailData.status === 1 ?
+                                (
                                     <div className="price_button">
                                         <div className="back_btn" onClick={() => (this.backList())}><Button>返回</Button></div>
                                         <div className="btn_item"><Button>退票</Button></div>
                                         <div className="btn_item"><Button>改签</Button></div>
                                     </div>
-                                ):
-                                this.state.detailData.status === 5 ? 
-                                (
-                                    <div className="price_button">
-                                        <Button>返回</Button>
-                                    </div>
-                                ):""
+                                ) :
+                                this.state.detailData.status === 5 ?
+                                    (
+                                        <div className="price_button">
+                                            <Button>返回</Button>
+                                        </div>
+                                    ) : ""
                             }
-                           
+
                         </div>
                     </div>
                     {/* 支付方式 */}
-                    {this.state.detailData.status === 1 ?
+                    {this.state.detailData.status === 1 && this.state.detailData.left_min > 0 ?
                         (
                             <div className="content_item">
                                 <div className="item_title">支付方式</div>
@@ -514,21 +553,53 @@ export default class index extends Component {
                                         <Button>取消订单</Button>
                                     </div>
                                     <div className="pay_btn">
-                                        <Button>立即支付</Button>
+                                        <Button>立即支付<span className="pay_money">&yen;{this.state.detailData.total_price}</span></Button>
                                     </div>
                                 </div>
                             </div>
-                        ):''
+                        ) : ''
                     }
                     {/* 发送短信弹出 */}
                     <Modal
-                        title="发送短信"
-                        visible={() => this.state.showModal}
-                        centered
-                        onCancel={() => this.state.showModal}
                         width={800}
+                        title="发送短信"
+                        visible={this.state.showModal}
+                        onCancel={() => this.setState({
+                            showModal: false
+                        })}
                     >
-                       
+                        <div className="modal_box">
+                            <div className="modal_item">
+                                <div className="modal_title">发送对象</div>
+                                <div className="modal_content">
+                                    <Radio.Group>
+                                        <Radio value={1}>联系人</Radio>
+                                        <Radio value={2}>乘机人</Radio>
+                                    </Radio.Group>
+                                </div>
+                            </div>
+                            <div className="modal_item">
+                                <div className="modal_title">手机号</div>
+                                <div className="modal_content">
+                                    <Input placeholder="请输入手机号" />
+                                </div>
+                            </div>
+                            <div className="modal_item">
+                                <div className="modal_title">选择模板</div>
+                                <div className="modal_content">
+
+                                </div>
+                            </div>
+                            <div className="modal_item">
+                                <div className="modal_title">发送内容</div>
+                                <div className="modal_content">
+                                    <TextArea
+                                        placeholder="请填写发送内容"
+                                        autoSize={{ minRows: 3, maxRows: 5 }}
+                                    />
+                                </div>
+                            </div>
+                        </div>
                     </Modal>
                 </div>
             </div>
