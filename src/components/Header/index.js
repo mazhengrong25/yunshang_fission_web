@@ -2,16 +2,16 @@
  * @Description: 导航栏
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:43:50
- * @LastEditTime: 2021-02-22 09:30:52
+ * @LastEditTime: 2021-02-22 09:31:43
  * @LastEditors: mzr
  * @LastEditTime: 2021-02-06 11:51:24
  * @LastEditors: wish.WuJunLong
  */
-import React, { Component } from "react";
+import React from "react";
 
 import { withRouter } from "react-router-dom";
 
-import { Menu, Dropdown, Badge, Modal, Input, Button } from "antd";
+import { Menu, Dropdown, Modal, Input, Button } from "antd";
 import {
   DownOutlined,
   UserOutlined,
@@ -21,9 +21,6 @@ import {
 } from "@ant-design/icons";
 
 import "./header.scss";
-
-import { createBrowserHistory } from "history";
-const history = createBrowserHistory();
 
 class Index extends React.Component {
   constructor(props) {
@@ -117,7 +114,7 @@ class Index extends React.Component {
         </div>
         <div className="header__nav">
           <div className="header__nav__main">
-            <div className="header__nav__main__logo"></div>
+            <div className="header__nav__main__logo" onClick={() => this.jumpUrl("/home")}></div>
             <div className="header__nav__main__box">
               <div
                 className={[
@@ -137,9 +134,9 @@ class Index extends React.Component {
                 ]}
                 onClick={() => this.jumpUrl("/inlandList")}
               >
-                <Badge count={this.state.badgeNumber} offset={[5, -3]}>
+                {/* <Badge count={this.state.badgeNumber} offset={[5, -3]}> */}
                   我的订单
-                </Badge>
+                {/* </Badge> */}
               </div>
               {this.state.loginStatus ? (
                 <div className="header__nav__main__box__userInfo">

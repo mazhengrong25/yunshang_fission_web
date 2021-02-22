@@ -1,0 +1,158 @@
+.flight_scheduled {
+  max-width: 1200px;
+  margin: 0 auto;
+
+  .scheduled_main {
+    .template_main {
+      background: #ffffff;
+      border-radius: 5px;
+      padding: 24px;
+      &:not(:last-child) {
+        margin-bottom: 16px;
+      }
+      .main_title {
+        font-size: 18px;
+        font-weight: bold;
+        color: #3a3b50;
+        margin-bottom: 24px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+      }
+    }
+
+    // 常用乘客列表
+    .common_contact {
+      .main_title {
+        .add_passenger {
+          min-width: 112px;
+          height: 40px;
+          border: 1px solid #5b7cf0;
+          border-radius: 5px;
+          font-size: 14px;
+          font-weight: 400;
+          color: #5b7cf0;
+          img {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+            margin-right: 8px;
+          }
+        }
+      }
+      .contact_box {
+        .contact_checked {
+          text-align: center;
+          line-height: 40px;
+          width: 96px;
+          height: 40px;
+          background: #f0f1f5;
+          border-radius: 5px;
+          font-size: 16px;
+          font-weight: 400;
+          color: #3a3b50;
+          transition: all 0.3s;
+          -webkit-transition: all 0.3s;
+          -moz-transition: all 0.3s;
+          -ms-transition: all 0.3s;
+          -o-transition: all 0.3s;
+          animation: unset;
+          -webkit-animation: unset;
+          &.ant-tag-checkable-checked {
+            background: url("../../static/contact_active.png") no-repeat center center
+              #fff;
+            background-size: contain;
+          }
+        }
+      }
+    }
+
+    // 乘机人列表
+    .passenger_list {
+      .passenger_box {
+        &:not(:last-child) {
+          margin-bottom: 32px;
+        }
+        .box_list {
+          background: (rgba($color: #f3f3f7, $alpha: 0.7));
+          padding: 21px 16px;
+          .list_info {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            .info_name {
+              display: flex;
+              align-items: center;
+              min-width: 210px;
+              .info_avatar {
+                display: inline-flex;
+                align-items: center;
+                justify-content: center;
+                width: 32px;
+                height: 32px;
+                background: #3a3b50;
+                border-radius: 50%;
+                margin-right: 10px;
+                img {
+                  width: 16px;
+                  height: 16px;
+                  object-fit: contain;
+                }
+              }
+              > p {
+                font-size: 16px;
+                font-weight: bold;
+                color: #3a3b50;
+              }
+              > span {
+                font-size: 14px;
+                font-weight: 400;
+                color: #878791;
+                margin-left: 8px;
+              }
+            }
+            .info_title {
+              font-size: 14px;
+              font-weight: 400;
+              color: #878791;
+            }
+            .info_card {
+              font-size: 14px;
+              font-weight: 400;
+              color: #333333;
+              display: inline-flex;
+              align-items: center;
+              min-width: 120px;
+              margin-right: 20px;
+            }
+            .info_idNumber {
+              font-size: 14px;
+              font-weight: 400;
+              color: #333333;
+              display: inline-flex;
+              align-items: center;
+            }
+          }
+          .list_input {
+            display: flex;
+            align-items: center;
+            .input_box {
+              display: flex;
+              align-items: center;
+              &:not(:last-child) {
+                margin-right: 32px;
+              }
+              .box_title {
+                font-size: 14px;
+                font-weight: 400;
+                color: #333333;
+                margin-right: 10px;
+                flex-shrink: 0;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

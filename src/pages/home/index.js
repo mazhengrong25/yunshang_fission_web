@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:08:05
- * @LastEditTime: 2021-02-18 12:02:36
+ * @LastEditTime: 2021-02-20 13:56:26
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -66,9 +66,7 @@ export default class index extends Component {
                           <div className="list_message">
                             <div className="notice_title">
                               {item.title}
-                              {index === 0? (
-                                <div className="newNotice">NEW</div>
-                              ): ''}  
+                              {index === 0 ? <div className="newNotice">NEW</div> : ""}
                             </div>
                             <div className="notice_date">
                               {this.$moment(item.created_at).format("YYYY-MM-DD")}
@@ -79,6 +77,8 @@ export default class index extends Component {
                           </div>
                         </div>
                       );
+                    } else {
+                      return "";
                     }
                   })}
                   <div className="moreNotice">查看更多</div>
