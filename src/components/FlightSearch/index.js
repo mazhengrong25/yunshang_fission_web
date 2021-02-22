@@ -2,7 +2,7 @@
  * @Description: 机票搜索
  * @Author: wish.WuJunLong
  * @Date: 2021-01-12 14:07:43
- * @LastEditTime: 2021-02-18 18:12:09
+ * @LastEditTime: 2021-02-19 13:32:54
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -24,11 +24,11 @@ export default class index extends Component {
       flightType: 0, // 机票查询状态 0 单程，1 往返，2 多程
 
       searchCity: {
-        startAir: "",
-        startCode: "",
-        endAir: "",
-        endCode: "",
-        startDate: "",
+        endAir: "北京(BJS)",
+        endCode: "BJS",
+        startAir: "重庆(CKG)",
+        startCode: "CKG",
+        startDate: this.$moment().add(1, "d").format("YYYY-MM-DD"),
       }, // 城市搜索
       searchCityList: [], // 城市搜索框返回值列表
 
@@ -112,11 +112,6 @@ export default class index extends Component {
   // 城市选择器获取焦点时
   openCityModal = async (val) => {
     await this.setState({ cityModal: val === "start", cityToModal: val === "end" });
-    // if (val === "start") {
-    //   this.startInput.focus();
-    // } else {
-    //   this.endInput.focus();
-    // }
   };
 
   // 获取机场列表
@@ -283,20 +278,18 @@ export default class index extends Component {
     console.log(date, dateString);
   };
 
-  encode(str){
+  encode(str) {
     // 对字符串进行编码
     var encode = encodeURI(str);
     // 对编码的字符串转化base64
     var base64 = btoa(encode);
     return base64;
-}
+  }
 
   // 航班搜索
   searchSubmit() {
     let url = `/flightList?start=${this.state.searchCity.startCode}&startAddress=${this.state.searchCity.startAir}&end=${this.state.searchCity.endCode}&endAddress=${this.state.searchCity.endAir}&date=${this.state.searchCity.startDate}`;
 
-    console.log(this.encode(url))
-    
     this.props.history.push(encodeURI(url));
   }
 
@@ -564,15 +557,18 @@ export default class index extends Component {
             <div className="flightSearch__main__list__item">
               <div className="flightSearch__main__list__item__title">起飞时间</div>
               <div className="flightSearch__main__list__item__input">
-                <DatePicker onChange={this.dateSelect} />
+                <DatePicker
+                  onChange={this.dateSelect}
+                  defaultValue={this.$moment(this.$moment().add(1, "d"),'YYYY-MM-DD')}
+                />
               </div>
             </div>
             <div className="flightSearch__main__list__checked"></div>
             <div className="flightSearch__main__list__item">
-              <div className="flightSearch__main__list__item__title">到达时间</div>
+              <div className="flightSearch__main__list__item__title">返程时间</div>
               <div className="flightSearch__main__list__item__input">
                 <DatePicker
-                  disabled={this.state.checkActive === "inland"}
+                  disabled={this.state.flightType === 0}
                   onChange={this.dateSelect}
                 />
               </div>

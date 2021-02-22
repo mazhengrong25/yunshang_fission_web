@@ -3,6 +3,18 @@
 body {
   background: #f0f1f5;
 }
+p {
+  margin: 0;
+}
+
+img {
+  image-rendering: -moz-crisp-edges; /* Firefox */
+  image-rendering: -o-crisp-edges; /* Opera */
+  image-rendering: -webkit-optimize-contrast; /*Webkit (non-standard naming) */
+  image-rendering: crisp-edges;
+  -ms-interpolation-mode: nearest-neighbor; /* IE (non-standard property) */
+}
+
 // antd 样式替换
 
 // 单选按钮
@@ -22,6 +34,24 @@ body {
       border-color: #5b7cf0;
       background-color: #5b7cf0;
     }
+  }
+}
+
+// 输入框
+.ant-input {
+  border-color: #afafb5;
+  height: 40px;
+  color: #333333;
+  border-radius: 5px;
+  -webkit-border-radius: 5px;
+  -moz-border-radius: 5px;
+  -ms-border-radius: 5px;
+  -o-border-radius: 5px;
+  &:hover {
+    border-color: #5b7cf0;
+  }
+  &:focus {
+    border-color: #5b7cf0;
   }
 }
 
@@ -54,6 +84,27 @@ body {
   height: 40px;
   border-radius: 5px;
   border: 1px solid #afafb5;
+  .ant-picker-input {
+    &:hover {
+      .ant-picker-suffix {
+        opacity: 0.2;
+      }
+    }
+    .ant-picker-suffix {
+      background: url("../src/static/date_select_icon.png") no-repeat center center;
+      background-size: contain;
+      width: 20px;
+      height: 20px;
+      > * {
+        display: none;
+      }
+      transition: all 0.2s;
+      -webkit-transition: all 0.2s;
+      -moz-transition: all 0.2s;
+      -ms-transition: all 0.2s;
+      -o-transition: all 0.2s;
+}
+  }
 }
 
 // 日期选择器
@@ -88,5 +139,4 @@ body {
   -moz-transition: all 0.3s;
   -ms-transition: all 0.3s;
   -o-transition: all 0.3s;
-
 }

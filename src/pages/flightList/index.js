@@ -2,7 +2,7 @@
  * @Description: 机票列表
  * @Author: wish.WuJunLong
  * @Date: 2021-02-05 18:31:03
- * @LastEditTime: 2021-02-18 19:09:55
+ * @LastEditTime: 2021-02-19 17:44:02
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -17,7 +17,7 @@ import {
   Skeleton,
   Result,
   Popover,
-  message,
+  Modal,
 } from "antd";
 
 import { DownOutlined, SmileOutlined } from "@ant-design/icons";
@@ -43,7 +43,14 @@ export default class index extends Component {
     this.state = {
       urlData: {}, // url参数
       flightList: [], // 航班列表
-      isFlightListStatus: false,
+      isFlightListStatus: false, // 航班列表状态
+
+      editFlightType: false, // 更改当前航程状态 打开航程选择栏
+
+      flightSort: {
+        // 航班列表排序状态
+        listSort: "", // 列表价格时间排序
+      },
 
       skeletonList: [1, 2, 3], // 骨架屏数量
       flightListStatus: true, // 查询航班列表状态
@@ -57,10 +64,11 @@ export default class index extends Component {
 
       searchTime: "notTime", // 时间筛选
       searchCabin: [1], // 舱位筛选
+
+      scheduledStatus: "", // 舱位验价按钮状态
     };
   }
   async componentDidMount() {
-    console.log(this.props.location.search)
     await this.setState({
       urlData: React.$filterUrlParams(decodeURI(this.props.location.search)),
     });
@@ -92,9 +100,15 @@ export default class index extends Component {
     });
   }
 
+  // 更改航程 打开航程选择栏
+  openEditFlight() {
+    this.setState({
+      editFlightType: !this.state.editFlightType,
+    });
+  }
+
   // 获取舱位信息
   openCabinBox(val) {
-    console.log(val);
     this.setState({
       segmentsKey: val,
       cabinList: [],
@@ -129,7 +143,33 @@ export default class index extends Component {
             cabinList: cabinList,
           });
         } else {
-          message.warning(res.data);
+          let secondsToGo = 5;
+
+          let _that = this;
+
+          const modal = Modal.warning({
+            title: res.data,
+            content: `将在 ${secondsToGo} 秒后自动刷新航班列表，您也可以点击确定按钮手动刷新。`,
+            okText: "确定",
+            onOk: () => {
+              _that.getFlightList();
+              Modal.destroy();
+              clearInterval(timer);
+            },
+          });
+
+          const timer = setInterval(() => {
+            secondsToGo -= 1;
+            modal.update({
+              content: `将在 ${secondsToGo} 秒后自动刷新航班列表，您也可以点击确定按钮手动刷新。`,
+            });
+          }, 1000);
+
+          setTimeout(() => {
+            _that.getFlightList();
+            Modal.destroy();
+            clearInterval(timer);
+          }, secondsToGo * 1001);
         }
       });
     } else {
@@ -167,20 +207,54 @@ export default class index extends Component {
         start = this.$moment(n1.segments[0].depTime).format("X");
         end = this.$moment(n2.segments[0].depTime).format("X");
       }
-
       return start - end;
     });
+    let flightSort = this.state.flightSort;
+    flightSort.listSort = e;
 
     this.setState({
+      flightSort,
       flightList: newFlightData,
     });
   };
 
   // 筛选栏 时间筛选
   searchTime = (e) => {
-    console.log(e.target.value);
+    let type = e.target.value;
+    console.log(type);
+    let flightList = this.state.flightList;
+
+    flightList.forEach((item) => {
+      // 获取当前航班日期
+      let thisTime = this.$moment(item.segments[0].depTime).format("YYYY-MM-DD");
+
+      // 对比当前航班时间是否处于筛选状态时间之前
+      item["searchType"] =
+        type !== "notTime"
+          ? this.$moment(item.segments[0].depTime).isBetween(
+              type === "morning"
+                ? `${thisTime} 06:00`
+                : type === "afternoon"
+                ? `${thisTime} 12:00`
+                : type === "night"
+                ? `${thisTime} 18:00`
+                : "",
+              type === "morning"
+                ? `${thisTime} 12:00`
+                : type === "afternoon"
+                ? `${thisTime} 18:00`
+                : type === "night"
+                ? `${thisTime} 24:00`
+                : "",
+              "minute",
+              "[)"
+            )
+          : true;
+    });
+    console.log(flightList);
+
     this.setState({
-      searchTime: e.target.value,
+      searchTime: type,
     });
   };
 
@@ -194,9 +268,24 @@ export default class index extends Component {
     });
   };
 
-  // 预定机票
+  // 预定机票 - 验价
   jumpTicketDetail(val) {
     console.log(val);
+    this.setState({
+      scheduledStatus: val.data,
+    });
+
+    let data = val.routing;
+
+    this.$axios.post("/api/checkPrice", data).then((res) => {
+      console.log(res);
+      if (res.errorcode === 10000) {
+        this.setState({
+          scheduledStatus: "",
+        });
+        this.props.history.push(`/flightScheduled?key=${res.data.keys}`);
+      }
+    });
   }
 
   render() {
@@ -215,10 +304,15 @@ export default class index extends Component {
                 <p>{this.state.urlData.returnDate ? "往返" : "单程"}</p>
               </div>
             </div>
-            <Button className="edit_search">更改</Button>
+            <Button className="edit_search" onClick={() => this.openEditFlight()}>
+              {this.state.editFlightType ? "取消更改" : "更改"}
+            </Button>
           </div>
 
-          <div className="header_search">
+          <div
+            className="header_search"
+            style={{ display: this.state.editFlightType ? "block" : "none" }}
+          >
             <div className="search_type">
               <Radio.Group value={1}>
                 <Radio value={1}>单程</Radio>
@@ -332,7 +426,10 @@ export default class index extends Component {
             <Affix offsetTop={0}>
               <div className="main_header">
                 <div className="flight_number">
-                  共{this.state.flightList.length}条航班
+                  共
+                  {this.state.flightList.filter((u) => u.searchType).length ||
+                    this.state.flightList.length}
+                  条航班
                 </div>
 
                 <div className="flight_sort">
@@ -348,175 +445,187 @@ export default class index extends Component {
                 {this.state.flightListStatus &&
                   this.state.flightList.map((item, index) => (
                     <div key={index}>
-                      <div className="list_card">
-                        <div className="card_air">
-                          <img
-                            className="air_icon"
-                            src={`${this.$url}` + item.segments[0].image}
-                            alt="航班logo"
-                          />
+                      {/* 判断当前数据是否显示 如没有当前参数则判断时候为为筛选状态 */}
+                      {item.searchType || this.state.searchTime === "notTime" ? (
+                        <div className="list_card">
+                          <div className="card_air">
+                            <img
+                              className="air_icon"
+                              src={`${this.$url}` + item.segments[0].image}
+                              alt="航班logo"
+                            />
 
-                          <div className="air_message">
-                            <div className="air_name">
-                              {item.segments[0].airline_info.airline.replace(
-                                /航空.*/,
-                                "航空"
-                              )}
-                            </div>
-
-                            <Popover
-                              placement="bottomLeft"
-                              color="#fff"
-                              overlayClassName="air_popover"
-                              content={() => (
-                                <div className="air_info">
-                                  <div className="info_title">
-                                    <img
-                                      className="title_icon"
-                                      src={`${this.$url}` + item.segments[0].image}
-                                      alt="航班logo"
-                                    />
-                                    {item.segments[0].airline_info.airline.replace(
-                                      /航空.*/,
-                                      "航空"
-                                    ) + item.segments[0].flightNumber}
-                                  </div>
-                                  <div className="info_main">
-                                    <div className="info_main_list">
-                                      <div className="info_main_list_title">机型</div>
-                                      <div className="info_main_list_message">
-                                        {item.segments[0].aircraftCode}
-                                      </div>
-                                    </div>
-
-                                    <div className="info_main_list">
-                                      <div className="info_main_list_title">机型代码</div>
-                                      <div className="info_main_list_message">
-                                        {item.segments[0].aircraft_code}
-                                      </div>
-                                    </div>
-
-                                    <div className="info_main_list">
-                                      <div className="info_main_list_title">经停次数</div>
-                                      <div className="info_main_list_message">
-                                        {item.segments[0].stopCount > 0
-                                          ? `${item.segments[0].stopCount} 次`
-                                          : "直达"}
-                                      </div>
-                                    </div>
-
-                                    <div className="info_main_list">
-                                      <div className="info_main_list_title">飞行时长</div>
-                                      <div className="info_main_list_message">
-                                        {Math.floor(item.segments[0].duration / 60)}小时
-                                        {Math.floor(item.segments[0].duration % 60)}分钟
-                                      </div>
-                                    </div>
-
-                                    <div className="info_main_list">
-                                      <div className="info_main_list_title">
-                                        是否有餐食
-                                      </div>
-                                      <div className="info_main_list_message">
-                                        {item.segments[0].hasMeal ? "有" : "无"}
-                                      </div>
-                                    </div>
-
-                                    <div className="info_main_list">
-                                      <div className="info_main_list_title">餐食等级</div>
-                                      <div className="info_main_list_message">
-                                        {item.segments[0].MealCode || '无'}
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  <div className="info_bottom">
-                                    机型仅供参考，具体请以实际执行航班为准
-                                  </div>
-                                </div>
-                              )}
-                            >
-                              <div className="air_number">
-                                {item.segments[0].flightNumber} 机型{" "}
-                                {item.segments[0].aircraftCode}
+                            <div className="air_message">
+                              <div className="air_name">
+                                {item.segments[0].airline_info.airline.replace(
+                                  /航空.*/,
+                                  "航空"
+                                )}
                               </div>
-                            </Popover>
 
-                            {item.segments[0].hasMeal ? (
-                              <div className="air_meals"></div>
-                            ) : (
-                              ""
-                            )}
-                          </div>
-                        </div>
+                              <Popover
+                                placement="bottomLeft"
+                                color="#fff"
+                                overlayClassName="air_popover"
+                                content={() => (
+                                  <div className="air_info">
+                                    <div className="info_title">
+                                      <img
+                                        className="title_icon"
+                                        src={`${this.$url}` + item.segments[0].image}
+                                        alt="航班logo"
+                                      />
+                                      {item.segments[0].airline_info.airline.replace(
+                                        /航空.*/,
+                                        "航空"
+                                      ) + item.segments[0].flightNumber}
+                                    </div>
+                                    <div className="info_main">
+                                      <div className="info_main_list">
+                                        <div className="info_main_list_title">机型</div>
+                                        <div className="info_main_list_message">
+                                          {item.segments[0].aircraftCode}
+                                        </div>
+                                      </div>
 
-                        <div className="flight_message">
-                          <div className="message_info">
-                            <div className="time">
-                              {this.$moment(item.segments[0].depTime).format("HH:mm")}
-                            </div>
-                            <div className="address">
-                              {item.segments[0].depAirport_CN.city_name}
-                              {item.segments[0].depAirport_CN.air_port_name}
-                              {item.segments[0].depTerminal}
-                            </div>
-                          </div>
-                          <div className="message_time">
-                            <div className="time_date">
-                              {Math.floor(item.segments[0].duration / 60)}h
-                              {Math.floor(item.segments[0].duration % 60)}m
-                            </div>
-                            <div className="time_icon"></div>
-                          </div>
-                          <div className="message_info">
-                            <div className="time">
-                              {this.$moment(
-                                item.segments[item.segments.length - 1].arrTime
-                              ).format("HH:mm")}
-                            </div>
-                            <div className="address">
-                              {
-                                item.segments[item.segments.length - 1].arrAirport_CN
-                                  .city_name
-                              }
-                              {
-                                item.segments[item.segments.length - 1].arrAirport_CN
-                                  .air_port_name
-                              }
-                              {item.segments[item.segments.length - 1].arrTerminal}
-                            </div>
-                          </div>
-                        </div>
+                                      <div className="info_main_list">
+                                        <div className="info_main_list_title">
+                                          机型代码
+                                        </div>
+                                        <div className="info_main_list_message">
+                                          {item.segments[0].aircraft_code}
+                                        </div>
+                                      </div>
 
-                        {item.available_cabin > 0 ? (
-                          <>
-                            <div className="flight_account">
-                              <p>&yen;</p>
-                              <div>{item.min_price}</div>
-                              <span>起</span>
+                                      <div className="info_main_list">
+                                        <div className="info_main_list_title">
+                                          经停次数
+                                        </div>
+                                        <div className="info_main_list_message">
+                                          {item.segments[0].stopCount > 0
+                                            ? `${item.segments[0].stopCount} 次`
+                                            : "直达"}
+                                        </div>
+                                      </div>
+
+                                      <div className="info_main_list">
+                                        <div className="info_main_list_title">
+                                          飞行时长
+                                        </div>
+                                        <div className="info_main_list_message">
+                                          {Math.floor(item.segments[0].duration / 60)}小时
+                                          {Math.floor(item.segments[0].duration % 60)}分钟
+                                        </div>
+                                      </div>
+
+                                      <div className="info_main_list">
+                                        <div className="info_main_list_title">
+                                          是否有餐食
+                                        </div>
+                                        <div className="info_main_list_message">
+                                          {item.segments[0].hasMeal ? "有" : "无"}
+                                        </div>
+                                      </div>
+
+                                      <div className="info_main_list">
+                                        <div className="info_main_list_title">
+                                          餐食等级
+                                        </div>
+                                        <div className="info_main_list_message">
+                                          {item.segments[0].MealCode || "无"}
+                                        </div>
+                                      </div>
+                                    </div>
+
+                                    <div className="info_bottom">
+                                      机型仅供参考，具体请以实际执行航班为准
+                                    </div>
+                                  </div>
+                                )}
+                              >
+                                <div className="air_number">
+                                  {item.segments[0].flightNumber} 机型{" "}
+                                  {item.segments[0].aircraftCode}
+                                </div>
+                              </Popover>
+
+                              {item.segments[0].hasMeal ? (
+                                <div className="air_meals"></div>
+                              ) : (
+                                ""
+                              )}
                             </div>
-                            <Button
-                              className="cabin_switch"
-                              onClick={() => this.openCabinBox(item.segments_key)}
-                              loading={
-                                item.segments_key === this.state.segmentsKey &&
-                                this.state.cabinList.length < 1
-                              }
-                            >
-                              {this.state.segmentsKey === item.segments_key &&
-                              this.state.cabinList.length > 1
-                                ? "收起"
-                                : this.state.segmentsKey === item.segments_key &&
+                          </div>
+
+                          <div className="flight_message">
+                            <div className="message_info">
+                              <div className="time">
+                                {this.$moment(item.segments[0].depTime).format("HH:mm")}
+                              </div>
+                              <div className="address">
+                                {item.segments[0].depAirport_CN.city_name}
+                                {item.segments[0].depAirport_CN.air_port_name}
+                                {item.segments[0].depTerminal}
+                              </div>
+                            </div>
+                            <div className="message_time">
+                              <div className="time_date">
+                                {Math.floor(item.segments[0].duration / 60)}h
+                                {Math.floor(item.segments[0].duration % 60)}m
+                              </div>
+                              <div className="time_icon"></div>
+                            </div>
+                            <div className="message_info">
+                              <div className="time">
+                                {this.$moment(
+                                  item.segments[item.segments.length - 1].arrTime
+                                ).format("HH:mm")}
+                              </div>
+                              <div className="address">
+                                {
+                                  item.segments[item.segments.length - 1].arrAirport_CN
+                                    .city_name
+                                }
+                                {
+                                  item.segments[item.segments.length - 1].arrAirport_CN
+                                    .air_port_name
+                                }
+                                {item.segments[item.segments.length - 1].arrTerminal}
+                              </div>
+                            </div>
+                          </div>
+
+                          {item.available_cabin > 0 ? (
+                            <>
+                              <div className="flight_account">
+                                <p>&yen;</p>
+                                <div>{item.min_price}</div>
+                                <span>起</span>
+                              </div>
+                              <Button
+                                className="cabin_switch"
+                                onClick={() => this.openCabinBox(item.segments_key)}
+                                loading={
+                                  item.segments_key === this.state.segmentsKey &&
                                   this.state.cabinList.length < 1
-                                ? "加载中"
-                                : "展开"}
-                            </Button>
-                          </>
-                        ) : (
-                          <div className="not_cabin">售罄</div>
-                        )}
-                      </div>
-
+                                }
+                              >
+                                {this.state.segmentsKey === item.segments_key &&
+                                this.state.cabinList.length > 1
+                                  ? "收起"
+                                  : this.state.segmentsKey === item.segments_key &&
+                                    this.state.cabinList.length < 1
+                                  ? "加载中"
+                                  : "展开"}
+                              </Button>
+                            </>
+                          ) : (
+                            <div className="not_cabin">售罄</div>
+                          )}
+                        </div>
+                      ) : (
+                        ""
+                      )}
                       {this.state.cabinList.length > 0 &&
                       this.state.segmentsKey === item.segments_key ? (
                         <div className="cabin_content">
@@ -580,7 +689,7 @@ export default class index extends Component {
                                                     (ritem, rindex) => (
                                                       <div
                                                         className="refund_main_box"
-                                                        key={rindex}
+                                                        key={ritem.title + "_" + rindex}
                                                       >
                                                         <p>{ritem.title}</p>
                                                         <p>
@@ -603,7 +712,7 @@ export default class index extends Component {
                                                       (ritem, rindex) => (
                                                         <div
                                                           className="refund_main_box"
-                                                          key={rindex}
+                                                          key={ritem.title + "_" + rindex}
                                                         >
                                                           <p>{ritem.title}</p>
                                                           <p>
@@ -622,10 +731,12 @@ export default class index extends Component {
                                             )}
                                           >
                                             <p>
-                                              {pitem.ruleInfos.refund[0].value &&
-                                              pitem.ruleInfos.refund[
-                                                pitem.ruleInfos.refund.length - 1
-                                              ].value
+                                              {Number(pitem.ruleInfos.refund[0].value) &&
+                                              Number(
+                                                pitem.ruleInfos.refund[
+                                                  pitem.ruleInfos.refund.length - 1
+                                                ].value
+                                              )
                                                 ? `退票${
                                                     pitem.ruleInfos.refund[0].value
                                                   }%-${
@@ -640,7 +751,9 @@ export default class index extends Component {
                                           <p className="not_rule">根据航司规定</p>
                                         )}
                                         <span></span>
-                                        <p className="not_rule">{pitem.cabinInfo.baggage}</p>
+                                        <p className="not_rule">
+                                          {pitem.cabinInfo.baggage}
+                                        </p>
                                       </div>
                                     </div>
 
@@ -659,9 +772,17 @@ export default class index extends Component {
                                       <Button
                                         className="list_btn"
                                         type="primary"
+                                        loading={
+                                          this.state.scheduledStatus === pitem.data
+                                        }
+                                        disabled={
+                                          this.state.scheduledStatus === pitem.data
+                                        }
                                         onClick={() => this.jumpTicketDetail(pitem)}
                                       >
-                                        预定
+                                        {this.state.scheduledStatus === pitem.data
+                                          ? "验价中"
+                                          : "预定"}
                                       </Button>
                                     </div>
                                   </div>
@@ -704,6 +825,7 @@ export default class index extends Component {
                   <Result
                     icon={<SmileOutlined />}
                     title="暂无航班信息，请更换日期进行查询"
+                    extra={<Button type="primary">更改航程</Button>}
                   />
                 ) : (
                   ""
