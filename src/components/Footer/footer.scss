@@ -1,0 +1,64 @@
+.footer {
+  background: #3a3b50;
+  margin-top: 48px;
+  position: relative;
+  z-index: 10;
+  .footer_main {
+    height: 120px;
+    max-width: 1200px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+
+    .main_logo {
+      display: inline-flex;
+      align-items: center;
+      cursor: pointer;
+      img {
+        width: 65px;
+        height: 46px;
+        object-fit: contain;
+      }
+      .logo_info {
+        margin-left: 8px;
+        > p {
+          font-size: 20px;
+          font-weight: bold;
+          color: #ffffff;
+        }
+        > span {
+          font-size: 12px;
+          font-weight: 300;
+          color: rgba($color: #ffffff, $alpha: 0.6);
+        }
+      }
+    }
+
+    .main_message {
+      .message_title {
+        font-size: 14px;
+        font-weight: bold;
+        color: #ffffff;
+        margin-bottom: 9px;
+      }
+      .message_text {
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba($color: #ffffff, $alpha: 0.6);
+        &:not(:last-child) {
+          margin-bottom: 6px;
+        }
+      }
+    }
+  }
+  .footer_info {
+    text-align: center;
+    line-height: 30px;
+    height: 30px;
+    background: #302e43;
+    font-size: 12px;
+    font-weight: 400;
+    color: #afafb5;
+  }
+}

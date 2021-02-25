@@ -2,7 +2,7 @@
  * @Description: 机票搜索
  * @Author: wish.WuJunLong
  * @Date: 2021-01-12 14:07:43
- * @LastEditTime: 2021-02-19 13:32:54
+ * @LastEditTime: 2021-02-22 16:45:18
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -275,7 +275,6 @@ export default class index extends Component {
     this.setState({
       searchCity: data,
     });
-    console.log(date, dateString);
   };
 
   encode(str) {
@@ -558,8 +557,14 @@ export default class index extends Component {
               <div className="flightSearch__main__list__item__title">起飞时间</div>
               <div className="flightSearch__main__list__item__input">
                 <DatePicker
+                  allowClear={false}
+                  disabledDate={(current) => {
+                    return (
+                      current && current < this.$moment().subtract(1, "days").endOf("day")
+                    );
+                  }}
                   onChange={this.dateSelect}
-                  defaultValue={this.$moment(this.$moment().add(1, "d"),'YYYY-MM-DD')}
+                  defaultValue={this.$moment(this.$moment().add(1, "d"), "YYYY-MM-DD")}
                 />
               </div>
             </div>
@@ -568,6 +573,11 @@ export default class index extends Component {
               <div className="flightSearch__main__list__item__title">返程时间</div>
               <div className="flightSearch__main__list__item__input">
                 <DatePicker
+                  disabledDate={(current) => {
+                    return (
+                      current && current < this.$moment().subtract(1, "days").endOf("day")
+                    );
+                  }}
                   disabled={this.state.flightType === 0}
                   onChange={this.dateSelect}
                 />

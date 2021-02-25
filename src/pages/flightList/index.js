@@ -2,7 +2,7 @@
  * @Description: 机票列表
  * @Author: wish.WuJunLong
  * @Date: 2021-02-05 18:31:03
- * @LastEditTime: 2021-02-19 17:44:02
+ * @LastEditTime: 2021-02-23 16:06:13
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -66,6 +66,7 @@ export default class index extends Component {
       searchCabin: [1], // 舱位筛选
 
       scheduledStatus: "", // 舱位验价按钮状态
+      scheduledAllBtn: false, // 所有验价按钮状态
     };
   }
   async componentDidMount() {
@@ -144,16 +145,13 @@ export default class index extends Component {
           });
         } else {
           let secondsToGo = 5;
-
-          let _that = this;
-
           const modal = Modal.warning({
-            title: res.data,
+            keyboard: false,
+            title: res.msg,
             content: `将在 ${secondsToGo} 秒后自动刷新航班列表，您也可以点击确定按钮手动刷新。`,
             okText: "确定",
             onOk: () => {
-              _that.getFlightList();
-              Modal.destroy();
+              this.getFlightList();
               clearInterval(timer);
             },
           });
@@ -166,8 +164,8 @@ export default class index extends Component {
           }, 1000);
 
           setTimeout(() => {
-            _that.getFlightList();
-            Modal.destroy();
+            this.getFlightList();
+            modal.destroy();
             clearInterval(timer);
           }, secondsToGo * 1001);
         }
@@ -188,9 +186,9 @@ export default class index extends Component {
   }
 
   // 打开更多舱位
-  openCabinIndexStatus() {
+  openCabinIndexStatus(number) {
     this.setState({
-      openCabinIndex: this.state.openCabinIndex + 5,
+      openCabinIndex: number,
     });
   }
 
@@ -273,6 +271,7 @@ export default class index extends Component {
     console.log(val);
     this.setState({
       scheduledStatus: val.data,
+      scheduledAllBtn: true,
     });
 
     let data = val.routing;
@@ -282,6 +281,7 @@ export default class index extends Component {
       if (res.errorcode === 10000) {
         this.setState({
           scheduledStatus: "",
+          scheduledAllBtn: false,
         });
         this.props.history.push(`/flightScheduled?key=${res.data.keys}`);
       }
@@ -305,7 +305,7 @@ export default class index extends Component {
               </div>
             </div>
             <Button className="edit_search" onClick={() => this.openEditFlight()}>
-              {this.state.editFlightType ? "取消更改" : "更改"}
+              {this.state.editFlightType ? "收起" : "更改"}
             </Button>
           </div>
 
@@ -776,7 +776,8 @@ export default class index extends Component {
                                           this.state.scheduledStatus === pitem.data
                                         }
                                         disabled={
-                                          this.state.scheduledStatus === pitem.data
+                                          this.state.scheduledStatus === pitem.data ||
+                                          this.state.scheduledAllBtn
                                         }
                                         onClick={() => this.jumpTicketDetail(pitem)}
                                       >
@@ -794,7 +795,11 @@ export default class index extends Component {
                                       key={oitem.name + "_" + pindex}
                                       className="open_more_cabin_btn"
                                     >
-                                      <span onClick={() => this.openCabinIndexStatus()}>
+                                      <span
+                                        onClick={() =>
+                                          this.openCabinIndexStatus(oitem.data.length)
+                                        }
+                                      >
                                         展开更多
                                       </span>
                                     </div>
