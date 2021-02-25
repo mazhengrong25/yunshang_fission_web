@@ -1,8 +1,11 @@
 .flight_scheduled {
   max-width: 1200px;
   margin: 0 auto;
+  display: flex;
 
   .scheduled_main {
+    margin-right: 16px;
+    flex: 1;
     .template_main {
       background: #ffffff;
       border-radius: 5px;
@@ -21,30 +24,30 @@
       }
     }
 
+    // 添加乘机人按钮
+    .add_passenger {
+      min-width: 112px;
+      height: 40px;
+      border: 1px solid #5b7cf0;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: 400;
+      color: #5b7cf0;
+      img {
+        width: 16px;
+        height: 16px;
+        object-fit: contain;
+        margin-right: 8px;
+      }
+    }
+
     // 常用乘客列表
     .common_contact {
-      .main_title {
-        .add_passenger {
-          min-width: 112px;
-          height: 40px;
-          border: 1px solid #5b7cf0;
-          border-radius: 5px;
-          font-size: 14px;
-          font-weight: 400;
-          color: #5b7cf0;
-          img {
-            width: 16px;
-            height: 16px;
-            object-fit: contain;
-            margin-right: 8px;
-          }
-        }
-      }
       .contact_box {
         .contact_checked {
           text-align: center;
           line-height: 40px;
-          width: 96px;
+          min-width: 96px;
           height: 40px;
           background: #f0f1f5;
           border-radius: 5px;
@@ -73,81 +76,279 @@
         &:not(:last-child) {
           margin-bottom: 32px;
         }
+
+        .remove_passenger {
+          width: 20px;
+          height: 20px;
+          background: url("../../static/remove_icon.png") no-repeat center center;
+          background-size: contain;
+          cursor: pointer;
+          &:hover {
+            background: url("../../static/remove_icon_hover.png") no-repeat center center;
+            background-size: contain;
+          }
+        }
+
         .box_list {
           background: (rgba($color: #f3f3f7, $alpha: 0.7));
           padding: 21px 16px;
           .list_info {
             display: flex;
             align-items: center;
-            margin-bottom: 20px;
-            .info_name {
-              display: flex;
-              align-items: center;
-              min-width: 210px;
-              .info_avatar {
-                display: inline-flex;
-                align-items: center;
-                justify-content: center;
-                width: 32px;
-                height: 32px;
+            &:not(:last-child) {
+              margin-bottom: 24px;
+            }
+            .info_avatar {
+              &:not(.not_avatar) {
                 background: #3a3b50;
-                border-radius: 50%;
-                margin-right: 10px;
-                img {
-                  width: 16px;
-                  height: 16px;
-                  object-fit: contain;
-                }
               }
-              > p {
-                font-size: 16px;
-                font-weight: bold;
-                color: #3a3b50;
-              }
-              > span {
-                font-size: 14px;
-                font-weight: 400;
-                color: #878791;
-                margin-left: 8px;
+              display: inline-flex;
+              align-items: center;
+              justify-content: center;
+              width: 32px;
+              height: 32px;
+              border-radius: 50%;
+              margin-right: 10px;
+              flex-shrink: 0;
+              img {
+                width: 16px;
+                height: 16px;
+                object-fit: contain;
               }
             }
+            .info_left,
+            .info_right {
+              display: inline-flex;
+              align-items: center;
+            }
+            .info_left {
+              margin-right: 24px;
+              max-width: 383px;
+              width: 100%;
+            }
+            .info_right {
+              max-width: 252px;
+              width: 100%;
+              .info_title {
+                width: 65px;
+                margin-right: 0;
+              }
+            }
+
             .info_title {
               font-size: 14px;
               font-weight: 400;
               color: #878791;
+              flex-shrink: 0;
+              margin-right: 11px;
             }
-            .info_card {
-              font-size: 14px;
-              font-weight: 400;
-              color: #333333;
+            .info_input {
+              max-width: 200px;
+              width: 100%;
+              flex-shrink: 0;
+            }
+            .info_select {
+              max-width: 136px;
+              width: 100%;
+              flex-shrink: 0;
+              .ant-select {
+                width: 100%;
+              }
+            }
+
+            .info_form {
               display: inline-flex;
               align-items: center;
-              min-width: 120px;
-              margin-right: 20px;
-            }
-            .info_idNumber {
-              font-size: 14px;
-              font-weight: 400;
-              color: #333333;
-              display: inline-flex;
-              align-items: center;
+              &:last-child {
+                margin-left: 24px;
+              }
             }
           }
-          .list_input {
-            display: flex;
-            align-items: center;
-            .input_box {
+        }
+      }
+      .passenger_tool {
+        text-align: center;
+      }
+    }
+  }
+  .scheduled_message {
+    max-width: 392px;
+    width: 100%;
+    flex: 1;
+    .message_box {
+      background-color: #fff;
+      &:not(:last-child) {
+        margin-bottom: 8px;
+      }
+      .box_title {
+        height: 56px;
+        padding: 0 16px;
+        display: flex;
+        align-items: center;
+        font-size: 18px;
+        font-weight: bold;
+        color: #3a3b50;
+        border-bottom: 1px solid #dadde2;
+      }
+
+      // 航班信息
+      .flight_info {
+        padding: 22px 16px 60px;
+      }
+    }
+  }
+
+  // 乘机人弹窗
+  .passenger_modal {
+    .ant-modal-content {
+      background-color: transparent;
+      .ant-modal-close {
+        color: rgba($color: #fff, $alpha: 0.7);
+        .ant-modal-close-x {
+          font-size: 14px;
+        }
+        &:hover {
+          color: #fff;
+        }
+      }
+      .ant-modal-header {
+        display: none;
+      }
+      .ant-modal-body {
+        padding: 0;
+        box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.15);
+        border-radius: 5px;
+        overflow: hidden;
+        .passenger_title {
+          height: 56px;
+          background: #3a3b50;
+          display: flex;
+          align-items: flex-end;
+          padding: 0 16px;
+          .title {
+            width: 120px;
+            height: 40px;
+            border-radius: 5px 5px 0px 0px;
+            text-align: center;
+            line-height: 40px;
+            font-size: 16px;
+            font-weight: 400;
+            color: #ffffff;
+            cursor: pointer;
+            &.active {
+              background: #ffffff;
+              color: #3a3b50;
+            }
+          }
+        }
+        .passenger_box {
+          background-color: #fff;
+          padding: 24px;
+
+          .box_main {
+            .main_search {
               display: flex;
               align-items: center;
-              &:not(:last-child) {
-                margin-right: 32px;
-              }
-              .box_title {
+              margin-bottom: 24px;
+              > p {
+                width: 44px;
                 font-size: 14px;
                 font-weight: 400;
                 color: #333333;
+                text-align: right;
                 margin-right: 10px;
-                flex-shrink: 0;
+              }
+              .search_input {
+                width: 200px;
+                height: 40px;
+
+                border-radius: 5px;
+                border: 1px solid #afafb5;
+                .ant-input {
+                  height: 30px;
+                }
+              }
+              .search_btn {
+                height: 40px;
+                width: 112px;
+                background: #5b7cf0;
+                border-radius: 5px;
+                border-color: #5b7cf0;
+                margin-left: 30px;
+              }
+            }
+            .box_table {
+              .ant-table {
+                &.ant-table-middle {
+                  font-size: 12px;
+                  .ant-table-container {
+                    .ant-table-thead {
+                      border-radius: 5px;
+                      .ant-table-cell {
+                        padding: 9px 8px;
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: #333333;
+                        background: #ebedf2;
+                      }
+                    }
+                  }
+                }
+              }
+
+              .contact_pagination {
+                margin-top: 24px;
+                text-align: right;
+                .ant-pagination-item {
+                  min-width: 24px;
+                  line-height: 24px;
+                  height: 24px;
+                  background: #f0f1f5;
+                  border: none;
+
+                  font-size: 14px;
+                  font-weight: 400;
+                  color: #3a3b50;
+                  &:hover {
+                    color: #5b7cf0;
+                  }
+                  &.ant-pagination-item-active {
+                    background: #5b7cf0;
+                    border-radius: 2px;
+                    font-size: 14px;
+                    font-weight: 400;
+                    a {
+                      color: #ffffff;
+                    }
+                  }
+                }
+                .ant-pagination-prev,
+                .ant-pagination-next {
+                  min-width: 24px;
+                  line-height: 24px;
+                  height: 24px;
+                  .ant-pagination-item-link {
+                    background-color: #f0f1f5;
+                    border: none;
+                  }
+                }
+              }
+            }
+            .box_option {
+              margin-top: 12px;
+              text-align: center;
+              .ant-btn {
+                width: 96px;
+                height: 36px;
+                border-radius: 5px;
+                &:first-child {
+                  border-color: #dadde2;
+                  margin-right: 16px;
+                }
+                &:last-child {
+                  background: #5b7cf0;
+                  border-color: #5b7cf0;
+                }
               }
             }
           }

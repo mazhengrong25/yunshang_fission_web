@@ -15,6 +15,10 @@ img {
   -ms-interpolation-mode: nearest-neighbor; /* IE (non-standard property) */
 }
 
+.home ~ .footer {
+  margin-top: 0;
+}
+
 // antd 样式替换
 
 // 单选按钮

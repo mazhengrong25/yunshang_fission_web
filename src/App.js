@@ -2,8 +2,13 @@
  * @Description: 主模块
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
+<<<<<<< HEAD
  * @LastEditTime: 2021-02-25 17:42:37
  * @LastEditors: mzr
+=======
+ * @LastEditTime: 2021-02-22 17:31:16
+ * @LastEditors: wish.WuJunLong
+>>>>>>> a300104463791731024a3def62ef867d9fd1deed
  */
 import React, { Fragment } from "react";
 
@@ -19,6 +24,7 @@ import FlightList from "./pages/flightList"; // 航班查询列表
 import FlightScheduled from "./pages/flightScheduled"; // 机票预订页面
 
 import HeaderTemplate from "./components/Header"; // 导航栏
+import FooterTemplate from "./components/Footer"; // 页脚
 
 import { Route, Switch, Redirect, BrowserRouter } from "react-router-dom";
 
@@ -45,6 +51,9 @@ function App() {
             <Redirect to={"/home"} />
           </Switch>
         </Fragment>
+
+        <FooterTemplate />
+
         <BackTop>
           <div className="back_top"></div>
         </BackTop>
