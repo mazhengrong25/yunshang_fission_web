@@ -2,19 +2,17 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
- * @LastEditTime: 2021-02-20 16:32:19
+ * @LastEditTime: 2021-02-25 14:38:50
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
 
 import { Input, DatePicker, Select, Button, Table, Tag, Pagination, Menu } from 'antd';
 
-// 菜单栏图标
-import InlandIcon from '../../../static/inland_icon.png';
-import InterIcon from '../../../static/inter_icon.png';
-
 import './inlandList.scss'
 import Column from 'antd/lib/table/Column';
+
+import JumpDetailIcon from "../../../static/action_detail.png"
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -28,28 +26,39 @@ export default class index extends Component {
             isShow: false,
             dataList: [],
             searchFrom: {
-                status: "", //状态
+                status: -1, //状态
                 passengerName: "", //乘机人
+                order_no: "", //订单号
                 "created_at": this.$moment().subtract(3, 'days').format('YYYY-MM-DD'),
             },
             paginationData: {
                 current_page: 1, //当前页数
-                per_page: 5, //每页条数	
+                per_page: 10, //每页条数	
                 total: 0
             },
+
+            menuOpenKeys: [], // 展开的菜单数组
         }
     }
 
     async componentDidMount() {
+        if (sessionStorage.getItem('orderList')) {
+            await this.setState({
+                searchFrom: JSON.parse(sessionStorage.getItem('orderList'))
+            })
+        }
         await this.getDataList();
+
     }
 
     // 获取航班列表
-    getDataList() {
+    async getDataList() {
 
         let data = this.state.searchFrom
         data['page'] = this.state.paginationData.page
         data['limit'] = this.state.paginationData.per_page
+
+        console.log(data)
 
         this.$axios.post("/api/orders/list", data).then(res => {
             if (res.result === 10000) {
@@ -57,12 +66,24 @@ export default class index extends Component {
                 let newPage = this.state.paginationData
                 newPage.total = res.data.total
                 newPage.current_page = res.data.current_page
-                this.setState({
-                    dataList: res.data.data,
-                    paginationData: newPage,
+
+
+                let newData = res.data.data
+                newData.forEach((item, index) => {
+                    // 判断当前订单支付状态以及剩余支付时间
+                    if (item.status === 1 && item.is_overtime === 1) {
+                        newData[index].status = 5
+                    }
+                    // 已支付
+                    if (item.pay_status === 2) {
+                        newData[index].status = 2
+                    }
                 })
-                console.log(this.state.paginationData)
-                console.log(this.state.dataList)
+
+                this.setState({
+                    dataList: newData,
+                    paginationData: newPage
+                })
             }
         })
     }
@@ -77,7 +98,7 @@ export default class index extends Component {
     changePagination = async (page, pageSize) => {
 
         console.log(page, pageSize)
-        
+
         let data = this.state.paginationData
         data['page'] = page;
         data['limit'] = pageSize;
@@ -90,8 +111,20 @@ export default class index extends Component {
         await this.getDataList();
     }
 
+    // 每页显示条数
+    changePageSize = async (current, size) => {
+        console.log("current, size", current, size)
+        let data = this.state.paginationData
+        data['current_page'] = current;
+        data['per_page'] = size;
 
-    // 选择器搜索
+        await this.setState({
+            paginationData: data,
+        })
+    }
+
+
+    // 选择器搜索   进入详情 没有保留数值  已预订-待出票  清零 都是已取消   待出票-空  
     SelectItem(label, val) {
         let data = this.state.searchFrom
         data[label] = val ? val.value : 0;
@@ -104,7 +137,6 @@ export default class index extends Component {
     InputItem(label, val) {
         let data = this.state.searchFrom;
         data[label] = val.target.value;
-        console.log(data[label])
         this.setState({
             searchFrom: data,
         })
@@ -128,6 +160,44 @@ export default class index extends Component {
         })
     }
 
+    // 折叠栏切换状态
+    onOpenChange = (key) => {
+
+        // key 会是菜单的选中数组
+
+        console.log(key)
+
+        // 如果key 的长度小于等于1 等于只选择一个，直接赋值
+        if (key.length <= 1) {
+            this.setState({
+                menuOpenKeys: key
+            })
+            return;
+        }
+
+
+        // 取key数组最后一位
+        let newMenu = key[key.length - 1]
+        // 如果key数组的最后一位等于key数组的第一位
+        if (newMenu.includes(key[0])) {
+            this.setState({
+                menuOpenKeys: key
+            })
+        } else {
+            // 如果不等于 直接赋值key数组的最后一位
+            this.setState({
+                menuOpenKeys: [newMenu]
+            })
+        }
+    }
+
+
+    // 筛选查询按钮
+    serachBtn() {
+        sessionStorage.setItem('orderList', JSON.stringify(this.state.searchFrom))
+        this.getDataList()
+    }
+
     render() {
         return (
             <div className="inlandList">
@@ -135,30 +205,21 @@ export default class index extends Component {
                     <div className="filter_div">
                         <div className="nav_top">我的订单</div>
                         <div className="nav_bottom">
-                            {/* <div className="nav_div" onClick={() => (this.openFoldBar())}>
-                                <div className="div_icon"></div>
-                                <div className="div_title">国内机票</div>
-                                <div className="icon_drop"></div>
-                            </div>
-                            <div className="" style={{ display: this.state.isShow ? 'block' : 'none' }}>
-                                <div className="">机票订单</div>
-                                <div>改签订单</div>
-                                <div>退票订单</div>
-                            </div> */}
                             <Menu
                                 onClick={this.handleClick}
                                 style={{ width: 184 }}
                                 mode="inline"
+                                onOpenChange={this.onOpenChange.bind(this)}
+                                openKeys={this.state.menuOpenKeys}
                             >
                                 <SubMenu key="inland" title="国内机票"
-                                    icon={<div className="menu_icon"><img src={InlandIcon} alt="" /></div>}>
+                                    icon={<div className="menu_icon"></div>}>
                                     <Menu.Item key="inland_ticket">机票订单</Menu.Item>
                                     <Menu.Item key="inland_change">改签订单</Menu.Item>
                                     <Menu.Item key="inland_refund">退票订单</Menu.Item>
                                 </SubMenu>
                                 <SubMenu key="inter" title="国际机票"
-                                    icon={<div className="menu_icon"><img src={InterIcon} alt="" /></div>}>
-
+                                    icon={<div className="menu_icon"></div>}>
                                     <Menu.Item key="inter_ticket">机票订单</Menu.Item>
                                     <Menu.Item key="inter_change">改签订单</Menu.Item>
                                     <Menu.Item key="inter_refund">退票订单</Menu.Item>
@@ -172,51 +233,60 @@ export default class index extends Component {
                             <div className="nav_item">
                                 <div className="item_title">乘机人</div>
                                 <div className="item_import">
-                                    <Input placeholder="请填写" allowClear onChange={this.InputItem.bind(this, "passengerName")} />
+                                    <Input placeholder="请填写"
+                                        allowClear
+                                        value={this.state.searchFrom.passengerName}
+                                        onChange={this.InputItem.bind(this, "passengerName")} />
                                 </div>
                             </div>
                             <div className="nav_item">
                                 <div className="item_title">行程日期</div>
-                                <RangePicker onChange={this.PickerItem.bind(this, "created_at", "created_at_end")} />
+                                <RangePicker
+                                    value={[this.$moment(this.state.searchFrom.created_at),this.$moment(this.state.searchFrom.created_at_end)]} 
+                                    onChange={this.PickerItem.bind(this, "created_at", "created_at_end")} />
                             </div>
                             <div className="nav_item">
-                                <div className="item_title">订单号/票号</div>
+                                <div className="item_title">订单号</div>
                                 <div className="item_import">
-                                    <Input placeholder="请输入订单号/票号" allowClear onChange={this.InputItem.bind(this, "order_no")} />
+                                    <Input
+                                        allowClear
+                                        placeholder="请输入订单号"
+                                        value={this.state.searchFrom.order_no}
+                                        onChange={this.InputItem.bind(this, "order_no")} />
                                 </div>
                             </div>
                             <div className="nav_item">
                                 <div className="item_title">订单状态</div>
                                 <div className="item_import">
                                     <Select
-                                        allowClear
+
                                         labelInValue
                                         placeholder="请选择"
+                                        value={{ value: this.state.searchFrom.status }}
                                         onChange={this.SelectItem.bind(this, "status")}
                                     >
-                                        <Option value={1}>已预订</Option>
-                                        <Option value={2}>待出票</Option>
+                                        <Option value={-1}>全部</Option>
+                                        <Option value={'pay_success'}>已预订</Option>
+                                        <Option value={1}>待出票</Option>
                                         <Option value={3}>已出票</Option>
-                                        <Option value={4}>出票失败</Option>
                                         <Option value={5}>已取消</Option>
                                     </Select>
                                 </div>
                             </div>
-                            <div className="nav_item">
-                                <Button type="primary" onClick={() => this.getDataList()}>查询</Button>
+                            <div className="nav_item" style={{ marginLeft: 20 }}>
+                                <Button type="primary" onClick={() => this.serachBtn()}>查询</Button>
                             </div>
 
                         </div>
                         <div className="order_table">
                             <Table
-                                rowKey="key_id"
+                                rowKey="id"
                                 pagination={false}
                                 dataSource={this.state.dataList}
                             >
                                 <Column
                                     title="类型"
                                     dataIndex="segment_type"
-                                    key="segment_type"
                                     render={(text) =>
                                         <>
                                             {
@@ -229,11 +299,9 @@ export default class index extends Component {
                                 ></Column>
                                 <Column
                                     title="乘机人"
-                                    dataIndex="passengerName"
-                                    key="passengerName"
-                                    render={(text, render, index) =>
+                                    render={(text, render) =>
                                         <div className="table_passenger">
-                                            {render.ticket_passenger.map(item => (
+                                            {render.ticket_passenger.map((item, index) => (
                                                 <span key={item.id} className="table_passenger_list">{item.PassengerName}</span>
                                             ))}
                                         </div>
@@ -241,7 +309,6 @@ export default class index extends Component {
                                 ></Column>
                                 <Column
                                     title="行程"
-                                    key="route"
                                     render={(text, render) =>
                                         <>
                                             {
@@ -260,8 +327,6 @@ export default class index extends Component {
                                 ></Column>
                                 <Column
                                     title="行程时间"
-                                    dataIndex="route_time"
-                                    key="route_time"
                                     render={(text, render) =>
                                         <>
                                             {
@@ -278,33 +343,30 @@ export default class index extends Component {
                                 <Column
                                     title="金额"
                                     dataIndex="total_price"
-                                    key="total_price"
                                 ></Column>
                                 <Column
                                     title="状态"
                                     dataIndex="status"
-                                    key="status"
-                                    render={(text) =>
+                                    render={(text, render) =>
                                         <>
                                             {
                                                 text === 1 ? "已预订" :  // 取消订单
-                                                    text === 2 ? "待出票" : // 取消订单
+                                                    text === 2 || render.pay_status === 2 ? "待出票" : // 取消订单
                                                         text === 3 ? "已出票" : // 退票 改签
                                                             text === 4 ? "出票失败" :  // 重新下单
                                                                 text === 5 ? "已取消" : ""  // 重新下单
                                             }
+
                                         </>
                                     }
                                 ></Column>
                                 <Column
                                     title="操作"
-                                    dataIndex="action"
-                                    key="action"
                                     render={(text, render) => (
 
                                         <div className="action_div">
                                             {
-                                                render.status === 1 ? <Tag color="#F87C2E">支付</Tag>
+                                                render.status === 1 && render.pay_status !== 2 ? <Tag color="#F87C2E">支付</Tag>
                                                     : render.status === 3 ?
                                                         <div className="ticket_issue">
                                                             <Tag>退票</Tag>
@@ -312,7 +374,9 @@ export default class index extends Component {
                                                         </div>
                                                         : ""
                                             }
-                                            <div className="action_detail" onClick={() => this.jumpDetail(render.order_no)}></div>
+                                            <div className="action_detail" onClick={() => this.jumpDetail(render.order_no)}>
+                                                <span><img src={JumpDetailIcon} alt="详情按钮icon" /></span>
+                                            </div>
                                         </div>
                                     )
 
@@ -321,14 +385,15 @@ export default class index extends Component {
                             </Table>
                             {/* 分页 */}
                             <div className="table_pagination">
-
                                 <Pagination
                                     showSizeChanger
+                                    pageSizeOptions={[10, 15, 20]}
                                     showTitle={false}
                                     total={Number(this.state.paginationData.total)}
                                     current={Number(this.state.paginationData.current_page)}
                                     pageSize={Number(this.state.paginationData.per_page)}
                                     onChange={this.changePagination}
+                                    onShowSizeChange={this.changePageSize.bind(this)}
                                 />
                             </div>
                         </div>

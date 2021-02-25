@@ -40,7 +40,6 @@ img {
 // 输入框
 .ant-input {
   border-color: #afafb5;
-  height: 40px;
   color: #333333;
   border-radius: 5px;
   -webkit-border-radius: 5px;
@@ -75,6 +74,34 @@ img {
     .ant-select-selector {
       border: 1px solid #5b7cf0 !important;
     }
+  }
+}
+
+// 分页器
+.ant-pagination {
+  .ant-pagination-item {
+    background: #f0f1f5;
+    border: none;
+    
+  }
+  .ant-pagination-prev .ant-pagination-item-link,
+  .ant-pagination-next .ant-pagination-item-link {
+    border-radius: 0px;
+    background-color: #f0f1f5;
+    border: none;
+  }
+  .ant-select-single .ant-select-selector {
+    display: flex;
+    align-items: center;
+    border: 1px solid #dadde2 !important;
+    height: 24px !important;
+    border-radius: none !important;
+  }
+  .ant-select-item-option-active:not(.ant-select-item-option-disabled) {
+        color: #5B7CF0;
+  }
+  .ant-select-item-option-selected:not(.ant-select-item-option-disabled) {
+        background-color:unset !important;
   }
 }
 
