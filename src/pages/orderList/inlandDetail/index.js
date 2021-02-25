@@ -2,7 +2,7 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-02-25 15:18:40
+ * @LastEditTime: 2021-02-25 17:39:53
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -119,10 +119,10 @@ export default class index extends Component {
     sumTicketPrice() {
         console.log()
         let newData = 0
-        for (let i = 0; i < this.state.detailPassenger.length; i++) {
-            newData += Number(this.state.detailPassenger[i].total_price)
-            console.log(this.state.detailPassenger[i])
-        }
+        // for (let i = 0; i < this.state.detailPassenger.length; i++) {
+        //     newData += Number(this.state.detailPassenger[i].total_price)
+        //     console.log(this.state.detailPassenger[i])
+        // }
         return newData
     }
 

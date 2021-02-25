@@ -2,8 +2,8 @@
  * @Description: 主模块
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-02-19 16:45:07
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-02-25 17:42:37
+ * @LastEditors: mzr
  */
 import React, { Fragment } from "react";
 
@@ -11,8 +11,9 @@ import { BackTop, ConfigProvider } from "antd";
 
 import Login from "./pages/login";
 import Home from "./pages/home"; // 主页
-import InlandList from "./pages/orderList/inlandLlist"; // 国内列表
-import InlandDetail from "./pages/orderList/inlandDetail"; //国内列表详情
+// import InlandList from "./pages/orderList/inlandLlist"; // 国内列表
+// import InlandDetail from "./pages/orderList/inlandDetail"; //国内列表详情
+import OrderList from "./pages/orderList/orderList"; // 订单列表
 
 import FlightList from "./pages/flightList"; // 航班查询列表
 import FlightScheduled from "./pages/flightScheduled"; // 机票预订页面
@@ -34,9 +35,10 @@ function App() {
         <Fragment>
           <Switch>
             <Route exact path="/FlightScheduled" component={FlightScheduled}></Route>
-            <Route exact path="/inlandDetail" component={InlandDetail} />
+            {/* <Route exact path="/inlandDetail" component={InlandDetail} /> */}
             <Route exact path="/flightList" component={FlightList} />
-            <Route exact path="/inlandList" component={InlandList} />
+            {/* <Route exact path="/inlandList" component={InlandList} /> */}
+            <Route exact path="/orderList" component={OrderList} />
             <Route exact path="/login" component={Login} />
             <Route exact path="/home" component={Home} />
             <Route exact path="/" component={Home} />

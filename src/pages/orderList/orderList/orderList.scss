@@ -1,0 +1,199 @@
+.inlandList {
+    height: 100%;
+    .content_div {
+      min-height: calc(100% - 110px);
+      background: rgba(240, 241, 245, 1);
+      // padding: 18px 0px;
+      display: flex;
+      justify-content: center;
+      .filter_div {
+        width: 216px;
+        margin-right: 16px;
+        .nav_top {
+          height: 56px;
+          background: #3a3b50;
+          font-size: 18px;
+          font-weight: bold;
+          color: #ffffff;
+          padding: 16px 24px;
+          border-radius: 5px;
+        }
+        .nav_bottom {
+          display: flex;
+          justify-content: center;
+          margin-top: 12px;
+          padding-top: 24px;
+          height: 808px;
+          background-color: #ffffff;
+          box-shadow: 0px 50px 80px #ebedf2;
+          border-radius: 5px;
+  
+          .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+            background-color: #fff;
+          }
+          .ant-menu-vertical .ant-menu-item::after,
+          .ant-menu-vertical-left .ant-menu-item::after,
+          .ant-menu-vertical-right .ant-menu-item::after,
+          .ant-menu-inline .ant-menu-item::after {
+            border-right: none;
+            margin: 17px;
+            width: 5px;
+            height: 5px;
+            background: #5b7cf0;
+            border-radius: 50%;
+          }
+          // 选中子级 再次选择另一个父级  之前选中子级的控制
+          .ant-menu-submenu-selected {
+            &:not(.ant-menu-submenu-open) {
+              .ant-menu-submenu-title {
+                color: #5b7cf0;
+                .menu_icon {
+                  background: url("../../../static/inland_icon_hover.png")
+                    no-repeat center center !important;
+                  background-size: contain !important;
+                }
+              }
+            }
+          }
+          .ant-menu-submenu-open {
+            .ant-menu-submenu-title {
+              color: #fff;
+              background: #5b7cf0;
+              .ant-menu-submenu-arrow {
+                &::after,
+                &::before {
+                  background-color: #fff;
+                }
+              }
+              box-shadow: 0px 5px 10px rgba(91, 124, 240, 0.5);
+              border-radius: 5px;
+              cursor: auto;
+              &:hover {
+                color: #fff;
+                .ant-menu-submenu-arrow {
+                  &::after,
+                  &::before {
+                    background-color: #fff;
+                  }
+                }
+              }
+            }
+          }
+          // 图标状态变化
+          .ant-menu-submenu {
+            &:first-child {
+              .menu_icon {
+                background: url("../../../static/inland_icon.png") no-repeat
+                  center center;
+                background-size: contain;
+              }
+            }
+            &:last-child {
+              .menu_icon {
+                background: url("../../../static/inter_icon.png") no-repeat center
+                  center;
+                background-size: contain;
+              }
+            }
+  
+            &:not(.ant-menu-submenu-open) {
+              &:first-child {
+                &:hover {
+                  .menu_icon {
+                    background: url("../../../static/inland_icon_hover.png")
+                      no-repeat center center;
+                    background-size: contain;
+                  }
+                }
+                .menu_icon {
+                  background: url("../../../static/inland_icon_active.png")
+                    no-repeat center center;
+                  background-size: contain;
+                }
+              }
+              &:last-child {
+                &:hover {
+                  .menu_icon {
+                    background: url("../../../static/inter_icon_hover.png")
+                      no-repeat center center;
+                    background-size: contain;
+                  }
+                }
+                .menu_icon {
+                  background: url("../../../static/inter_icon_active.png")
+                    no-repeat center center;
+                  background-size: contain;
+                }
+              }
+              .ant-menu-submenu-title {
+                .ant-menu-submenu-arrow {
+                  &::after,
+                  &::before {
+                    background-color: #333;
+                  }
+                }
+                &:hover {
+                  box-shadow: 0px 0px 20px #ebedf2;
+                  .ant-menu-submenu-arrow {
+                    &::after,
+                    &::before {
+                      background-color: #5b7cf0;
+                    }
+                  }
+                }
+              }
+            }
+          }
+          // 父级标题
+          .ant-menu-submenu-title {
+            display: flex;
+            align-items: center;
+            height: 56px;
+            border-radius: 5px;
+            margin-bottom: 16px;
+            transition: all 0.3s;
+            -webkit-transition: all 0.3s;
+            -moz-transition: all 0.3s;
+            -ms-transition: all 0.3s;
+            -o-transition: all 0.3s;
+          }
+  
+          //子级
+          .ant-menu {
+            .ant-menu-item {
+              &:hover {
+                background: #f3f3f7;
+              }
+              &:not(.ant-menu-item-selected) {
+                &:hover {
+                  background: #f3f3f7;
+                  color: #666;
+                }
+              }
+            }
+          }
+  
+          .ant-menu-inline,
+          .ant-menu-vertical,
+          .ant-menu-vertical-left {
+            border-right: none;
+          }
+          .menu_icon {
+            width: 17px;
+            height: 17px;
+            margin-right: 5px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+          }
+        }
+      }
+      .list_div {
+        width: 968px;
+        background-color: #fff;
+        box-shadow: 0px 50px 80px #ebedf2;
+        border-radius: 5px;
+      }
+  }
+}
+  
