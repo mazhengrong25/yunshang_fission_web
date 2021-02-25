@@ -2,7 +2,7 @@
  * @Description: 机票预订页面
  * @Author: wish.WuJunLong
  * @Date: 2021-02-19 13:54:59
- * @LastEditTime: 2021-02-25 16:05:24
+ * @LastEditTime: 2021-02-25 17:18:20
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -428,7 +428,7 @@ export default class index extends Component {
             </div>
 
             <div className="contact_box">
-              <div className=""></div>
+              <div className="box_list"></div>
             </div>
           </div>
         </div>
