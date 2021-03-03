@@ -1,0 +1,63 @@
+.accountCenter {
+    .account_content_div {
+        display: flex;
+        justify-content: center;
+        background: rgba(240, 241, 245, 1);
+        .account_filter_div {
+            width: 216px;
+            margin-right: 16px;
+            .account_nav_top {
+              height: 56px;
+              background: #3a3b50;
+              font-size: 18px;
+              font-weight: bold;
+              color: #ffffff;
+              padding: 16px 24px;
+              border-radius: 5px;
+            }
+            .account_nav_bottom {
+              display: flex;
+              justify-content: center;
+              margin-top: 12px;
+              padding-top: 24px;
+              height: 808px;
+              background-color: #ffffff;
+              box-shadow: 0px 50px 80px #ebedf2;
+              border-radius: 5px;
+              .account_menu {
+                
+                .ant-menu {
+                    font-weight: 400;
+                }
+
+                .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+                    color: #fff;
+                    background-color: #5B7CF0;
+                    box-shadow: 0px 5px 10px rgba(91, 124, 240, 0.5);
+                    border-radius: 5px;
+                }
+
+                .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-active {
+                    
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: #5B7CF0;
+                    background-color: #fff;
+                    box-shadow: 0px 0px 20px #EBEDF2;
+                    border-radius: 5px;
+                }
+
+                .ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
+                    border-right: none;
+                }
+              }
+            }
+        }
+    
+        .account_list_div {
+            width: 968px;
+            // background-color: #fff;
+            // border-radius: 5px;
+        }
+    }
+}

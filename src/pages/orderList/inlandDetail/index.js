@@ -2,7 +2,7 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-02-25 15:18:40
+ * @LastEditTime: 2021-02-26 15:17:46
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -102,7 +102,11 @@ export default class index extends Component {
 
     // 返回到列表
     backList() {
-        this.props.history.push('/inlandList')
+        try {
+            this.props.history.go(-1)
+        } catch (error) {
+            this.props.history.push('/orderList?type=inland_ticket')
+        }
     }
 
 
@@ -124,6 +128,11 @@ export default class index extends Component {
             console.log(this.state.detailPassenger[i])
         }
         return newData
+    }
+
+    copyOrderNo(val) {
+        console.log(val)
+        // this.copy(val)
     }
 
     render() {
@@ -158,7 +167,7 @@ export default class index extends Component {
                                 <div className="order_div">
                                     <div className="order_number">订单编号</div>
                                     <div className="input_number" style={{ fontSize: 18 }}>{this.state.detailData.order_no}</div>
-                                    <div className="number_copy"></div>
+                                    <div className="number_copy" onClick={() => this.copyOrderNo(this.state.detailData.order_no)}></div>
                                 </div>
                                 <div style={{ flex: 1 }}></div>
                                 <div className="order_status"

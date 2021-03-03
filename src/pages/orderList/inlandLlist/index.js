@@ -2,12 +2,12 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
- * @LastEditTime: 2021-02-25 14:38:50
+ * @LastEditTime: 2021-02-26 09:31:30
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
 
-import { Input, DatePicker, Select, Button, Table, Tag, Pagination, Menu } from 'antd';
+import { Input, DatePicker, Select, Button, Table, Tag, Pagination } from 'antd';
 
 import './inlandList.scss'
 import Column from 'antd/lib/table/Column';
@@ -16,7 +16,6 @@ import JumpDetailIcon from "../../../static/action_detail.png"
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
-const { SubMenu } = Menu;
 
 export default class index extends Component {
 
@@ -37,7 +36,6 @@ export default class index extends Component {
                 total: 0
             },
 
-            menuOpenKeys: [], // 展开的菜单数组
         }
     }
 
@@ -57,8 +55,6 @@ export default class index extends Component {
         let data = this.state.searchFrom
         data['page'] = this.state.paginationData.page
         data['limit'] = this.state.paginationData.per_page
-
-        console.log(data)
 
         this.$axios.post("/api/orders/list", data).then(res => {
             if (res.result === 10000) {
@@ -89,9 +85,10 @@ export default class index extends Component {
     }
 
     // 跳转到详情页面
-    jumpDetail(val) {
-        console.log(val)
+    jumpDetail (val) {
+        console.log(this.props.history)
         this.props.history.push(`/inlandDetail?detail=${val}`)
+
     }
 
     // 分页
@@ -124,7 +121,7 @@ export default class index extends Component {
     }
 
 
-    // 选择器搜索   进入详情 没有保留数值  已预订-待出票  清零 都是已取消   待出票-空  
+    // 选择器搜索   
     SelectItem(label, val) {
         let data = this.state.searchFrom
         data[label] = val ? val.value : 0;
@@ -153,45 +150,6 @@ export default class index extends Component {
         })
     }
 
-    // 折叠栏展开
-    openFoldBar() {
-        this.setState({
-            isShow: !this.state.isShow
-        })
-    }
-
-    // 折叠栏切换状态
-    onOpenChange = (key) => {
-
-        // key 会是菜单的选中数组
-
-        console.log(key)
-
-        // 如果key 的长度小于等于1 等于只选择一个，直接赋值
-        if (key.length <= 1) {
-            this.setState({
-                menuOpenKeys: key
-            })
-            return;
-        }
-
-
-        // 取key数组最后一位
-        let newMenu = key[key.length - 1]
-        // 如果key数组的最后一位等于key数组的第一位
-        if (newMenu.includes(key[0])) {
-            this.setState({
-                menuOpenKeys: key
-            })
-        } else {
-            // 如果不等于 直接赋值key数组的最后一位
-            this.setState({
-                menuOpenKeys: [newMenu]
-            })
-        }
-    }
-
-
     // 筛选查询按钮
     serachBtn() {
         sessionStorage.setItem('orderList', JSON.stringify(this.state.searchFrom))
@@ -201,32 +159,7 @@ export default class index extends Component {
     render() {
         return (
             <div className="inlandList">
-                <div className="content_div">
-                    <div className="filter_div">
-                        <div className="nav_top">我的订单</div>
-                        <div className="nav_bottom">
-                            <Menu
-                                onClick={this.handleClick}
-                                style={{ width: 184 }}
-                                mode="inline"
-                                onOpenChange={this.onOpenChange.bind(this)}
-                                openKeys={this.state.menuOpenKeys}
-                            >
-                                <SubMenu key="inland" title="国内机票"
-                                    icon={<div className="menu_icon"></div>}>
-                                    <Menu.Item key="inland_ticket">机票订单</Menu.Item>
-                                    <Menu.Item key="inland_change">改签订单</Menu.Item>
-                                    <Menu.Item key="inland_refund">退票订单</Menu.Item>
-                                </SubMenu>
-                                <SubMenu key="inter" title="国际机票"
-                                    icon={<div className="menu_icon"></div>}>
-                                    <Menu.Item key="inter_ticket">机票订单</Menu.Item>
-                                    <Menu.Item key="inter_change">改签订单</Menu.Item>
-                                    <Menu.Item key="inter_refund">退票订单</Menu.Item>
-                                </SubMenu>
-                            </Menu>
-                        </div>
-                    </div>
+                <div className="inlandList__content_div">
                     <div className="list_div">
                         <div className="list_title">机票订单</div>
                         <div className="list_nav">
@@ -259,7 +192,6 @@ export default class index extends Component {
                                 <div className="item_title">订单状态</div>
                                 <div className="item_import">
                                     <Select
-
                                         labelInValue
                                         placeholder="请选择"
                                         value={{ value: this.state.searchFrom.status }}
