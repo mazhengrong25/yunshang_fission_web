@@ -2,7 +2,7 @@
  * @Description: 机票预订页面
  * @Author: wish.WuJunLong
  * @Date: 2021-02-19 13:54:59
- * @LastEditTime: 2021-02-25 17:18:20
+ * @LastEditTime: 2021-03-01 16:42:40
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -16,6 +16,7 @@ import PassengerAvatar from "../../static/passenger_avatar.png"; // 乘机人头
 const { CheckableTag } = Tag;
 const { Option } = Select;
 const { Column } = Table;
+const { TextArea } = Input;
 
 let defaultPassenger = {
   name: "", // 乘客姓名
@@ -30,6 +31,8 @@ export default class index extends Component {
   constructor(props) {
     super(props);
     this.state = {
+      orderKey: "", // 验价返回key
+
       reserveMessage: {}, // 航班信息
       contactList: [], // 乘客列表
       selectedRowKeys: [], // 乘客列表选择
@@ -47,16 +50,26 @@ export default class index extends Component {
 
       selectContactList: [defaultPassenger], // 选中乘客列表
 
-      passengerActive: "contact", // 常用乘机人弹窗切换状态
+      passengerActive: "contact", // 常用乘机人弹窗切换状态 contact 联系人页面
 
-      isPassengerModal: true, // 常用乘机人弹窗
+      isPassengerModal: false, // 常用乘机人弹窗
+
+      contactsMessage: {
+        name: "",
+        phone: "",
+        // email: "",
+      }, // 联系人信息
     };
   }
 
   async componentDidMount() {
-    // let key = React.$filterUrlParams(decodeURI(this.props.location.search)).key;
-    // await this.getReserveData(key);
+    let key = React.$filterUrlParams(decodeURI(this.props.location.search)).key;
+    await this.setState({
+      orderKey: key,
+    });
+    await this.getReserveData(key);
     await this.getContactList();
+    await this.getInsuranceList();
   }
 
   // 获取航班预定信息
@@ -79,7 +92,7 @@ export default class index extends Component {
           onOk: () => {
             clearInterval(timer);
             Modal.destroyAll();
-            this.props.history.goBack();
+            this.props.history.goBack(-1);
           },
         });
 
@@ -93,7 +106,7 @@ export default class index extends Component {
         setTimeout(() => {
           clearInterval(timer);
           Modal.destroyAll();
-          this.props.history.goBack();
+          this.props.history.goBack(-1);
         }, secondsToGo * 1001);
       }
     });
@@ -119,6 +132,11 @@ export default class index extends Component {
       } else {
       }
     });
+  }
+
+  // 获取保险列表
+  getInsuranceList() {
+    this.$axios.get("/api/insurance/list").then((res) => {});
   }
 
   // 选择常用联系人
@@ -249,6 +267,61 @@ export default class index extends Component {
       isPassengerModal: false,
       selectedRowKeys: [],
     });
+  }
+
+  // 联系人信息输入
+  changeContacts = (name, val) => {
+    let data = this.state.contactsMessage;
+    data[name] = val.target.value;
+    this.setState({
+      contactsMessage: data,
+    });
+  };
+
+  // 预定下单按钮
+  submitOrderBtn() {
+    let passengers = [];
+
+    this.state.selectContactList.forEach((item) => {
+      passengers.push({
+        PassengerName: item.name,
+        PassengerType: "ADT",
+        Gender: "M",
+        Birthday: item.birthday,
+        Credential:
+          item.cert_type === "身份证"
+            ? "0"
+            : item.cert_type === "护照"
+            ? "1"
+            : item.cert_type === "港澳通行证"
+            ? "2"
+            : item.cert_type === "台胞证"
+            ? "3"
+            : item.cert_type === "回乡证"
+            ? "4"
+            : item.cert_type === "台湾通行证"
+            ? "5"
+            : item.cert_type === "入台证"
+            ? "6"
+            : item.cert_type === "国际海员证"
+            ? "7"
+            : item.cert_type === "其他证件"
+            ? "8"
+            : "",
+        CredentialNo: item.cert_no,
+        Phone: item.phone,
+        IsInsure: 0,
+      });
+    });
+
+    let data = {
+      keys: this.state.orderKey,
+      insurance_id: 1,
+      contacts: this.state.contactsMessage,
+      passengers: passengers,
+    };
+
+    this.$axios.post("/api/insert/order", data).then((res) => {});
   }
 
   render() {
@@ -428,8 +501,63 @@ export default class index extends Component {
             </div>
 
             <div className="contact_box">
-              <div className="box_list"></div>
+              <div className="box_list">
+                <div className="list_title">姓名</div>
+                <div className="list_input">
+                  <Input
+                    placeholder="联系人姓名"
+                    value={this.state.contactsMessage.name}
+                    onChange={this.changeContacts.bind(this, "name")}
+                  ></Input>
+                </div>
+              </div>
+              <div className="box_list">
+                <div className="list_title">手机</div>
+                <div className="list_input">
+                  <Input
+                    placeholder="联系人手机"
+                    value={this.state.contactsMessage.phone}
+                    onChange={this.changeContacts.bind(this, "phone")}
+                  ></Input>
+                </div>
+              </div>
+              <div className="box_list">
+                <div className="list_title">邮箱</div>
+                <div className="list_input">
+                  <Input placeholder="联系人邮箱"></Input>
+                </div>
+              </div>
             </div>
+            <div className="contact_box">
+              <div className="box_list">
+                <div className="list_title">备注</div>
+                <div className="list_input">
+                  <TextArea
+                    autoSize={{ minRows: 3, maxRows: 5 }}
+                    placeholder="添加备注"
+                  />
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* 保险服务 */}
+          <div className="template_main insurance_main">
+            <div className="main_title">
+              <p>保险服务</p>
+            </div>
+          </div>
+
+          {/* 订单提交 */}
+          <div className="template_main submit_main">
+            <Button className="return_flight_btn">重选航班</Button>
+            <Button
+              type="primary"
+              className="submit_btn"
+              onClick={() => this.submitOrderBtn()}
+            >
+              提交订单
+            </Button>
           </div>
         </div>
         {/* 航班信息版块 */}
@@ -610,7 +738,13 @@ export default class index extends Component {
             <div
               className="box_add"
               style={{ display: this.state.passengerActive === "add" ? "block" : "none" }}
-            ></div>
+            >
+              <div className="add_title">基本信息</div>
+              <div className="add_list">
+                <p>姓名</p>
+                <div></div>
+              </div>
+            </div>
           </div>
         </Modal>
       </div>
