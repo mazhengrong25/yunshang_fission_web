@@ -1,19 +1,19 @@
 /*
- * @Description: 
+ * @Description: 订单列表菜单栏
  * @Author: mzr
  * @Date: 2021-02-25 17:20:46
- * @LastEditTime: 2021-02-25 18:33:43
+ * @LastEditTime: 2021-03-02 16:50:23
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
 
-import { DatePicker, Select, Menu } from 'antd';
+import { Menu } from 'antd';
 
 import './orderList.scss'
-import InlandList from '../inlandLlist'
 
-const { RangePicker } = DatePicker;
-const { Option } = Select;
+import InlandList from '../inlandLlist' //国内列表
+
+
 const { SubMenu } = Menu;
 
 export default class index extends Component {
@@ -27,12 +27,14 @@ export default class index extends Component {
         }
     }
 
+    componentDidMount() {
+        let newUrl = React.$filterUrlParams(this.props.location.search).type
 
-    // 折叠栏展开
-    openFoldBar() {
         this.setState({
-            isShow: !this.state.isShow
+            menuOpenKeys: newUrl.indexOf('inland') !== -1 ? ['inland'] : ['inter'],
+            menuItem: newUrl
         })
+
     }
 
     // 折叠栏切换状态
@@ -65,28 +67,32 @@ export default class index extends Component {
             })
         }
     }
-    
+
     // 折叠栏子级key值
     openMenuItem = (item) => {
+
+        console.log(this.props.location)
+        this.props.history.push(`/orderList?type=${item.key}`)
         this.setState({
-            menuItem:item.key
+            menuItem: item.key
         })
     }
 
 
     render() {
         return (
-            <div className="inlandList">
+            <div className="orderList">
                 <div className="content_div">
                     <div className="filter_div">
                         <div className="nav_top">我的订单</div>
                         <div className="nav_bottom">
                             <Menu
-                                onClick={this.handleClick}
                                 style={{ width: 184 }}
                                 mode="inline"
                                 onOpenChange={this.onOpenChange.bind(this)}
                                 openKeys={this.state.menuOpenKeys}
+                                selectedKeys={[this.state.menuItem]}
+                           
                             >
                                 <SubMenu key="inland" title="国内机票"
                                     icon={<div className="menu_icon"></div>}>
@@ -105,12 +111,11 @@ export default class index extends Component {
                     </div>
 
                     <div className="list_div">
-                    {this.state.menuItem === "inland_ticket" ? (<InlandList></InlandList>) : ""
-                    }
+                        {this.state.menuItem === "inland_ticket" ? (<InlandList history={this.props.history}></InlandList>) : ""}
                     </div>
-                    
-                    
-                   
+
+
+
                 </div>
 
             </div>

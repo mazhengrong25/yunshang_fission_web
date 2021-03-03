@@ -2,7 +2,7 @@
  * @Description: 导航栏
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:43:50
- * @LastEditTime: 2021-02-25 14:27:16
+ * @LastEditTime: 2021-03-02 15:34:20
  * @LastEditors: mzr
  * @LastEditTime: 2021-02-06 11:51:24
  * @LastEditors: wish.WuJunLong
@@ -128,11 +128,11 @@ class Index extends React.Component {
               </div>
               <div
                 className={[
-                  this.state.activeUrl === "/inlandList"
+                  this.state.activeUrl === "/orderList"
                     ? "header__nav__main__box__item active"
                     : "header__nav__main__box__item",
                 ]}
-                onClick={() => this.jumpUrl("/inlandList")}
+                onClick={() => this.jumpUrl("/orderList?type=inland_ticket")}
               >
                 {/* <Badge count={this.state.badgeNumber} offset={[5, -3]}> */}
                   我的订单
@@ -144,7 +144,7 @@ class Index extends React.Component {
                     trigger={["click"]}
                     overlay={() => (
                       <Menu>
-                        <Menu.Item>个人中心</Menu.Item>
+                        <Menu.Item onClick={() => this.jumpUrl("/accountCenter")}>个人中心</Menu.Item>
                         <Menu.Item>钱包</Menu.Item>
                         <Menu.Item onClick={() => this.exitLogin()}>登出账号</Menu.Item>
                       </Menu>

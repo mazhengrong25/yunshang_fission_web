@@ -1,0 +1,76 @@
+.personInfo {
+
+    &:not(:last-child) {
+        margin-bottom: 8px;
+    }
+
+    .content_div {
+        
+            height: 264px;
+            background: #FFFFFF;
+            box-shadow: 0px 50px 80px #EBEDF2;
+            border-radius: 5px;
+            .div_title {
+                
+                font-size: 16px;
+                font-weight: bold;
+                color: #333333;
+                padding: 16px 24px;
+                border-bottom: 1px solid #DADDE2;
+            }
+            .item_content {
+                display: flex;
+                padding: 36px 32px;
+                .item_avatar{
+                    width: 120px;
+                    height: 120px;
+                    background: #FFFFFF;
+                    box-shadow: 0px 0px 50px rgba(174, 174, 193, 0.4);
+                    border-radius: 50%;
+
+                }
+                .action_div {
+                    margin-left: 40px;
+                    .action_title {
+                                            
+                        font-size: 20px;
+                        font-weight: 400;
+                        color: #333333;
+                    }
+                    .action_time {
+                        
+                        font-size: 14px;
+                        font-weight: 400;
+                        color: #878791;
+                    }
+                    .action_button {
+                        display: flex;
+                        .ant-btn {
+                            height: 40px;
+                            border: 1px solid #5B7CF0;
+                            border-radius: 5px; 
+                            color: #5B7CF0;
+                            margin-right: 16px;
+                        }      
+                    }
+                }
+            }
+    }
+    .content_recharge {
+        
+        height: 152px;
+        background: #FFFFFF;
+        box-shadow: 0px 50px 80px #EBEDF2;
+        border-radius: 5px;
+        margin:10px 0px;
+        
+    }
+    .content_account {
+        
+        height: 440px;
+        background: #FFFFFF;
+        box-shadow: 0px 50px 80px #EBEDF2;
+        border-radius: 5px;
+    }
+   
+}
