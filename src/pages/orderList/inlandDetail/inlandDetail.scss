@@ -1,11 +1,12 @@
 .inlandDetail {
   height: 100%;
   background: rgba(240, 241, 245, 1);
-  // padding: 18px 0px;
   display: flex;
   align-items: center;
   flex-direction: column;
   position: relative;
+  max-width: 1200px;
+  margin: 0 auto;
   .content_spin {
     position: absolute;
     width: 100%;
@@ -14,7 +15,7 @@
     left: 0;
   }
   .content_div {
-    min-width: calc(100% - 720px);
+    width: 100%;
     .content_nav {
       font-size: 12px;
       font-weight: 400;
@@ -91,8 +92,7 @@
           .number_copy {
             width: 16px;
             height: 17px;
-            background: url("../../../static/number_copy.png") no-repeat center
-              center;
+            background: url("../../../static/number_copy.png") no-repeat center center;
             background-size: contain;
             cursor: pointer;
           }
@@ -168,12 +168,15 @@
               .message_head {
                 width: 32px;
                 height: 32px;
-                background: url("../../../static/message_head.png") no-repeat
-                  center center;
-                background-color: #000;
-                background-size: initial;
+                background: url("../../../static/message_head.png") no-repeat center
+                  center #000;
+                background-size: 50% 50%;
                 border-radius: 50%;
                 margin-right: 10px;
+                -webkit-border-radius: 50%;
+                -moz-border-radius: 50%;
+                -ms-border-radius: 50%;
+                -o-border-radius: 50%;
               }
               .passenger_name {
                 font-size: 16px;
@@ -213,8 +216,10 @@
         flex-direction: column;
         padding: 24px;
         .item_space {
+          &:not(:last-child) {
+            margin-bottom: 26px;
+          }
           display: inline-flex;
-          margin-bottom: 26px;
           // .ant-btn {
           //   padding: 0;
           // }
@@ -317,63 +322,6 @@
           }
         }
       }
-      // .voucher_div {
-      //     padding: 24px;
-      //     .item_space {
-      //         display: inline-flex;
-      //         .div_item {
-      //             display: inline-flex;
-      //             margin-right: 40px;
-      //             .div_title {
-
-      //                 font-size: 14px;
-      //                 font-weight: 400;
-      //                 color: #878791;
-      //                 margin-right: 8px;
-      //             }
-      //             .div_input {
-
-      //                 font-size: 14px;
-      //                 font-weight: 400;
-      //                 color: #333333;
-      //             }
-      //         }
-      //         .address_div {
-      //             height: 80px;
-      //             background:rgba(243, 243, 247, 0.7);
-      //         }
-      //     }
-      // }
-      // .insure_div {
-      //     display: flex;
-      //     flex-direction: column;
-      //     padding: 24px;
-      //     .insure_space {
-      //         display: inline-flex;
-      //         justify-content: space-between;
-      //         .space_title {
-
-      //             font-size: 16px;
-      //             font-weight: 400;
-      //             color: #333333;
-      //         }
-      //         .space_amount {
-
-      //             font-size: 24px;
-      //             font-weight: bold;
-      //             color: #5B7CF0;
-      //         }
-      //         .insure_item {
-      //             display: inline-flex;
-      //             .insure_icon {
-      //                 width: 16px;
-      //                 height: 16px;
-      //                 background: url("../../../static/insure_icon.png") no-repeat center center;
-      //                 background-size: contain;
-      //             }
-      //         }
-      //     }
-      // }
     }
     .flight_div {
       background: #ffffff;
@@ -437,8 +385,7 @@
             width: 154px;
             height: 28px;
             object-fit: contain;
-            background: url("../../../static/flight_fly.png") no-repeat center
-              center;
+            background: url("../../../static/flight_fly.png") no-repeat center center;
             background-size: contain;
           }
         }
@@ -505,8 +452,8 @@
               width: 14px;
               height: 56px;
               object-fit: contain;
-              background: url("../../../static/flight_fly_colomn.png") no-repeat
-                center center;
+              background: url("../../../static/flight_fly_colomn.png") no-repeat center
+                center;
               background-size: contain;
             }
           }
@@ -554,8 +501,7 @@
               width: 13px;
               height: 15px;
               object-fit: contain;
-              background: url("../../../static/flight_meal.png") no-repeat
-                center center;
+              background: url("../../../static/flight_meal.png") no-repeat center center;
               background-size: contain;
             }
           }
@@ -567,8 +513,7 @@
               width: 16px;
               height: 16px;
               object-fit: contain;
-              background: url("../../../static/flight_time.png") no-repeat
-                center center;
+              background: url("../../../static/flight_time.png") no-repeat center center;
               background-size: contain;
             }
             .right_consume {

@@ -2,7 +2,7 @@
  * @Description: 机票搜索
  * @Author: wish.WuJunLong
  * @Date: 2021-01-12 14:07:43
- * @LastEditTime: 2021-02-22 16:45:18
+ * @LastEditTime: 2021-03-11 15:03:48
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -585,8 +585,27 @@ export default class index extends Component {
             </div>
           </div>
 
-          {/* 搜索按钮 */}
+          {/* 舱位等级选择 */}
+          <div className="flightSearch__main__list">
+            <div className="flightSearch__main__list__item">
+              <div className="flightSearch__main__list__item__title">舱位等级</div>
+              <div className="flightSearch__main__list__item__input">
+                <Select
+                  style={{width: 200}}
+                  allowClear
+                  onChange={this.cabinSelect}
+                  placeholder="选择舱位等级"
+                >
+                  <Option value="jack">经济舱</Option>
+                  <Option value="lucy">超级经济舱</Option>
+                  <Option value="lucy">明珠经济舱</Option>
+                  <Option value="lucy">公务舱</Option>
+                </Select>
+              </div>
+            </div>
+          </div>
 
+          {/* 搜索按钮 */}
           <Button
             className="flightSearch__main__list__searchBtn"
             type="primary"
