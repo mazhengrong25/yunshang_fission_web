@@ -2,8 +2,8 @@
  * @Description: 订单列表菜单栏
  * @Author: mzr
  * @Date: 2021-02-25 17:20:46
- * @LastEditTime: 2021-03-12 10:49:15
- * @LastEditors: mzr
+ * @LastEditTime: 2021-03-12 10:56:40
+ * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from 'react'
 
@@ -85,7 +85,7 @@ export default class index extends Component {
                     <div className="filter_div">
                         <div className="nav_top">我的订单</div>
                         <div className="nav_bottom">
-                            <menu
+                            <Menu
                                 style={{ width: 184 }}
                                 mode="inline"
                                 onOpenChange={this.onOpenChange.bind(this)}
@@ -105,7 +105,7 @@ export default class index extends Component {
                                     <Menu.Item key="inter_change" onClick={this.openMenuItem.bind(this)}>改签订单</Menu.Item>
                                     <Menu.Item key="inter_refund" onClick={this.openMenuItem.bind(this)}>退票订单</Menu.Item>
                                 </SubMenu>
-                            </menu>
+                            </Menu>
                         </div>
                     </div>
 
