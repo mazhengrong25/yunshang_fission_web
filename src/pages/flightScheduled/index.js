@@ -2,7 +2,7 @@
  * @Description: 机票预订页面
  * @Author: wish.WuJunLong
  * @Date: 2021-02-19 13:54:59
- * @LastEditTime: 2021-03-01 16:42:40
+ * @LastEditTime: 2021-03-09 16:52:02
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -12,6 +12,8 @@ import { Modal, Tag, Button, DatePicker, Input, Select, Table, Pagination } from
 import "./flightScheduled.scss";
 import AddPassengerIcon from "../../static/add_passenger_icon.png"; // 添加乘机人图标
 import PassengerAvatar from "../../static/passenger_avatar.png"; // 乘机人头像
+
+import TicketImage from "../../static/flight_fly.png";
 
 const { CheckableTag } = Tag;
 const { Option } = Select;
@@ -321,7 +323,11 @@ export default class index extends Component {
       passengers: passengers,
     };
 
-    this.$axios.post("/api/insert/order", data).then((res) => {});
+    this.$axios.post("/api/insert/order", data).then((res) => {
+      if (res.errorcode === 10000) {
+        this.props.history.push(`/inlandDetail?detail=${res.data[0].order_no}`);
+      }
+    });
   }
 
   render() {
@@ -566,28 +572,87 @@ export default class index extends Component {
             <div className="box_title">航班信息</div>
             <div className="flight_info">
               <div className="info_title">
-                <div className="info_type"></div>
-                <div className="info_time"></div>
-                <div className="info_address"></div>
+                <div className="info_type">
+                  {this.state.reserveMessage.segments
+                    ? this.state.reserveMessage.segments.length === 1
+                      ? "单程"
+                      : "往返"
+                    : ""}
+                </div>
+                <div className="info_time">
+                  {this.state.reserveMessage.segments
+                    ? `${this.$moment(
+                        this.state.reserveMessage.segments[0].departure_time
+                      ).format("YYYY-MM-DD")} ${this.$moment(
+                        this.state.reserveMessage.segments[0].departure_time
+                      ).format("ddd")}`
+                    : ""}
+                </div>
+                <div className="info_address">
+                  {this.state.reserveMessage.segments
+                    ? `${this.state.reserveMessage.segments[0].depAirport_CN.province}-${
+                        this.state.reserveMessage.segments[
+                          this.state.reserveMessage.segments.length - 1
+                        ].arrAirport_CN.province
+                      }`
+                    : ""}
+                </div>
               </div>
 
               <div className="info_content">
                 <div className="content_address">
-                  <div></div>
-                  <p></p>
+                  {this.state.reserveMessage.segments
+                    ? `${this.$moment(
+                        this.state.reserveMessage.segments[0].departure_time
+                      ).format("HH:mm")}`
+                    : ""}
                 </div>
 
-                {/* <img url={} alt="航班飞行图标" /> */}
+                <img src={TicketImage} alt="航班飞行图标" />
 
                 <div className="content_address">
-                  <div></div>
-                  <p></p>
+                  {this.state.reserveMessage.segments
+                    ? `${this.$moment(
+                        this.state.reserveMessage.segments[0].arrive_time
+                      ).format("HH:mm")}`
+                    : ""}
                 </div>
               </div>
+              <div className="info_address">
+                <p>
+                  {this.state.reserveMessage.segments
+                    ? `${this.state.reserveMessage.segments[0].depAirport_CN.province}
+                          ${this.state.reserveMessage.segments[0].depAirport_CN.air_port_name}
+                          ${this.state.reserveMessage.segments[0].depTerminal}`
+                    : ""}
+                </p>
+                <p>
+                  {this.state.reserveMessage.segments
+                    ? `${
+                        this.state.reserveMessage.segments[
+                          this.state.reserveMessage.segments.length - 1
+                        ].arrAirport_CN.province
+                      }
+                          ${
+                            this.state.reserveMessage.segments[
+                              this.state.reserveMessage.segments.length - 1
+                            ].arrAirport_CN.air_port_name
+                          }
+                          ${
+                            this.state.reserveMessage.segments[
+                              this.state.reserveMessage.segments.length - 1
+                            ].arrTerminal
+                          }`
+                    : ""}
+                </p>
+              </div>
+
+
+              <div className="info_more_message_btn">展开</div>
 
               <div className="info_message">
                 <div className="message_air">
-                  {/* <img url={} alt="航司图标" /> */}
+                  {/* <img src={} alt="航司图标" /> */}
                   <div className="air_name"></div>
                   <div className="air_info"></div>
                   <div className="air_cabin"></div>
@@ -599,6 +664,12 @@ export default class index extends Component {
                 </div>
               </div>
             </div>
+          </div>
+
+          {/* 退改信息 */}
+          <div className="baggage_info">
+              <p>退改20%-100%</p>
+              <p>行李额20KG</p>
           </div>
 
           <div className="message_box">

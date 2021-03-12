@@ -19,6 +19,8 @@ import InlandDetail from "./pages/orderList/inlandDetail"; //国内列表详情
 import FlightList from "./pages/flightList"; // 航班查询列表
 import FlightScheduled from "./pages/flightScheduled"; // 机票预订页面
 
+import OrderPay from "./pages/orderList/orderPay"; // 支付回调页面
+
 import HeaderTemplate from "./components/Header"; // 导航栏
 import FooterTemplate from "./components/Footer"; // 页脚
 
@@ -36,6 +38,7 @@ function App() {
 
         <Fragment>
           <Switch>
+            <Route exact path="/orderPay" component={OrderPay}></Route>
             <Route exact path="/FlightScheduled" component={FlightScheduled}></Route>
             <Route exact path="/flightList" component={FlightList} />
             <Route exact path="/inlandDetail" component={InlandDetail} />

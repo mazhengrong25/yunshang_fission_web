@@ -146,7 +146,7 @@
               max-width: 200px;
               width: 100%;
               flex-shrink: 0;
-              .ant-input{
+              .ant-input {
                 height: 40px;
               }
             }
@@ -242,12 +242,15 @@
       }
     }
   }
+
+  // 航班板块
   .scheduled_message {
     max-width: 392px;
     width: 100%;
     flex: 1;
     .message_box {
       background-color: #fff;
+      border-radius: 5px;
       &:not(:last-child) {
         margin-bottom: 8px;
       }
@@ -264,7 +267,99 @@
 
       // 航班信息
       .flight_info {
-        padding: 22px 16px 60px;
+        padding: 22px 16px 40px;
+        position: relative;
+        .info_title {
+          display: flex;
+          align-items: center;
+          margin-bottom: 24px;
+          .info_type {
+            width: 32px;
+            height: 18px;
+            background: #5b7cf0;
+            border-radius: 2px;
+            line-height: 18px;
+            font-size: 12px;
+            font-weight: 400;
+            color: #ffffff;
+            text-align: center;
+            margin-right: 10px;
+          }
+          .info_time {
+            font-size: 14px;
+            font-weight: 400;
+            color: #333333;
+          }
+          .info_address {
+            margin-left: 20px;
+            font-size: 14px;
+            font-weight: bold;
+            color: #333333;
+          }
+        }
+        .info_content {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          margin-bottom: 5px;
+          .content_address {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333333;
+          }
+          img {
+            width: 154px;
+            height: 30px;
+            object-fit: contain;
+          }
+        }
+        .info_address {
+          font-size: 12px;
+          font-weight: 400;
+          color: #333333;
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+        }
+        .info_more_message_btn {
+          width: 84px;
+          height: 26px;
+          background: #3a3b50;
+          border-radius: 5px 5px 0px 0px;
+          line-height: 26px;
+          text-align: center;
+          font-size: 12px;
+          font-weight: 400;
+          color: #ffffff;
+          position: absolute;
+          bottom: 0;
+          left: 50%;
+          margin-left: -42px;
+          cursor: pointer;
+        }
+      }
+    }
+
+    // 退改信息
+    .baggage_info {
+      height: 56px;
+      background: #ffffff;
+      border-radius: 5px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      padding: 0 16px;
+      font-size: 14px;
+      font-weight: 400;
+      color: #5b7cf0;
+      > p:last-child {
+        margin-left: 8px;
+        &::before {
+          content: "|";
+          color: #5b7cf0;
+          opacity: 0.2;
+          margin-right: 8px;
+        }
       }
     }
   }

@@ -116,11 +116,7 @@ img {
   border-radius: 5px;
   border: 1px solid #afafb5;
   .ant-picker-input {
-    &:hover {
-      .ant-picker-suffix {
-        opacity: 0.2;
-      }
-    }
+    
     .ant-picker-suffix {
       background: url("../src/static/date_select_icon.png") no-repeat center center;
       background-size: contain;
