@@ -2,7 +2,7 @@
  * @Description: 个人中心
  * @Author: mzr
  * @Date: 2021-03-02 15:27:47
- * @LastEditTime: 2021-03-02 17:44:50
+ * @LastEditTime: 2021-03-10 10:35:03
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -13,6 +13,12 @@ import './accountCenter.scss'
 
 // 个人信息
 import PersonInfo from '../personInfo'
+// 证件信息
+import CertInfo from '../certInfo'
+// 钱包流水
+import WalletInfo from '../walletInfo'
+// 常用人员
+import UsedPerson from '../usedPerson'
 
 export default class index extends Component {
     constructor(props) {
@@ -22,9 +28,9 @@ export default class index extends Component {
         }
     }
 
+
     // 侧边导航菜单 menu.item 获取key
     openMenuItem = (val) => {
-        console.log(val)
         this.props.history.push(`/accountCenter?type=${val.key}`)
         this.setState({
             itemKey:val.key,
@@ -45,23 +51,23 @@ export default class index extends Component {
                             >
                                 <Menu.Item 
                                     key="perInfo" 
-                                    icon={<div className="account_icon"></div>}
+                                    icon={<div className="account_icon_perInfo"></div>}
                                     onClick={this.openMenuItem.bind(this)}>个人信息</Menu.Item>
                                 <Menu.Item 
                                     key="cerInfo" 
-                                    icon={<div className="account_icon"></div>}
+                                    icon={<div className="account_icon_cerInfo"></div>}
                                     onClick={this.openMenuItem.bind(this)}>证件信息</Menu.Item>
                                 <Menu.Item 
                                     key="usedPer" 
-                                    icon={<div className="account_icon"></div>}
+                                    icon={<div className="account_icon_usedPer"></div>}
                                     onClick={this.openMenuItem.bind(this)}>常用人员</Menu.Item>
                                 <Menu.Item 
                                     key="usedAdd" 
-                                    icon={<div className="account_icon"></div>}
+                                    icon={<div className="account_icon_usedAdd"></div>}
                                     onClick={this.openMenuItem.bind(this)}>常用地址</Menu.Item>
                                 <Menu.Item 
                                     key="wallAcc" 
-                                    icon={<div className="account_icon"></div>}
+                                    icon={<div className="account_icon_wallAcc"></div>}
                                     onClick={this.openMenuItem.bind(this)}>钱包流水</Menu.Item>
                             </Menu>
                         </div>
@@ -69,7 +75,13 @@ export default class index extends Component {
 
                     <div className="account_list_div">
                         {this.state.itemKey === 'perInfo' ? 
-                            (<PersonInfo history={this.props.history}></PersonInfo>):""}
+                            (<PersonInfo history={this.props.history}></PersonInfo>):
+                            this.state.itemKey === 'cerInfo'?
+                                (<CertInfo history={this.props.history}></CertInfo>):
+                                this.state.itemKey === 'wallAcc'? 
+                                    (<WalletInfo history={this.props.history}></WalletInfo>):
+                                        this.state.itemKey === 'usedPer'?
+                                            (<UsedPerson></UsedPerson>):""}
                     </div>
 
                 </div>

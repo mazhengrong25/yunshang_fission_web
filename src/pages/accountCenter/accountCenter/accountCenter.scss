@@ -24,40 +24,143 @@
               background-color: #ffffff;
               box-shadow: 0px 50px 80px #ebedf2;
               border-radius: 5px;
-              .account_menu {
-                
+              
+                // 侧边菜单栏
                 .ant-menu {
                     font-weight: 400;
+                    height: 56px;
                 }
-
-                .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
-                    color: #fff;
-                    background-color: #5B7CF0;
-                    box-shadow: 0px 5px 10px rgba(91, 124, 240, 0.5);
-                    border-radius: 5px;
-                }
-
+            
                 .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-active {
-                    
                     font-size: 14px;
                     font-weight: 400;
                     color: #5B7CF0;
                     background-color: #fff;
                     box-shadow: 0px 0px 20px #EBEDF2;
                     border-radius: 5px;
+                    display: flex;
+                    .account_icon_perInfo {
+                        background: url("../../../static/perInfo_blue.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
+                    .account_icon_cerInfo {
+                        background: url("../../../static/cerInfo_blue.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
+                    .account_icon_usedPer {
+                        background: url("../../../static/usedPer_blue.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
+                    .account_icon_usedAdd {
+                        background: url("../../../static/usedAdd_blue.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
+                    .account_icon_wallAcc {
+                        background: url("../../../static/wallAcc_blue.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
+
+                }
+
+
+                .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected {
+                    
+                   
+                    color: #fff;
+                    background-color: #5B7CF0;
+                    box-shadow: 0px 5px 10px rgba(91, 124, 240, 0.5);
+                    border-radius: 5px;
+                    .account_icon_perInfo {
+                        background: url("../../../static/perInfo_icon.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
+                    .account_icon_cerInfo {
+                        background: url("../../../static/cerInfo_icon.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
+                    .account_icon_usedPer {
+                        background: url("../../../static/usedPer_icon.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
+                    .account_icon_usedAdd {
+                        background: url("../../../static/usedAdd_icon.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
+                    .account_icon_wallAcc {
+                        background: url("../../../static/wallAcc_icon.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
+                    
+                }
+
+                .ant-menu-item {
+                    
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: #333333;
+                    display: flex;
+                    height: 56px;
+                    .account_icon_perInfo {
+                        background: url("../../../static/perInfo_gray.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
+                    .account_icon_cerInfo {
+                        background: url("../../../static/cerInfo_gray.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
+                    .account_icon_usedPer {
+                        background: url("../../../static/usedPer_gray.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
+                    .account_icon_usedAdd {
+                        background: url("../../../static/usedAdd_gray.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
+                    .account_icon_wallAcc {
+                        background: url("../../../static/wallAcc_gray.png")
+                        no-repeat center center !important;
+                        background-size: contain !important;
+                    }
                 }
 
                 .ant-menu-inline, .ant-menu-vertical, .ant-menu-vertical-left {
                     border-right: none;
                 }
-              }
+                .ant-menu-vertical .ant-menu-item::after,
+                .ant-menu-vertical-left .ant-menu-item::after,
+                .ant-menu-vertical-right .ant-menu-item::after,
+                .ant-menu-inline .ant-menu-item::after {
+                       border-right: none;
+                }
+                
+                .ant-menu-item .ant-menu-item-icon + span, 
+                .ant-menu-submenu-title .ant-menu-item-icon + span, 
+                .ant-menu-item .anticon + span, 
+                .ant-menu-submenu-title .anticon + span {
+                    line-height: 53px;
+                }
+              
             }
         }
     
         .account_list_div {
             width: 968px;
-            // background-color: #fff;
-            // border-radius: 5px;
+            background-color: #fff;
+            border-radius: 5px;
         }
     }
 }

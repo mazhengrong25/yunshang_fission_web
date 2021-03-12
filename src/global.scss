@@ -41,22 +41,6 @@ img {
   }
 }
 
-// 输入框
-.ant-input {
-  border-color: #afafb5;
-  color: #333333;
-  border-radius: 5px;
-  -webkit-border-radius: 5px;
-  -moz-border-radius: 5px;
-  -ms-border-radius: 5px;
-  -o-border-radius: 5px;
-  &:hover {
-    border-color: #5b7cf0;
-  }
-  &:focus {
-    border-color: #5b7cf0;
-  }
-}
 
 // 选择器
 .ant-select-single {
@@ -150,6 +134,48 @@ img {
   }
   &.ant-picker-disabled {
     opacity: 0.4;
+  }
+}
+
+// 对话框
+.ant-modal-content {
+  border-radius: 5px;
+  .ant-modal-close-x {
+    color: #fff;
+  }
+  .ant-modal-header {
+    height: 48px  !important;
+    background: #3A3B50 !important;
+    border-radius: 5px 5px 0px 0px !important;
+    border-bottom: 1px solid #3A3B50 !important;
+    .ant-modal-title
+    { 
+      
+      font-size: 16px;
+      font-weight: 400;
+      color: #FFFFFF !important;
+    }
+  }
+  .ant-modal-footer {
+    text-align: center;
+    border-top: none;
+    padding-bottom: 32px;
+    .ant-btn {
+      width: 96px;
+      height: 36px;
+      border: 1px solid #DADDE2;
+      border-radius: 5px;
+    }
+    .ant-btn-primary {
+      width: 96px;
+      height: 36px;
+      background: #5B7CF0;
+      border: 1px solid #5B7CF0;
+      border-radius: 5px;
+    }
+    .ant-modal-footer button + button {
+      margin-left: 16px;
+    }
   }
 }
 

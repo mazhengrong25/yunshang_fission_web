@@ -2,7 +2,7 @@
  * @Description: 订单列表菜单栏
  * @Author: mzr
  * @Date: 2021-02-25 17:20:46
- * @LastEditTime: 2021-03-02 16:50:23
+ * @LastEditTime: 2021-03-12 10:49:15
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -26,7 +26,6 @@ export default class index extends Component {
             menuItem: "", // 子级菜单key
         }
     }
-
     componentDidMount() {
         let newUrl = React.$filterUrlParams(this.props.location.search).type
 
@@ -86,13 +85,13 @@ export default class index extends Component {
                     <div className="filter_div">
                         <div className="nav_top">我的订单</div>
                         <div className="nav_bottom">
-                            <Menu
+                            <menu
                                 style={{ width: 184 }}
                                 mode="inline"
                                 onOpenChange={this.onOpenChange.bind(this)}
                                 openKeys={this.state.menuOpenKeys}
                                 selectedKeys={[this.state.menuItem]}
-                           
+
                             >
                                 <SubMenu key="inland" title="国内机票"
                                     icon={<div className="menu_icon"></div>}>
@@ -106,7 +105,7 @@ export default class index extends Component {
                                     <Menu.Item key="inter_change" onClick={this.openMenuItem.bind(this)}>改签订单</Menu.Item>
                                     <Menu.Item key="inter_refund" onClick={this.openMenuItem.bind(this)}>退票订单</Menu.Item>
                                 </SubMenu>
-                            </Menu>
+                            </menu>
                         </div>
                     </div>
 

@@ -2,8 +2,8 @@
  * @Description: 主页
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:08:05
- * @LastEditTime: 2021-02-24 10:04:10
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-03-11 17:23:30
+ * @LastEditors: mzr
  */
 import React, { Component } from "react";
 
@@ -95,6 +95,7 @@ export default class index extends Component {
   jumpNoticeDetail(val) {
     console.log(val);
   }
+
 
   render() {
     return (
