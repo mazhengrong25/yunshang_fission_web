@@ -2,7 +2,7 @@
  * @Description: 机票搜索
  * @Author: wish.WuJunLong
  * @Date: 2021-01-12 14:07:43
- * @LastEditTime: 2021-03-11 15:03:48
+ * @LastEditTime: 2021-03-23 15:57:38
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -285,6 +285,11 @@ export default class index extends Component {
     return base64;
   }
 
+  // 舱位等级筛选
+  cabinSelect = (val) => {
+    console.log(val);
+  };
+
   // 航班搜索
   searchSubmit() {
     let url = `/flightList?start=${this.state.searchCity.startCode}&startAddress=${this.state.searchCity.startAir}&end=${this.state.searchCity.endCode}&endAddress=${this.state.searchCity.endAir}&date=${this.state.searchCity.startDate}`;
@@ -558,6 +563,7 @@ export default class index extends Component {
               <div className="flightSearch__main__list__item__input">
                 <DatePicker
                   allowClear={false}
+                  showToday={false}
                   disabledDate={(current) => {
                     return (
                       current && current < this.$moment().subtract(1, "days").endOf("day")
@@ -573,6 +579,7 @@ export default class index extends Component {
               <div className="flightSearch__main__list__item__title">返程时间</div>
               <div className="flightSearch__main__list__item__input">
                 <DatePicker
+                  showToday={false}
                   disabledDate={(current) => {
                     return (
                       current && current < this.$moment().subtract(1, "days").endOf("day")
@@ -591,15 +598,16 @@ export default class index extends Component {
               <div className="flightSearch__main__list__item__title">舱位等级</div>
               <div className="flightSearch__main__list__item__input">
                 <Select
-                  style={{width: 200}}
+                  style={{ width: 200 }}
                   allowClear
                   onChange={this.cabinSelect}
                   placeholder="选择舱位等级"
+                  value={this.state.cabinLevel}
                 >
-                  <Option value="jack">经济舱</Option>
-                  <Option value="lucy">超级经济舱</Option>
-                  <Option value="lucy">明珠经济舱</Option>
-                  <Option value="lucy">公务舱</Option>
+                  <Option value={0}>经济舱</Option>
+                  <Option value={1}>超级经济舱</Option>
+                  <Option value={2}>明珠经济舱</Option>
+                  <Option value={3}>公务舱</Option>
                 </Select>
               </div>
             </div>

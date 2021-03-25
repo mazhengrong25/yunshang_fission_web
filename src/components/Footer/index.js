@@ -2,11 +2,12 @@
  * @Description: 全局页脚
  * @Author: wish.WuJunLong
  * @Date: 2021-02-22 16:47:54
- * @LastEditTime: 2021-02-22 16:55:16
+ * @LastEditTime: 2021-03-15 10:24:41
  * @LastEditors: wish.WuJunLong
  */
 
 import React, { Component } from "react";
+import { Link } from "react-router-dom";
 
 import FooterLogo from "../../static/footer_logo.png";
 
@@ -26,9 +27,9 @@ export default class index extends Component {
           </div>
 
           <div className="main_nav">
-
-
-
+            <Link to="/">首页</Link>
+            <Link to="/orderList?type=inland_ticket">我的订单</Link>
+            <Link to="/">公告通知</Link>
           </div>
 
 

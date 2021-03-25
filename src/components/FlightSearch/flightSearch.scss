@@ -115,6 +115,34 @@
               }
             }
             &__cityChecked {
+              .ant-tabs-nav {
+                .ant-tabs-nav-wrap {
+                  .ant-tabs-nav-list {
+                    .ant-tabs-tab {
+                      padding: 4px 14px 4px 16px;
+                      &.ant-tabs-tab-active {
+                        .ant-tabs-tab-btn {
+                          color: #5b7cf0;
+                          font-weight: 400;
+                          text-shadow: none;
+                        }
+                      }
+                      .ant-tabs-tab-btn {
+                        padding: 4px 10px 4px 4px;
+                        width: 100%;
+                        text-align: left;
+                        border-radius: 2px;
+                        font-size: 12px;
+                        font-weight: 400;
+                        &:hover {
+                          background: #f3f3f7;
+                          color: #5b7cf0;
+                        }
+                      }
+                    }
+                  }
+                }
+              }
               /deep/.ant-tabs-tabpane {
                 padding: 5px 0 5px 20px !important;
               }

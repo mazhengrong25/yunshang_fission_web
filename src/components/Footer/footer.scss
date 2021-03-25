@@ -35,6 +35,17 @@
       }
     }
 
+    .main_nav {
+      a {
+        font-size: 12px;
+        font-weight: 400;
+        color: rgba($color: #ffffff, $alpha: 0.6);
+        &:not(:last-child){
+          margin-right: 40px;
+        }
+      }
+    }
+
     .main_message {
       .message_title {
         font-size: 14px;

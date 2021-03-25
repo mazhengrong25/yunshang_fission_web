@@ -2,7 +2,7 @@
  * @Description: 机票列表
  * @Author: wish.WuJunLong
  * @Date: 2021-02-05 18:31:03
- * @LastEditTime: 2021-03-10 17:55:03
+ * @LastEditTime: 2021-03-23 17:51:23
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -83,7 +83,7 @@ export default class index extends Component {
     });
 
     await this.getFlightList();
-    await this.getAirlineList();
+    this.getAirlineList();
   }
 
   // 获取航班列表
@@ -226,14 +226,15 @@ export default class index extends Component {
     let start;
     let end;
     let newFlightData = this.state.flightList.sort((n1, n2) => {
-      if (e === "price") {
+
+      if (e.indexOf("price") > -1) {
         start = n1.min_price;
         end = n2.min_price;
-      } else if (e === "time") {
+      } else if (e.indexOf("time") > -1) {
         start = this.$moment(n1.segments[0].depTime).format("X");
         end = this.$moment(n2.segments[0].depTime).format("X");
       }
-      return start - end;
+      return e.indexOf("top") > -1 ? start - end : end - start;
     });
     let flightSort = this.state.flightSort;
     flightSort.listSort = e;
@@ -542,8 +543,10 @@ export default class index extends Component {
 
                 <div className="flight_sort">
                   <Select placeholder="排序" onChange={this.sortFlightList}>
-                    <Option value="time">时间早晚</Option>
-                    <Option value="price">价格高低</Option>
+                    <Option value="time-top">时间早-晚</Option>
+                    <Option value="time-bottom">时间晚-早</Option>
+                    <Option value="price-top">价格高-低</Option>
+                    <Option value="price-bottom">价格低-高</Option>
                   </Select>
                 </div>
               </div>
