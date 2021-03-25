@@ -2,7 +2,7 @@
  * @Description: 个人中心---钱包流水
  * @Author: mzr
  * @Date: 2021-03-10 10:30:20
- * @LastEditTime: 2021-03-12 09:56:42
+ * @LastEditTime: 2021-03-24 15:34:36
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -23,10 +23,9 @@ export default class index extends Component {
                 per_page: 10, //每页条数	
                 total: 0
             },
-            // searchFrom: {
-                
-               
-            // },
+            searchFrom: {},
+            start_time:"2021-03-01",
+            end_time: this.$moment() 
 
         }
     }
@@ -39,10 +38,15 @@ export default class index extends Component {
 
     // 获取钱包流水列表
     async getDataList() {
-        let data = {
+        
+        let data = this.state.searchFrom
+        data['start_time'] = this.state.start_time
+        data['end_time'] = this.state.end_time
+        data['page'] = this.state.paginationData.page
+        data['limit'] = this.state.paginationData.per_page
 
-        }
-        this.$axios.post("/api/trans/list", data).then(res => {
+
+        this.$axios.post("/api/wallet/list", data).then(res => {
            console.log('流水',res)
            if(res.errorcode === 10000) {
                
@@ -56,6 +60,16 @@ export default class index extends Component {
                })
            }
         })
+    }
+
+    // 日期筛选
+    DateItem = (date,dateString) => {
+        
+        console.log(dateString)
+        this.setState({
+            start_time: dateString
+        })
+        
     }
 
     // 筛选查询
@@ -101,8 +115,17 @@ export default class index extends Component {
                         <div className="content_nav">
                             <div className="content_item">
                                 <div className="item_title">收款时间</div>
-                                <DatePicker/> -
-                                <DatePicker/>
+                                <div className="wallet_picker">
+                                    <DatePicker
+                                        onChange={this.DateItem}
+                                    />
+                                </div> -
+                                <div className="wallet_picker">
+                                    <DatePicker
+                                        allowClear={false}
+                                        value={this.state.end_time}
+                                    />
+                                </div>
                             </div>
                             <Button type="primary" onClick={() => this.serachBtn()}>查询</Button>
                         </div>
@@ -119,6 +142,29 @@ export default class index extends Component {
                                 <Column
                                     title="订单类型"
                                     dataIndex="order_type"
+                                    render={(text) =>
+                                        <>
+                                            {
+                                                text === 1 ? '国内正常单':
+                                                    text=== 2 ? '国际正常单':
+                                                        text === 3 ? '国内退票单':
+                                                            text === 4 ? '国际退票单':
+                                                                text === 5 ? '国内改签单':
+                                                                    text === 6 ? '国际改签单':
+                                                                        text === 7 ? '短信':
+                                                                            text === 8 ? "流量":
+                                                                                text === 9 ? "保险单":
+                                                                                    text === 10 ? "现金充值":
+                                                                                        text === 11 ? "余额冻结":
+                                                                                            text === 12 ? "余额提现":
+                                                                                                text === 13 ? "国内反冲":
+                                                                                                    text === 14 ? "国际反冲":
+                                                                                                        text === 15 ? "保险退保":
+                                                                                                            text === 16 ? "调账":""
+
+                                            }
+                                        </>   
+                                    }
                                 ></Column>
                                 <Column
                                     title="支付方式"
@@ -162,35 +208,70 @@ export default class index extends Component {
                                                 <div className="popover_div">
                                                     <div className="wall_title">流水详情</div>
                                                     <div className="wall_table">
-                                                        <div className="table_title">订单：211211213131313</div>
+                                                        <div className="table_title">订单：{render.order_no}</div>
                                                         <div className="table_content">
                                                             <div className="row">
                                                                 <div className="col_fir">订单类型</div>
-                                                                <div className="col_sec">国内正常单</div>
+                                                                <div className="col_sec">
+                                                                    {
+                                                                        render.order_type === 1 ? '国内正常单':
+                                                                            render.order_type === 2 ? '国际正常单':
+                                                                                render.order_type === 3 ? '国内退票单':
+                                                                                    render.order_type === 4 ? '国际退票单':
+                                                                                        render.order_type === 5 ? '国内改签单':
+                                                                                            render.order_type === 6 ? '国际改签单':
+                                                                                                render.order_type === 7 ? '短信':
+                                                                                                    render.order_type === 8 ? "流量":
+                                                                                                        render.order_type === 9 ? "保险单":
+                                                                                                            render.order_type === 10 ? "现金充值":
+                                                                                                                render.order_type === 11 ? "余额冻结":
+                                                                                                                    render.order_type === 12 ? "余额提现":
+                                                                                                                        render.order_type === 13 ? "国内反冲":
+                                                                                                                            render.order_type === 14 ? "国际反冲":
+                                                                                                                                render.order_type === 15 ? "保险退保":
+                                                                                                                                    render.order_type === 16 ? "调账":""
+                                                                    }
+                                                                </div>
                                                             </div>
                                                             <div className="row">
                                                                 <div className="col_fir">分销商</div>
-                                                                <div className="col_sec">分销国际测试账号</div>
+                                                                <div className="col_sec">{render.userinfo.company_name}</div>
                                                             </div>
                                                             <div className="row">
                                                                 <div className="col_fir">交易类型</div>
-                                                                <div className="col_sec">钱包消费</div>
+                                                                <div className="col_sec">
+                                                                {   
+                                                                    render.trans_type === 1 ? '钱包充值':
+                                                                        render.trans_type === 2 ? '钱包消费':
+                                                                            render.trans_type === 3 ? '短信充值':
+                                                                                render.trans_type === 4 ? '短信消费':
+                                                                                    render.trans_type === 5 ? '信用额度调整':
+                                                                                        render.trans_type === 6 ? '冻结金额调整':
+                                                                                            render.trans_type === 7 ? '三方支付':
+                                                                                                render.trans_type === 8 ? "三方支付全退":
+                                                                                                    render.trans_type === 9 ? "三方支付部分退":
+                                                                                                        render.trans_type === 10 ? "提现":
+                                                                                                            render.trans_type === 11 ? "流量充值":
+                                                                                                                render.trans_type === 12 ? "预付款调整":""
+                                                                                                                
+                                                                }
+                                                                </div>
                                                             </div>
                                                             <div className="row">
                                                                 <div className="col_fir">交易前余额</div>
-                                                                <div className="col_sec">92341.01</div>
+                                                                <div className="col_sec">{render.before_balance}</div>
                                                             </div>
                                                             <div className="row">
                                                                 <div className="col_fir">交易金额</div>
-                                                                <div className="col_sec">-646.00</div>
+                                                                <div className="col_sec">{render.amount}</div>
                                                             </div>
                                                             <div className="row">
                                                                 <div className="col_fir">交易后余额</div>
-                                                                <div className="col_sec">91695.01</div>
+                                                                <div className="col_sec">{render.after_balance}</div>
                                                             </div>
                                                             <div className="row">
                                                                 <div className="col_fir">实际操作员</div>
-                                                                <div className="col_sec">ys_inland_test</div>
+                                                                <div className="col_sec">{render.admin_code}</div>
                                                             </div>
                                                         </div>
                                                     </div>

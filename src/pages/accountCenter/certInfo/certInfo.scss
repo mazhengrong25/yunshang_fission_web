@@ -84,15 +84,14 @@
             margin-right: 10px;
             text-align: right;
         }
-        .item_select {
-
-        }
         span {
-            width: 0px;
-            image {
-                width: 50%;
-                height: 50%;
-                object-fit: contain;
+           
+            img {
+                cursor: pointer;
+                position: absolute;
+                width: 10px;
+                margin-left: 14px;
+                margin-top: -3px;
             }
         }
     }

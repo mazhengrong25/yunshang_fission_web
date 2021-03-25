@@ -2,8 +2,8 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-03-05 11:05:47
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-03-12 10:56:30
+ * @LastEditors: mzr
  */
 import React, { Component } from "react";
 
@@ -17,7 +17,6 @@ import {
   Input,
   Statistic,
   Spin,
-  message,
 } from "antd";
 
 import { Base64 } from "js-base64";
