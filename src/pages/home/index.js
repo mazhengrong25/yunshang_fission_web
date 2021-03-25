@@ -3,7 +3,7 @@
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:08:05
 <<<<<<< HEAD
- * @LastEditTime: 2021-03-11 17:23:30
+ * @LastEditTime: 2021-03-18 14:41:34
  * @LastEditors: mzr
 =======
  * @LastEditTime: 2021-03-10 16:08:21
@@ -166,6 +166,11 @@ export default class index extends Component {
   // 打开公告详情
   jumpNoticeDetail(val) {
     console.log(val);
+  }
+
+  // 公告 查看更多 跳转
+  jumpNoticeMore() {
+    this.props.history.push("/announceNotice");
   }
 
 
@@ -440,7 +445,7 @@ export default class index extends Component {
                       return "";
                     }
                   })}
-                  <div className="moreNotice">查看更多</div>
+                  <div className="moreNotice" onClick={() => this.jumpNoticeMore()}>查看更多</div>
                 </div>
               </div>
             </div>

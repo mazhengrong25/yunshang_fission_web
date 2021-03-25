@@ -2,7 +2,7 @@
  * @Description: 导航栏
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:43:50
- * @LastEditTime: 2021-03-02 15:34:20
+ * @LastEditTime: 2021-03-12 11:59:02
  * @LastEditors: mzr
  * @LastEditTime: 2021-02-06 11:51:24
  * @LastEditors: wish.WuJunLong
@@ -144,7 +144,7 @@ class Index extends React.Component {
                     trigger={["click"]}
                     overlay={() => (
                       <Menu>
-                        <Menu.Item onClick={() => this.jumpUrl("/accountCenter")}>个人中心</Menu.Item>
+                        <Menu.Item onClick={() => this.jumpUrl("/accountCenter?type=perInfo")}>个人中心</Menu.Item>
                         <Menu.Item>钱包</Menu.Item>
                         <Menu.Item onClick={() => this.exitLogin()}>登出账号</Menu.Item>
                       </Menu>

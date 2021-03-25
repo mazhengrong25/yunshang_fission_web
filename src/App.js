@@ -2,7 +2,7 @@
  * @Description: 主模块
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-03-02 17:04:22
+ * @LastEditTime: 2021-03-18 17:46:21
  * @LastEditors: mzr
  */
 import React, { Fragment } from "react";
@@ -11,6 +11,8 @@ import { BackTop, ConfigProvider } from "antd";
 
 import Login from "./pages/login";
 import Home from "./pages/home"; // 主页
+import AnnounceNoticeList from "./pages/announceNotice/noticeList" // 平台公告列表
+import AnnounceNoticeDetail from './pages/announceNotice/noticeDetail' //公告列表详情
 import AccountCenter from "./pages/accountCenter/accountCenter"; //个人中心
 
 import OrderList from "./pages/orderList/orderList"; // 订单列表
@@ -44,6 +46,8 @@ function App() {
             <Route exact path="/inlandDetail" component={InlandDetail} />
             <Route exact path="/orderList" component={OrderList} />
             <Route exact path="/accountCenter" component={AccountCenter} />
+            <Route exact path="/announceNotice" component={AnnounceNoticeList} /> 
+            <Route exact path="/announceNoticeDetail" component={AnnounceNoticeDetail} /> 
             <Route exact path="/login" component={Login} />
             <Route exact path="/home" component={Home} />
             <Route exact path="/" component={Home} />
