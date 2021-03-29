@@ -386,13 +386,13 @@
 // .group_popover .ant-popover-placement-bottomLeft .ant-popover-hidden {
  
 // }
-.group_popover {
-  .ant-popover-placement-bottomLeft {
-    left: -250px;
-    top: -960px;
+// .group_popover {
+//   .ant-popover-placement-bottomLeft {
+//     left: -250px;
+//     top: -960px;
 
-  }
-}
+//   }
+// }
 
 .group_popover .ant-popover-placement-bottom,
 .group_popover .ant-popover-placement-bottomLeft,
@@ -400,6 +400,7 @@
   padding-top: 5px;
   padding-left: 20px;
 }
+
 .group_popover {
   .divide_div {
     width: 88px;
