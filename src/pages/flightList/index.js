@@ -2,7 +2,7 @@
  * @Description: 机票列表
  * @Author: wish.WuJunLong
  * @Date: 2021-02-05 18:31:03
- * @LastEditTime: 2021-03-23 17:51:23
+ * @LastEditTime: 2021-03-25 18:51:44
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -20,12 +20,14 @@ import {
   Modal,
 } from "antd";
 
-import { DownOutlined, SmileOutlined } from "@ant-design/icons";
+import { SmileOutlined } from "@ant-design/icons";
 
 import QueueAnim from "rc-queue-anim";
 
 import "./flightList.scss";
 
+// 展开更多舱位按钮
+import MoreCabinBtn from "../../static/icon_drop.png";
 // 筛选组图片
 import searchNotTime from "../../static/search_notTime.png";
 import searchNotTimeActive from "../../static/search_notTime_active.png";
@@ -226,7 +228,6 @@ export default class index extends Component {
     let start;
     let end;
     let newFlightData = this.state.flightList.sort((n1, n2) => {
-
       if (e.indexOf("price") > -1) {
         start = n1.min_price;
         end = n2.min_price;
@@ -394,7 +395,7 @@ export default class index extends Component {
               <div className="search_content">
                 <div className="search_list fiy_time">
                   <div className="list_title" onClick={() => this.openNavMenu(0)}>
-                    起飞时段 <DownOutlined />
+                    起飞时段 <div className="search_open_btn"><img src={MoreCabinBtn} alt="航班筛选展开按钮"></img></div>
                   </div>
                   <div
                     className="fly_div"
@@ -456,7 +457,7 @@ export default class index extends Component {
 
                 <div className="search_list">
                   <div className="list_title" onClick={() => this.openNavMenu(1)}>
-                    舱位 <DownOutlined />
+                    舱位 <div className="search_open_btn"><img src={MoreCabinBtn} alt="航班筛选展开按钮"></img></div>
                   </div>
                   <div
                     className="cabin_div"
@@ -485,7 +486,7 @@ export default class index extends Component {
 
                 <div className="search_list">
                   <div className="list_title" onClick={() => this.openNavMenu(2)}>
-                    航空公司 <DownOutlined />
+                    航空公司 <div className="search_open_btn"><img src={MoreCabinBtn} alt="航班筛选展开按钮"></img></div>
                   </div>
                   <div
                     className="airline_div"
@@ -759,6 +760,7 @@ export default class index extends Component {
                                             pindex === 0 && oitem.data.length > 1
                                               ? "pointer"
                                               : "",
+                                          fontWeight: pindex === 0 && oitem.data.length > 1?'bold':''
                                         }}
                                         onClick={() =>
                                           this.openMoreCabin(
@@ -769,14 +771,20 @@ export default class index extends Component {
                                         {oitem.name} {pitem.cabinInfo.cabinCode}{" "}
                                         {pitem.discount}
                                         {pindex === 0 && oitem.data.length > 1 ? (
-                                          <DownOutlined
-                                            rotate={
-                                              item.segments_key + oitem.name ===
-                                              this.state.openCabinName
-                                                ? 180
-                                                : 0
-                                            }
-                                          />
+                                          <div className="more_cabin_btn">
+                                            <img
+                                              style={{
+                                                transform: `rotate(${
+                                                  item.segments_key + oitem.name ===
+                                                  this.state.openCabinName
+                                                    ? 180
+                                                    : 0
+                                                }deg)`,
+                                              }}
+                                              src={MoreCabinBtn}
+                                              alt="展开更多舱位"
+                                            ></img>
+                                          </div>
                                         ) : (
                                           ""
                                         )}
@@ -886,7 +894,7 @@ export default class index extends Component {
                                                   </div>
                                                 </div>
                                                 <div className="price_item">
-                                                  <div className="detail_title">奖励</div>
+                                                  <div className="detail_title">奖励金</div>
                                                   <div className="detail_amount">
                                                     &yen;
                                                     {
@@ -942,28 +950,39 @@ export default class index extends Component {
                                             <span>{pitem.cabinPrices.ADT.price}</span>
                                           </div>
                                         </Popover>
+
+                                        {pitem.cabinPrices.ADT.rulePrice.reward ? (
+                                          <div className="incentive_money">
+                                            奖励 &yen; 
+                                            {pitem.cabinPrices.ADT.rulePrice.reward}
+                                          </div>
+                                        ) : (
+                                          ""
+                                        )}
+                                      </div>
+                                      <div className="option_box">
+                                        <Button
+                                          className="list_btn"
+                                          type="primary"
+                                          loading={
+                                            this.state.scheduledStatus === pitem.data
+                                          }
+                                          disabled={
+                                            this.state.scheduledStatus === pitem.data ||
+                                            this.state.scheduledAllBtn
+                                          }
+                                          onClick={() => this.jumpTicketDetail(pitem)}
+                                        >
+                                          {this.state.scheduledStatus === pitem.data
+                                            ? "验价中"
+                                            : "预定"}
+                                        </Button>
                                         {pitem.cabinInfo.cabinNum < 9 ? (
                                           <p>余 {pitem.cabinInfo.cabinNum} 张</p>
                                         ) : (
                                           ""
                                         )}
                                       </div>
-                                      <Button
-                                        className="list_btn"
-                                        type="primary"
-                                        loading={
-                                          this.state.scheduledStatus === pitem.data
-                                        }
-                                        disabled={
-                                          this.state.scheduledStatus === pitem.data ||
-                                          this.state.scheduledAllBtn
-                                        }
-                                        onClick={() => this.jumpTicketDetail(pitem)}
-                                      >
-                                        {this.state.scheduledStatus === pitem.data
-                                          ? "验价中"
-                                          : "预定"}
-                                      </Button>
                                     </div>
                                   </div>
 

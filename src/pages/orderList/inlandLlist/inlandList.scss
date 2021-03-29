@@ -49,8 +49,8 @@
             .ant-menu-submenu-title {
               color: #5b7cf0;
               .menu_icon {
-                background: url("../../../static/inland_icon_hover.png")
-                  no-repeat center center !important;
+                background: url("../../../static/inland_icon_hover.png") no-repeat center
+                  center !important;
                 background-size: contain !important;
               }
             }
@@ -84,15 +84,13 @@
         .ant-menu-submenu {
           &:first-child {
             .menu_icon {
-              background: url("../../../static/inland_icon.png") no-repeat
-                center center;
+              background: url("../../../static/inland_icon.png") no-repeat center center;
               background-size: contain;
             }
           }
           &:last-child {
             .menu_icon {
-              background: url("../../../static/inter_icon.png") no-repeat center
-                center;
+              background: url("../../../static/inter_icon.png") no-repeat center center;
               background-size: contain;
             }
           }
@@ -101,28 +99,28 @@
             &:first-child {
               &:hover {
                 .menu_icon {
-                  background: url("../../../static/inland_icon_hover.png")
-                    no-repeat center center;
+                  background: url("../../../static/inland_icon_hover.png") no-repeat
+                    center center;
                   background-size: contain;
                 }
               }
               .menu_icon {
-                background: url("../../../static/inland_icon_active.png")
-                  no-repeat center center;
+                background: url("../../../static/inland_icon_active.png") no-repeat center
+                  center;
                 background-size: contain;
               }
             }
             &:last-child {
               &:hover {
                 .menu_icon {
-                  background: url("../../../static/inter_icon_hover.png")
-                    no-repeat center center;
+                  background: url("../../../static/inter_icon_hover.png") no-repeat center
+                    center;
                   background-size: contain;
                 }
               }
               .menu_icon {
-                background: url("../../../static/inter_icon_active.png")
-                  no-repeat center center;
+                background: url("../../../static/inter_icon_active.png") no-repeat center
+                  center;
                 background-size: contain;
               }
             }
@@ -268,15 +266,13 @@
           width: 11px;
           height: 2px;
           margin-top: 9px;
-          background: url("../../../static/single_direction.png") no-repeat
-            center center;
+          background: url("../../../static/single_direction.png") no-repeat center center;
         }
         .mul_direction {
           width: 11px;
           height: 2px;
           margin-top: 9px;
-          background: url("../../../static/mul_direction.png") no-repeat center
-            center;
+          background: url("../../../static/mul_direction.png") no-repeat center center;
         }
       }
       .route_time {
@@ -302,25 +298,20 @@
           > span {
             width: 15px;
             height: 3px;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
+            background: url("../../../static/action_detail.png") no-repeat center center;
+            background-size: contain;
           }
-          img {
-            width: 100%;
-            height: 100%;
-            object-fit: contain;
-          }
+
           &:hover {
             background-color: #5b7cf0;
             border-color: #5b7cf0;
             color: #fff;
             > span {
-              filter: invert(100%);
-              -webkit-filter: invert(100%);
+              background: url("../../../static/action_detail_hover.png") no-repeat center
+                center;
+              background-size: contain;
             }
           }
-
         }
         .ant-tag {
           width: 40px;

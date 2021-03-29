@@ -2,8 +2,8 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-03-12 10:56:30
- * @LastEditors: mzr
+ * @LastEditTime: 2021-03-25 19:50:06
+ * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
 
@@ -116,16 +116,16 @@ export default class index extends Component {
     //   this.props.history.push("/orderList?type=inland_ticket");
     // }
     let data = {
-        payType: '钱包',
-        payOrder: this.state.urlData.detail,
-        payTime: new Date(),
-        payPrice: this.state.detailData.total_price
-    }
+      payType: "钱包",
+      payOrder: this.state.urlData.detail,
+      payTime: new Date(),
+      payPrice: this.state.detailData.total_price,
+    };
     this.props.history.push({
-        pathname: '/orderPay',
-        search: `?detail=${this.state.urlData.detail}`,
-        query: data
-      });
+      pathname: "/orderPay",
+      search: `?detail=${this.state.urlData.detail}`,
+      query: data,
+    });
   }
 
   // 支付时间结束 关闭订单
@@ -165,11 +165,11 @@ export default class index extends Component {
           this.props.history.push({
             pathname: `/orderPay?detail=${this.state.urlData.detail}`,
             query: {
-                payType: '钱包',
-                payOrder: this.state.urlData.detail,
-                payTime: new Date(),
-                payPrice: this.state.detailData.total_price
-            }
+              payType: "钱包",
+              payOrder: this.state.urlData.detail,
+              payTime: new Date(),
+              payPrice: this.state.detailData.total_price,
+            },
           });
         }
       });
@@ -177,8 +177,8 @@ export default class index extends Component {
 
   render() {
     return (
-      <Spin spinning={this.state.loadDetail}>
-        <div className="inlandDetail">
+      <div className="inlandDetail">
+        <Spin spinning={this.state.loadDetail}>
           <div className="content_div">
             <div className="content_nav">
               <Breadcrumb separator="<">
@@ -218,7 +218,6 @@ export default class index extends Component {
                     onClick={() => this.copyOrderNo(this.state.detailData.order_no)}
                   ></div>
                 </div>
-                <div style={{ flex: 1 }}></div>
                 <div
                   className="order_status"
                   style={{
@@ -246,52 +245,53 @@ export default class index extends Component {
                 </div>
               </div>
               <div className="order_space">
-                <div className="order_div">
-                  <div className="order_number">预定人</div>
-                  <div className="input_number_crease">
-                    {this.state.detailData.book_user}
-                  </div>
-                </div>
-                {this.state.detailData.status === 1 ? (
+                <div className="order_message">
                   <div className="order_div">
-                    <div className="order_number">下单时间</div>
+                    <div className="order_number">预定人</div>
                     <div className="input_number_crease">
-                      {this.state.detailData.created_at}
+                      {this.state.detailData.book_user}
                     </div>
                   </div>
-                ) : this.state.detailData.status === 2 ||
-                  this.state.detailData.status === 3 ||
-                  this.state.detailData.status === 5 ? (
-                  <div className="order_not_pay">
+                  {this.state.detailData.status === 1 ? (
                     <div className="order_div">
-                      <div className="order_number">支付时间</div>
+                      <div className="order_number">下单时间</div>
                       <div className="input_number_crease">
-                        {this.state.detailData.pay_time}
+                        {this.state.detailData.created_at}
                       </div>
                     </div>
-                    <div className="order_div">
-                      <div className="order_number">支付方式</div>
-                      <div className="input_number_crease">
-                        {this.state.detailData.pay_type === 1
-                          ? "预存款"
-                          : this.state.detailData.pay_type === 2
-                          ? "授信支付"
-                          : this.state.detailData.pay_type === 3
-                          ? "易宝"
-                          : this.state.detailData.pay_type === 4
-                          ? "支付宝"
-                          : ""}
+                  ) : this.state.detailData.status === 2 ||
+                    this.state.detailData.status === 3 ||
+                    this.state.detailData.status === 5 ? (
+                    <>
+                      <div className="order_div">
+                        <div className="order_number">支付时间</div>
+                        <div className="input_number_crease">
+                          {this.state.detailData.pay_time}
+                        </div>
                       </div>
-                    </div>
-                  </div>
-                ) : (
-                  ""
-                )}
+                      <div className="order_div">
+                        <div className="order_number">支付方式</div>
+                        <div className="input_number_crease">
+                          {this.state.detailData.pay_type === 1
+                            ? "预存款"
+                            : this.state.detailData.pay_type === 2
+                            ? "授信支付"
+                            : this.state.detailData.pay_type === 3
+                            ? "易宝"
+                            : this.state.detailData.pay_type === 4
+                            ? "支付宝"
+                            : ""}
+                        </div>
+                      </div>
+                    </>
+                  ) : (
+                    ""
+                  )}
+                </div>
 
-                <div style={{ flex: 1 }}></div>
-                <div className="order_div">
+                <div className="order_div" style={{ alignItems: "baseline" }}>
                   <div className="order_number">金额</div>
-                  <div className="input_number" style={{ marginTop: -2 }}>
+                  <div className="input_number">
                     <span>&yen;</span>
                     {this.state.detailData.total_price}
                   </div>
@@ -303,22 +303,23 @@ export default class index extends Component {
               <div className="flight_div" key={item.id}>
                 <div className="flight_title">航班信息</div>
                 <div className="flight_detail">
-                  <div className="flight_type">
-                    {this.state.detailData.segment_type === 1 ? "单程" : ""}
-                  </div>
+                  <div className="flight_message">
+                    <div className="flight_type">
+                      {this.state.detailData.segment_type === 1 ? "单程" : ""}
+                    </div>
 
-                  <div className="flight_route">
-                    <div className="flight_address">
-                      {`${item.departure_CN.city_name} - 
+                    <div className="flight_route">
+                      <div className="flight_address">
+                        {`${item.departure_CN.city_name} - 
                                                 ${item.arrive_CN.city_name}`}
-                    </div>
-                    <div className="flight_date">
-                      {item.departure_time.substring(0, 10)}
-                      <span>{this.$moment(item.departure_time).format("ddd")}</span>
+                      </div>
+                      <div className="flight_date">
+                        {item.departure_time.substring(0, 10)}
+                        <span>{this.$moment(item.departure_time).format("ddd")}</span>
+                      </div>
                     </div>
                   </div>
 
-                  <div style={{ flex: 1 }}></div>
                   <div className="route_div">
                     <div className="center_route">
                       <div className="flight_time">
@@ -329,8 +330,8 @@ export default class index extends Component {
                       </div>
                     </div>
                     <div className="flight_icon"></div>
-                    <div className="center_route">
-                      <div className="flight_time" style={{ textAlign: "right" }}>
+                    <div className="center_route"  style={{ textAlign: "right" }}>
+                      <div className="flight_time">
                         {item.arrive_time.substring(11, 16)}
                       </div>
                       <div className="flight_airport">
@@ -338,7 +339,6 @@ export default class index extends Component {
                       </div>
                     </div>
                   </div>
-                  <div style={{ flex: 1 }}></div>
                   <div className="flight_entry">
                     <div className="entry_item">退改20%-100%</div>
                     <Divider type="vertical" />
@@ -753,8 +753,8 @@ export default class index extends Component {
               </div>
             </Modal>
           </div>
-        </div>
-      </Spin>
+        </Spin>
+      </div>
     );
   }
 }
