@@ -1,12 +1,12 @@
 .inlandDetail {
-  height: 100%;
   background: rgba(240, 241, 245, 1);
   display: flex;
   align-items: center;
   flex-direction: column;
   position: relative;
   max-width: 1200px;
-  margin: 0 auto;
+  width: 100%;
+  margin: 0 auto !important;
   .content_spin {
     position: absolute;
     width: 100%;
@@ -17,15 +17,7 @@
   .content_div {
     width: 100%;
     .content_nav {
-      font-size: 12px;
-      font-weight: 400;
-      color: #878791;
-      margin-bottom: 16px;
-      &:hover {
-        font-weight: 400;
-        color: #3a3b50;
-        cursor: pointer;
-      }
+      margin: 16px 0;
     }
     .pay_div {
       display: flex;
@@ -56,17 +48,28 @@
       }
     }
     .content_status {
-      height: 112px;
       background: #ffffff;
       border-radius: 5px;
       margin-bottom: 16px;
+      padding: 24px;
       .order_space {
         display: flex;
-        align-items: flex-start;
+        justify-content: space-between;
+        &:not(:last-child) {
+          margin-bottom: 27px;
+        }
+        .order_message {
+          display: flex;
+          align-items: center;
+          .order_div {
+            &:not(:last-child) {
+              margin-right: 80px;
+            }
+          }
+        }
         .order_div {
           display: flex;
           align-items: center;
-          padding: 13px 24px;
           .order_number {
             font-size: 14px;
             font-weight: 400;
@@ -82,12 +85,11 @@
             span {
               font-weight: bold;
               font-size: 16px;
-              margin-right: 8px;
+              margin-right: 4px;
             }
             font-size: 24px;
             font-weight: bold;
             color: #333333;
-            margin-right: 8px;
           }
           .number_copy {
             width: 16px;
@@ -101,12 +103,10 @@
           font-size: 18px;
           font-weight: bold;
           color: #f36969;
-          padding: 20px 24px 0;
         }
         .order_not_pay {
           display: flex;
           align-items: center;
-          padding: 4px 24px;
         }
       }
     }
@@ -336,44 +336,53 @@
       }
       .flight_detail {
         display: flex;
-        align-items: flex-start;
-        margin-top: 34px;
-        margin-bottom: 21px;
-        .flight_type {
-          background: #5b7cf0;
-          border-radius: 2px;
-          color: #fff;
-          font-weight: 400;
-          font-size: 12px;
-          margin: 12px 24px;
-          padding: 0 5px;
-        }
-        .flight_route {
-          display: flex;
-          flex-direction: column;
-          .flight_address {
-            font-size: 28px;
-            font-weight: bold;
-            color: #333333;
-          }
-          .flight_date {
-            font-size: 14px;
+        align-items: center;
+        justify-content: space-between;
+        padding: 24px 24px 21px;
+        .flight_message {
+          width: 28%;
+          .flight_type {
+            background: #5b7cf0;
+            border-radius: 2px;
+            color: #fff;
             font-weight: 400;
-            color: #333333;
-            span {
-              margin-left: 5px;
+            font-size: 12px;
+            padding: 0 5px;
+            margin-right: 16px;
+            display: inline-flex;
+            position: relative;
+            top: -5px;
+          }
+          .flight_route {
+            display: inline-flex;
+            flex-direction: column;
+            .flight_address {
+              font-size: 28px;
+              font-weight: bold;
+              color: #333333;
+            }
+            .flight_date {
+              font-size: 14px;
+              font-weight: 400;
+              color: #333333;
+              span {
+                margin-left: 5px;
+              }
             }
           }
         }
+
         .route_div {
           display: flex;
           .center_route {
             display: flex;
             flex-direction: column;
+            width: 140px;
             .flight_airport {
               font-size: 14px;
               font-weight: 400;
               color: #333333;
+              white-space: nowrap
             }
             .flight_time {
               font-size: 24px;
@@ -391,7 +400,9 @@
         }
         .flight_entry {
           display: flex;
-          margin: 23px 24px;
+          align-items: center;
+          justify-content: flex-end;
+          width: 28%;
           .entry_item {
             font-size: 14px;
             font-weight: 400;

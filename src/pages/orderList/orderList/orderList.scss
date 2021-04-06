@@ -5,6 +5,9 @@
     background: rgba(240, 241, 245, 1);
     display: flex;
     justify-content: center;
+    max-width: 1200px;
+    width: 100%;
+    margin: 0 auto;
     .filter_div {
       width: 216px;
       margin-right: 16px;
@@ -191,7 +194,8 @@
       }
     }
     .list_div {
-      width: 968px;
+      max-width: 968px;
+      width: 100%;
       background-color: #fff;
       // box-shadow: 0px 50px 80px #ebedf2;
       border-radius: 5px;
