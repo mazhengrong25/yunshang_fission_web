@@ -2,7 +2,7 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-04-06 15:18:42
+ * @LastEditTime: 2021-04-06 15:23:13
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -29,6 +29,8 @@ import { ExclamationCircleOutlined } from "@ant-design/icons";
 import "./inlandDetail.scss";
 import Column from "antd/lib/table/Column";
 
+import BlueWarn from "../../../static/warn_blue.png";
+
 const { TextArea } = Input;
 const { Countdown } = Statistic;
 const { confirm } = Modal;
@@ -46,6 +48,7 @@ export default class index extends Component {
       insurancePassenger: [], // 有保险的乘客
       showModal: false, //弹出发送短信
       loadDetail: true, //加载详情页面
+      showRefund: false, //弹出退票
     };
   }
 
@@ -53,7 +56,6 @@ export default class index extends Component {
     await this.setState({
       urlData: React.$filterUrlParams(this.props.location.search),
     });
-
     await this.getDetail();
   }
 
@@ -71,6 +73,18 @@ export default class index extends Component {
     this.setState({
       showModal: true,
     });
+  }
+
+  // 退票弹窗
+  openRefundModal() {
+    this.setState({
+      showRefund: true,
+    });
+  }
+
+  // 退票详情
+  jumpRefundDetail() {
+    this.props.history.push(`/refundDetail?detail=${this.state.urlData.detail}`);
   }
 
   // 获取详情
@@ -697,7 +711,7 @@ export default class index extends Component {
                       <Button>返回</Button>
                     </div>
                     <div className="btn_item">
-                      <Button>退票</Button>
+                      <Button onClick={() => this.openRefundModal()}>退票</Button>
                     </div>
                     <div className="btn_item">
                       <Button>改签</Button>
@@ -781,6 +795,25 @@ export default class index extends Component {
                     />
                   </div>
                 </div>
+              </div>
+            </Modal>
+            {/* 退票弹窗 */}
+            <Modal
+              width={400}
+              centered
+              className="refund_modal"
+              visible={this.state.showRefund}
+              onCancel={() =>this.setState({ showRefund: false})}
+              footer={[
+                  <Button onClick={() => this.setState({ showRefund: false })}>取消</Button>,
+                  <Button type="primary" onClick={() => this.jumpRefundDetail()}>确定</Button>,
+              ]}
+            >
+              <div className="refund_group">
+                <div className="middle_warn">
+                    <img src={BlueWarn} alt="警告图标" />
+                </div>
+                <p>是否确定退票？</p>
               </div>
             </Modal>
           </div>
