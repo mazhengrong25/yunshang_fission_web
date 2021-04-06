@@ -97,6 +97,7 @@
             background: url("../../../static/number_copy.png") no-repeat center center;
             background-size: contain;
             cursor: pointer;
+            margin-left: 13px;
           }
         }
         .order_status {
@@ -156,15 +157,17 @@
         .message_div {
           display: flex;
           flex-direction: column;
-          height: 112px;
           background: rgba(243, 243, 247, 0.7);
           margin-top: 13px;
           padding: 21px 16px;
           .item_space {
-            display: inline-flex;
+            display: flex;
+            align-items: center;
             .message_item {
               display: inline-flex;
+              align-items: center;
               margin-right: 40px;
+              flex-shrink: 0;
               .message_head {
                 width: 32px;
                 height: 32px;
@@ -190,19 +193,23 @@
                 color: #878791;
               }
             }
-            .div_item {
-              display: inline-flex;
-              margin-right: 40px;
-              .div_title {
-                font-size: 14px;
-                font-weight: 400;
-                color: #878791;
-                margin-right: 8px;
-              }
-              .div_input {
-                font-size: 14px;
-                font-weight: 400;
-                color: #333333;
+            .message_info {
+              display: flex;
+              flex-wrap: wrap;
+              .div_item {
+                display: inline-flex;
+                margin-right: 40px;
+                .div_title {
+                  font-size: 14px;
+                  font-weight: 400;
+                  color: #878791;
+                  margin-right: 8px;
+                }
+                .div_input {
+                  font-size: 14px;
+                  font-weight: 400;
+                  color: #333333;
+                }
               }
             }
           }
@@ -250,13 +257,47 @@
         .ticket_price {
           display: flex;
           align-items: center;
+          justify-content: center;
           font-size: 24px;
           font-weight: bold;
           color: #5b7cf0;
           span {
             font-weight: bold;
             font-size: 16px;
-            margin-right: 5px;
+            margin-right: 4px;
+            &:first-child {
+              font-size: 14px;
+              font-weight: 400;
+              color: #333333;
+              margin-right: 10px;
+            }
+          }
+        }
+        .ant-table-thead {
+          .ant-table-cell {
+            padding: 9px 16px;
+            border-bottom: none;
+            font-size: 14px;
+            font-weight: 400;
+            color: #333333;
+          }
+        }
+        .ant-table-tbody {
+          .ant-table-row {
+            &:first-child {
+              .ant-table-cell {
+                &:last-child {
+                  border-left: 1px solid #ebedf2;
+                }
+              }
+            }
+            .ant-table-cell {
+              padding: 13px 16px;
+              border-bottom-color: #ebedf2 !important;
+              font-size: 12px;
+              font-weight: 400;
+              color: #333333;
+            }
           }
         }
         .price_button {
@@ -382,7 +423,7 @@
               font-size: 14px;
               font-weight: 400;
               color: #333333;
-              white-space: nowrap
+              white-space: nowrap;
             }
             .flight_time {
               font-size: 24px;
@@ -407,6 +448,9 @@
             font-size: 14px;
             font-weight: 400;
             color: #5b7cf0;
+            &:first-child {
+              cursor: pointer;
+            }
           }
         }
       }
@@ -426,28 +470,33 @@
         border-top: 2px dotted #dadde2;
         .content_div_open {
           display: flex;
-          margin: 25px 24px;
+          align-items: center;
+          justify-content: space-between;
+          padding: 25px 24px;
           .open_left {
             display: flex;
             align-items: center;
+            width: 28%;
             .left_div {
               display: flex;
               flex-direction: column;
               margin-right: 5px;
               .open_left_date {
-                font-size: 12px;
-                font-weight: 400;
-                color: #878791;
+                display: inline-flex;
+                align-items: center;
                 &:first-child {
-                  margin-bottom: 32px;
+                  margin-bottom: 29px;
                 }
-              }
-              .open_left_time {
-                font-size: 14px;
-                font-weight: bold;
-                color: #333333;
-                &:first-child {
-                  margin-bottom: 32px;
+                > span {
+                  font-size: 12px;
+                  font-weight: 400;
+                  color: #878791;
+                }
+                > p {
+                  margin-left: 8px;
+                  font-size: 14px;
+                  font-weight: bold;
+                  color: #333333;
                 }
               }
               .open_left_address {
@@ -455,17 +504,18 @@
                 font-weight: bold;
                 color: #333333;
                 &:first-child {
-                  margin-bottom: 32px;
+                  margin-bottom: 29px;
                 }
               }
             }
             .left_icon {
-              width: 14px;
+              width: 15px;
               height: 56px;
               object-fit: contain;
               background: url("../../../static/flight_fly_colomn.png") no-repeat center
                 center;
               background-size: contain;
+              margin: 0 10px;
             }
           }
           .open_middle {
@@ -474,6 +524,7 @@
             .middle_icon {
               width: 24px;
               height: 24px;
+              margin-right: 8px;
               img {
                 width: 100%;
                 height: 100%;
@@ -519,13 +570,15 @@
           .open_right {
             display: flex;
             align-items: center;
-            margin: 47px 104px;
+            justify-content: center;
+            width: 28%;
             .right_icon {
               width: 16px;
               height: 16px;
               object-fit: contain;
               background: url("../../../static/flight_time.png") no-repeat center center;
               background-size: contain;
+              margin-right: 4px;
             }
             .right_consume {
               font-size: 12px;

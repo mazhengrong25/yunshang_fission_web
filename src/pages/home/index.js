@@ -2,13 +2,8 @@
  * @Description: 主页
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:08:05
-<<<<<<< HEAD
- * @LastEditTime: 2021-03-18 14:41:34
- * @LastEditors: mzr
-=======
- * @LastEditTime: 2021-03-10 16:08:21
+ * @LastEditTime: 2021-03-29 14:40:48
  * @LastEditors: wish.WuJunLong
->>>>>>> 55a5cb28a012c97f2f178baf5323b9ca8bdb3b02
  */
 import React, { Component } from "react";
 

@@ -2,7 +2,7 @@
  * @Description: 机票预订页面
  * @Author: wish.WuJunLong
  * @Date: 2021-02-19 13:54:59
- * @LastEditTime: 2021-03-09 16:52:02
+ * @LastEditTime: 2021-03-29 10:44:31
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -61,6 +61,8 @@ export default class index extends Component {
         phone: "",
         // email: "",
       }, // 联系人信息
+
+      insuranceList: [], // 保险列表
     };
   }
 
@@ -138,7 +140,13 @@ export default class index extends Component {
 
   // 获取保险列表
   getInsuranceList() {
-    this.$axios.get("/api/insurance/list").then((res) => {});
+    this.$axios.get("/api/insurance/list").then((res) => {
+      if (res.errorcode === 10000) {
+        this.setState({
+          insuranceList: res.data,
+        });
+      }
+    });
   }
 
   // 选择常用联系人
@@ -279,6 +287,11 @@ export default class index extends Component {
       contactsMessage: data,
     });
   };
+
+  // 保险选择
+  insuranceSelect =(val) =>{
+    console.log(val)
+  }
 
   // 预定下单按钮
   submitOrderBtn() {
@@ -552,6 +565,26 @@ export default class index extends Component {
             <div className="main_title">
               <p>保险服务</p>
             </div>
+
+            <div className="insurance_box">
+              <p className="insurance_tips">如乘机人存在多个航段，多个航段将全部购保险</p>
+              <div className="box_select">
+                <div className="select_title">选择保险</div>
+
+                <Select style={{width: 300}} placeholder="请选择保险" onChange={this.insuranceSelect}>
+                  {this.state.insuranceList.map((item) => (
+                    <Option key={item.id} value={item.id}>{item.insure_desc}</Option>
+                  ))}
+                </Select>
+              </div>
+
+              <div className="insurance_price">
+                <span>&yen;</span>
+
+                <p>/份</p>
+              </div>
+
+            </div>
           </div>
 
           {/* 订单提交 */}
@@ -647,7 +680,6 @@ export default class index extends Component {
                 </p>
               </div>
 
-
               <div className="info_more_message_btn">展开</div>
 
               <div className="info_message">
@@ -668,8 +700,8 @@ export default class index extends Component {
 
           {/* 退改信息 */}
           <div className="baggage_info">
-              <p>退改20%-100%</p>
-              <p>行李额20KG</p>
+            <p>退改20%-100%</p>
+            <p>行李额20KG</p>
           </div>
 
           <div className="message_box">

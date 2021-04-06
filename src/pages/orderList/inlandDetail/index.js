@@ -2,7 +2,7 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-03-25 19:50:06
+ * @LastEditTime: 2021-04-01 18:41:03
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -17,9 +17,12 @@ import {
   Input,
   Statistic,
   Spin,
+  message,
 } from "antd";
 
 import { Base64 } from "js-base64";
+
+import copy from "copy-to-clipboard";
 
 import "./inlandDetail.scss";
 import Column from "antd/lib/table/Column";
@@ -110,22 +113,22 @@ export default class index extends Component {
 
   // 返回到列表
   backList() {
-    // try {
-    //   this.props.history.go(-1);
-    // } catch (error) {
-    //   this.props.history.push("/orderList?type=inland_ticket");
-    // }
-    let data = {
-      payType: "钱包",
-      payOrder: this.state.urlData.detail,
-      payTime: new Date(),
-      payPrice: this.state.detailData.total_price,
-    };
-    this.props.history.push({
-      pathname: "/orderPay",
-      search: `?detail=${this.state.urlData.detail}`,
-      query: data,
-    });
+    try {
+      this.props.history.go(-1);
+    } catch (error) {
+      this.props.history.push("/orderList?type=inland_ticket");
+    }
+    // let data = {
+    //   payType: "钱包",
+    //   payOrder: this.state.urlData.detail,
+    //   payTime: new Date(),
+    //   payPrice: this.state.detailData.total_price,
+    // };
+    // this.props.history.push({
+    //   pathname: "/orderPay",
+    //   search: `?detail=${this.state.urlData.detail}`,
+    //   query: data,
+    // });
   }
 
   // 支付时间结束 关闭订单
@@ -149,8 +152,11 @@ export default class index extends Component {
   }
 
   copyOrderNo(val) {
-    console.log(val);
-    // this.copy(val)
+    if (copy(val)) {
+      message.success("已复制订单号至剪切板");
+    } else {
+      message.success("复制订单号失败，请手动复制");
+    }
   }
 
   // 支付订单
@@ -214,6 +220,7 @@ export default class index extends Component {
                     {this.state.detailData.order_no}
                   </div>
                   <div
+                    style={{display: this.state.detailData.order_no?'block': 'none'}}
                     className="number_copy"
                     onClick={() => this.copyOrderNo(this.state.detailData.order_no)}
                   ></div>
@@ -260,8 +267,7 @@ export default class index extends Component {
                       </div>
                     </div>
                   ) : this.state.detailData.status === 2 ||
-                    this.state.detailData.status === 3 ||
-                    this.state.detailData.status === 5 ? (
+                    this.state.detailData.status === 3 ? (
                     <>
                       <div className="order_div">
                         <div className="order_number">支付时间</div>
@@ -323,16 +329,16 @@ export default class index extends Component {
                   <div className="route_div">
                     <div className="center_route">
                       <div className="flight_time">
-                        {item.departure_time.substring(11, 16)}
+                        {this.$moment(item.departure_time).format("HH:mm")}
                       </div>
                       <div className="flight_airport">
                         {`${item.departure_CN.city_name}${item.departure_CN.air_port_name}机场${item.departure_terminal}`}
                       </div>
                     </div>
                     <div className="flight_icon"></div>
-                    <div className="center_route"  style={{ textAlign: "right" }}>
+                    <div className="center_route" style={{ textAlign: "right" }}>
                       <div className="flight_time">
-                        {item.arrive_time.substring(11, 16)}
+                        {this.$moment(item.arrive_time).format("HH:mm")}
                       </div>
                       <div className="flight_airport">
                         {`${item.arrive_CN.city_name}${item.arrive_CN.air_port_name}机场${item.arrive_terminal}`}
@@ -354,18 +360,12 @@ export default class index extends Component {
                     <div className="open_left">
                       <div className="left_div">
                         <div className="open_left_date">
-                          {item.departure_time.substring(5, 10)}
+                          <span>{this.$moment(item.departure_time).format("MM-DD")}</span>
+                          <p>{this.$moment(item.departure_time).format("HH:mm")}</p>
                         </div>
                         <div className="open_left_date">
-                          {item.arrive_time.substring(5, 10)}
-                        </div>
-                      </div>
-                      <div className="left_div">
-                        <div className="open_left_time">
-                          {item.departure_time.substring(11, 16)}
-                        </div>
-                        <div className="open_left_time">
-                          {item.arrive_time.substring(11, 16)}
+                          <span>{this.$moment(item.arrive_time).format("MM-DD")}</span>
+                          <p>{this.$moment(item.arrive_time).format("HH:mm")}</p>
                         </div>
                       </div>
                       <div className="left_icon"></div>
@@ -380,31 +380,36 @@ export default class index extends Component {
                         </div>
                       </div>
                     </div>
-                    <div style={{ flex: 1 }}></div>
                     <div className="open_middle">
                       <div className="middle_icon">
                         <img src={this.$url + item.image} alt="" />
                       </div>
-                      <div className="middle_fly_type">{item.airline_CN.air_name}</div>
+                      <div className="middle_fly_type">{item.airline_CN}</div>
                       <div className="middle_fly_modal">
                         {`${item.flight_no}
-                                                    机型${item.model}`}
+                                                    机型 ${item.model}`}
                       </div>
                       <div className="middle_fly_cabin">
-                        {item.cabin_level === "ECONOMY"
-                          ? "经济舱"
-                          : item.cabin_level === "FIRST"
-                          ? "头等舱"
-                          : item.cabin_level === "BUSINESS"
-                          ? "公务舱"
-                          : ""}
+                        {`${item.cabin} ${
+                          item.cabin_level === "ECONOMY"
+                            ? "经济舱"
+                            : item.cabin_level === "FIRST"
+                            ? "头等舱"
+                            : item.cabin_level === "BUSINESS"
+                            ? "公务舱"
+                            : item.cabin_level
+                        }`}
                       </div>
-                      <div className="middle_fly_meal"></div>
+                      {/* <div className="middle_fly_meal"></div> */}
                     </div>
-                    <div style={{ flex: 1 }}></div>
                     <div className="open_right">
                       <div className="right_icon"></div>
-                      <div className="right_consume">2h30m</div>
+                      <div className="right_consume">
+                        {Math.floor(item.duration / 3600) +
+                          "h" +
+                          ((item.duration / 60) % 60) +
+                          "m"}
+                      </div>
                     </div>
                   </div>
                 </div>
@@ -440,47 +445,43 @@ export default class index extends Component {
                         <div className="passenger_name">{item.PassengerName}</div>
                         <div className="passenger_identity">{item.ticket_department}</div>
                       </div>
-                      <div className="div_item">
-                        <div className="div_title">证件:</div>
-                        <div className="div_input">
-                          {item.Credential === "0"
-                            ? "身份证"
-                            : item.Credential === "1"
-                            ? "护照"
-                            : item.Credential === "2"
-                            ? "港澳通行证"
-                            : item.Credential === "3"
-                            ? "台胞证"
-                            : item.Credential === "4"
-                            ? "回乡证"
-                            : item.Credential === "5"
-                            ? "台湾通行证"
-                            : item.Credential === "6"
-                            ? "入台证"
-                            : item.Credential === "7"
-                            ? "国际海员证"
-                            : item.Credential === "8"
-                            ? "其它证件"
-                            : ""}
+                      <div className="message_info">
+                        <div className="div_item">
+                          <div className="div_title">证件:</div>
+                          <div className="div_input">
+                            {item.Credential === "0"
+                              ? "身份证"
+                              : item.Credential === "1"
+                              ? "护照"
+                              : item.Credential === "2"
+                              ? "港澳通行证"
+                              : item.Credential === "3"
+                              ? "台胞证"
+                              : item.Credential === "4"
+                              ? "回乡证"
+                              : item.Credential === "5"
+                              ? "台湾通行证"
+                              : item.Credential === "6"
+                              ? "入台证"
+                              : item.Credential === "7"
+                              ? "国际海员证"
+                              : item.Credential === "8"
+                              ? "其它证件"
+                              : ""}
+                          </div>
                         </div>
-                      </div>
-                      <div className="div_item">
-                        <div className="div_title">证件号:</div>
-                        <div className="div_input">{item.CredentialNo}</div>
-                      </div>
-                      <div className="div_item">
-                        <div className="div_title">成本中心:</div>
-                        <div className="div_input">{item.ticket_department}</div>
-                      </div>
-                    </div>
-                    <div className="item_space" style={{ marginLeft: 44, marginTop: 21 }}>
-                      <div className="div_item">
-                        <div className="div_title">手机:</div>
-                        <div className="div_input">{item.phone}</div>
-                      </div>
-                      <div className="div_item">
-                        <div className="div_title">邮箱:</div>
-                        <div className="div_input">{item.email || "无"}</div>
+                        <div className="div_item">
+                          <div className="div_title">证件号:</div>
+                          <div className="div_input">{item.CredentialNo}</div>
+                        </div>
+                        <div className="div_item">
+                          <div className="div_title">手机:</div>
+                          <div className="div_input">{item.phone}</div>
+                        </div>
+                        <div className="div_item">
+                          <div className="div_title">邮箱:</div>
+                          <div className="div_input">{item.email || "无"}</div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -636,18 +637,19 @@ export default class index extends Component {
                     render={(text) => <>&yen;{text}</>}
                   />
                   <Column
-                    title="结算价"
+                    title="总价"
                     dataIndex="total_price"
-                    render={(text) => <>&yen;{text}</>}
+                    render={(text) => <p style={{fontWeight: 'bold'}}>&yen;{text}</p>}
                   />
                   <Column
-                    title="共计"
+                    title=""
                     dataIndex="ticket_price"
                     render={(text, record, index) => {
                       if (index === 0) {
                         return {
                           children: (
                             <div className="ticket_price">
+                              <span>共计</span>
                               <span>&yen;</span>
                               {this.sumTicketPrice()}
                             </div>

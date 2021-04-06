@@ -223,6 +223,50 @@
       }
     }
 
+    // 保险
+    .insurance_main {
+      .insurance_box {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding-bottom: 30px;
+        position: relative;
+        .insurance_tips {
+          font-size: 12px;
+          font-weight: 400;
+          color: #878791;
+          position: absolute;
+          bottom: -5px;
+          left: 66px;
+        }
+        .box_select {
+          display: flex;
+          align-items: center;
+          .select_title {
+            margin-right: 10px;
+            font-size: 14px;
+            font-weight: 400;
+            color: #333333;
+          }
+        }
+        .insurance_price {
+          display: flex;
+          align-items: baseline;
+          font-size: 24px;
+          font-weight: bold;
+          color: #5b7cf0;
+          span {
+            font-size: 16px;
+          }
+          p {
+            font-size: 12px;
+            font-weight: 400;
+            color: #878791;
+          }
+        }
+      }
+    }
+
     // 提交按钮
     .submit_main {
       text-align: center;
