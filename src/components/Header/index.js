@@ -2,8 +2,8 @@
  * @Description: 导航栏
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:43:50
- * @LastEditTime: 2021-03-12 11:59:02
- * @LastEditors: mzr
+ * @LastEditTime: 2021-04-06 14:04:56
+ * @LastEditors: wish.WuJunLong
  * @LastEditTime: 2021-02-06 11:51:24
  * @LastEditors: wish.WuJunLong
  */
@@ -11,7 +11,7 @@ import React from "react";
 
 import { withRouter } from "react-router-dom";
 
-import { Menu, Dropdown, Modal, Input, Button } from "antd";
+import { Menu, Dropdown, Modal, Input, Button, message } from "antd";
 import {
   DownOutlined,
   UserOutlined,
@@ -42,10 +42,30 @@ class Index extends React.Component {
   }
 
   componentDidMount() {
+    if (!localStorage.getItem("token")) {
+      this.setState({
+        loginBox: true,
+      });
+      this.props.history.push("/");
+    }
+
     this.setState({
       activeUrl: this.props.history.location.pathname || "/",
       loginStatus: localStorage.getItem("token"),
     });
+  }
+
+  componentWillReceiveProps(nextProps, nextState) {
+    if (
+      this.props.location.pathname !== nextProps.location.pathname &&
+      !localStorage.getItem("token")
+    ) {
+      // 路由发生了变化
+      this.setState({
+        loginBox: true,
+      });
+      this.props.history.push("/");
+    }
   }
 
   // 账号登录
@@ -55,6 +75,7 @@ class Index extends React.Component {
       password: this.state.password,
     };
     await this.$axios.post("/api/login", data).then((res) => {
+      console.log(res);
       if (res.errorcode === 10000) {
         let token = `${res.data.token_type} ${res.data.access_token}`;
         localStorage.setItem("token", token);
@@ -65,9 +86,15 @@ class Index extends React.Component {
         this.setState({
           loginBox: false,
         });
+        this.getUserInfo();
+      } else {
+        this.setState({
+          loginBox: true,
+        });
+        message.warning(res.msg);
+        this.props.history.push("/");
       }
     });
-    this.getUserInfo();
   }
 
   // 获取用户信息
@@ -89,7 +116,9 @@ class Index extends React.Component {
       this.setState({
         userName: "",
         loginStatus: false,
+        loginBox: true,
       });
+      this.props.history.push("/");
     });
   }
 
@@ -114,7 +143,10 @@ class Index extends React.Component {
         </div>
         <div className="header__nav">
           <div className="header__nav__main">
-            <div className="header__nav__main__logo" onClick={() => this.jumpUrl("/home")}></div>
+            <div
+              className="header__nav__main__logo"
+              onClick={() => this.jumpUrl("/home")}
+            ></div>
             <div className="header__nav__main__box">
               <div
                 className={[
@@ -128,14 +160,14 @@ class Index extends React.Component {
               </div>
               <div
                 className={[
-                  this.state.activeUrl === "/orderList"
+                  this.state.activeUrl.indexOf('/orderList') !== -1
                     ? "header__nav__main__box__item active"
                     : "header__nav__main__box__item",
                 ]}
                 onClick={() => this.jumpUrl("/orderList?type=inland_ticket")}
               >
                 {/* <Badge count={this.state.badgeNumber} offset={[5, -3]}> */}
-                  我的订单
+                我的订单
                 {/* </Badge> */}
               </div>
               {this.state.loginStatus ? (
@@ -144,7 +176,11 @@ class Index extends React.Component {
                     trigger={["click"]}
                     overlay={() => (
                       <Menu>
-                        <Menu.Item onClick={() => this.jumpUrl("/accountCenter?type=perInfo")}>个人中心</Menu.Item>
+                        <Menu.Item
+                          onClick={() => this.jumpUrl("/accountCenter?type=perInfo")}
+                        >
+                          个人中心
+                        </Menu.Item>
                         <Menu.Item>钱包</Menu.Item>
                         <Menu.Item onClick={() => this.exitLogin()}>登出账号</Menu.Item>
                       </Menu>
@@ -175,6 +211,10 @@ class Index extends React.Component {
           title="账号登录"
           visible={this.state.loginBox}
           footer={null}
+          centered={true}
+          maskClosable={false}
+          keyboard={false}
+          closable={false}
           onCancel={() => this.setState({ loginBox: false })}
         >
           <div className="header__loginBox">
@@ -184,6 +224,7 @@ class Index extends React.Component {
                 value={this.state.account}
                 placeholder="请输入账号"
                 onChange={(e) => this.setState({ account: e.target.value })}
+                onPressEnter={() => this.loginBtn()}
                 prefix={<UserOutlined />}
               />
             </div>
@@ -197,6 +238,7 @@ class Index extends React.Component {
                 }
                 onChange={(e) => this.setState({ password: e.target.value })}
                 prefix={<LockOutlined />}
+                onPressEnter={() => this.loginBtn()}
               />
             </div>
 

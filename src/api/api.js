@@ -2,8 +2,8 @@
  * @Description: api封装
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-02-10 10:44:25
- * @LastEditors: mzr
+ * @LastEditTime: 2021-04-06 13:42:48
+ * @LastEditors: wish.WuJunLong
  */
 import axios from "axios";
 
@@ -80,7 +80,7 @@ instance.interceptors.response.use(
   (response) => {
     if (response.config.url !== "/api/logout" && response.data.msg && response.data.msg.indexOf("Token") > -1) {
       const config = response.config;
-      if (!isRefreshing) {
+      if (!isRefreshing && localStorage.getItem("token")) {
         isRefreshing = true;
         return getNewToken()
           .then((res) => {

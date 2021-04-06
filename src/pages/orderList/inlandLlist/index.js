@@ -2,7 +2,7 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
- * @LastEditTime: 2021-03-25 17:25:03
+ * @LastEditTime: 2021-04-06 14:32:23
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -22,7 +22,7 @@ export default class index extends Component {
       isShow: false,
       dataList: [],
       searchFrom: {
-        status: -1, //状态
+        status: "-1", //状态
         passengerName: "", //乘机人
         order_no: "", //订单号
         created_at: this.$moment().subtract(3, "days").format("YYYY-MM-DD"),
@@ -46,7 +46,17 @@ export default class index extends Component {
 
   // 获取航班列表
   async getDataList() {
-    let data = this.state.searchFrom;
+    let data = JSON.parse(JSON.stringify(this.state.searchFrom));
+    data["status"] =
+      this.state.searchFrom.status === 0
+        ? "-1"
+        : this.state.searchFrom.status === 1
+        ? "pay_success"
+        : this.state.searchFrom.status === 2
+        ? 1
+        : this.state.searchFrom.status === 4
+        ? 5
+        : this.state.searchFrom.status;
     data["page"] = this.state.paginationData.page;
     data["limit"] = this.state.paginationData.per_page;
 
@@ -62,10 +72,10 @@ export default class index extends Component {
           if (item.status === 1 && item.is_overtime === 1) {
             newData[index].status = 5;
           }
-          // 已支付
-          if (item.pay_status === 2) {
-            newData[index].status = 2;
-          }
+          // // 已支付
+          // if (item.pay_status === 2) {
+          //   newData[index].status = 2;
+          // }
         });
 
         this.setState({
@@ -195,11 +205,11 @@ export default class index extends Component {
                     value={{ value: this.state.searchFrom.status }}
                     onChange={this.SelectItem.bind(this, "status")}
                   >
-                    <Option value={-1}>全部</Option>
-                    <Option value={"pay_success"}>已预订</Option>
-                    <Option value={1}>待出票</Option>
+                    <Option value={0}>全部</Option>
+                    <Option value={1}>已预订</Option>
+                    <Option value={2}>待出票</Option>
                     <Option value={3}>已出票</Option>
-                    <Option value={5}>已取消</Option>
+                    <Option value={4}>已取消</Option>
                   </Select>
                 </div>
               </div>
@@ -212,7 +222,7 @@ export default class index extends Component {
             <div className="order_table">
               <Table rowKey="id" pagination={false} dataSource={this.state.dataList}>
                 <Column
-                  width={'17%'}
+                  width={"17%"}
                   title="类型"
                   dataIndex="segment_type"
                   render={(text) => (
@@ -228,7 +238,7 @@ export default class index extends Component {
                   )}
                 ></Column>
                 <Column
-                  width={'17%'}
+                  width={"17%"}
                   title="乘机人"
                   render={(text, render) => (
                     <div className="table_passenger">
@@ -241,7 +251,7 @@ export default class index extends Component {
                   )}
                 ></Column>
                 <Column
-                  width={'17%'}
+                  width={"17%"}
                   title="行程"
                   render={(text, render) => (
                     <>
@@ -292,19 +302,17 @@ export default class index extends Component {
                   dataIndex="status"
                   render={(text, render) => (
                     <>
-                      {
-                        text === 1
-                          ? "已预订" // 取消订单
-                          : text === 2 || render.pay_status === 2
-                          ? "待出票" // 取消订单
-                          : text === 3
-                          ? "已出票" // 退票 改签
-                          : text === 4
-                          ? "出票失败" // 重新下单
-                          : text === 5
-                          ? "已取消"
-                          : "" // 重新下单
-                      }
+                      {text !== 0 && text !== 5 && text === 1
+                        ? "已预订"
+                        : text === 1 || text === 2
+                        ? "待出票"
+                        : text === 3
+                        ? "已出票"
+                        : text === 5
+                        ? "已取消"
+                        : text === 1 && render.left_min < 0
+                        ? "已取消"
+                        : text}
                     </>
                   )}
                 ></Column>
