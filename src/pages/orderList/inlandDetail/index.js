@@ -2,7 +2,7 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-04-01 18:41:03
+ * @LastEditTime: 2021-04-06 15:18:42
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -24,11 +24,14 @@ import { Base64 } from "js-base64";
 
 import copy from "copy-to-clipboard";
 
+import { ExclamationCircleOutlined } from "@ant-design/icons";
+
 import "./inlandDetail.scss";
 import Column from "antd/lib/table/Column";
 
 const { TextArea } = Input;
 const { Countdown } = Statistic;
+const { confirm } = Modal;
 
 export default class index extends Component {
   constructor(props) {
@@ -88,10 +91,6 @@ export default class index extends Component {
         let data = res.data;
         if (data.status === 1 && data.left_min <= 0) {
           data.status = 5;
-        }
-        // 已支付状态
-        if (data.pay_status === 2) {
-          data.status = 2;
         }
 
         this.setState({
@@ -181,6 +180,23 @@ export default class index extends Component {
       });
   }
 
+  // 取消订单
+  cancelOrder() {
+    confirm({
+      title: "警告！",
+      icon: <ExclamationCircleOutlined />,
+      content: "是否确认取消当前订单？",
+      onOk() {
+        let data = {
+          order_no: this.state.urlData.detail || "",
+        };
+        this.$axios.post("/api/cancle/orders", data).then((res) => {
+          
+        });
+      },
+    });
+  }
+
   render() {
     return (
       <div className="inlandDetail">
@@ -220,7 +236,7 @@ export default class index extends Component {
                     {this.state.detailData.order_no}
                   </div>
                   <div
-                    style={{display: this.state.detailData.order_no?'block': 'none'}}
+                    style={{ display: this.state.detailData.order_no ? "block" : "none" }}
                     className="number_copy"
                     onClick={() => this.copyOrderNo(this.state.detailData.order_no)}
                   ></div>
@@ -240,15 +256,21 @@ export default class index extends Component {
                         : "",
                   }}
                 >
-                  {this.state.detailData.status === 1
+                  {this.state.detailData.status !== 0 &&
+                  this.state.detailData.status !== 5 &&
+                  this.state.detailData.status === 1
                     ? "待支付"
-                    : this.state.detailData.status === 2
+                    : this.state.detailData.status === 1 ||
+                      this.state.detailData.status === 2
                     ? "待出票"
                     : this.state.detailData.status === 3
                     ? "已出票"
                     : this.state.detailData.status === 5
                     ? "已取消"
-                    : ""}
+                    : this.state.detailData.status === 1 &&
+                      this.state.detailData.left_min < 0
+                    ? "已取消"
+                    : this.state.detailData.status}
                 </div>
               </div>
               <div className="order_space">
@@ -639,7 +661,7 @@ export default class index extends Component {
                   <Column
                     title="总价"
                     dataIndex="total_price"
-                    render={(text) => <p style={{fontWeight: 'bold'}}>&yen;{text}</p>}
+                    render={(text) => <p style={{ fontWeight: "bold" }}>&yen;{text}</p>}
                   />
                   <Column
                     title=""
@@ -669,7 +691,7 @@ export default class index extends Component {
                   />
                 </Table>
 
-                {this.state.detailData.status === 1 ? (
+                {this.state.detailData.status === 3 ? (
                   <div className="price_button">
                     <div className="back_btn" onClick={() => this.backList()}>
                       <Button>返回</Button>
@@ -682,7 +704,9 @@ export default class index extends Component {
                     </div>
                   </div>
                 ) : this.state.detailData.status === 5 ||
-                  this.state.detailData.status === 2 ? (
+                  this.state.detailData.status === 2 ||
+                  (this.state.detailData.status === 1 &&
+                    this.state.detailData.pay_status === 2) ? (
                   <div className="price_button">
                     <Button onClick={() => this.backList()}>返回</Button>
                   </div>
@@ -692,12 +716,17 @@ export default class index extends Component {
               </div>
             </div>
             {/* 支付方式 */}
-            {this.state.detailData.status === 1 && this.state.detailData.left_min > 0 ? (
+            {this.state.detailData.status === 1 &&
+            this.state.detailData.left_min > 0 &&
+            this.state.detailData.pay_status === 1 ? (
               <div className="content_item">
                 <div className="item_title">支付方式</div>
                 <div className="payment_div">
                   <div className="cancel_btn">
-                    <Button>取消订单</Button>
+                    <Button onClick={() => this.backList()}>返回</Button>
+                  </div>
+                  <div className="cancel_btn">
+                    <Button onClick={() => this.cancelOrder()}>取消订单</Button>
                   </div>
                   <div className="pay_btn">
                     <Button onClick={() => this.orderPayBtn()}>

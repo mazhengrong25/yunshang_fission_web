@@ -2,7 +2,7 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
- * @LastEditTime: 2021-04-06 14:32:23
+ * @LastEditTime: 2021-04-06 14:40:19
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -72,10 +72,6 @@ export default class index extends Component {
           if (item.status === 1 && item.is_overtime === 1) {
             newData[index].status = 5;
           }
-          // // 已支付
-          // if (item.pay_status === 2) {
-          //   newData[index].status = 2;
-          // }
         });
 
         this.setState({
@@ -303,7 +299,7 @@ export default class index extends Component {
                   render={(text, render) => (
                     <>
                       {text !== 0 && text !== 5 && text === 1
-                        ? "已预订"
+                        ? "待支付"
                         : text === 1 || text === 2
                         ? "待出票"
                         : text === 3
