@@ -2,7 +2,7 @@
  * @Description: 个人中心
  * @Author: mzr
  * @Date: 2021-03-02 15:27:47
- * @LastEditTime: 2021-03-15 10:27:08
+ * @LastEditTime: 2021-03-30 15:35:57
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -28,6 +28,13 @@ export default class index extends Component {
         }
     }
 
+    componentDidMount() {
+        let newUrl = React.$filterUrlParams(this.props.location.search).type
+        this.setState({
+            itemKey:newUrl
+        })
+    }
+
 
     // 侧边导航菜单 menu.item 获取key
     openMenuItem = (val) => {
@@ -48,7 +55,7 @@ export default class index extends Component {
                                 className="account_menu"
                                 mode="inline"
                                 style={{width:184}}
-                                // selectedKeys={[this.state.itemKey = 'perInfo']}
+                                defaultSelectedKeys={['perInfo']}
                             >
                                 <Menu.Item 
                                     key="perInfo" 
@@ -84,12 +91,7 @@ export default class index extends Component {
                                         this.state.itemKey === 'usedPer'?
                                             (<UsedPerson></UsedPerson>):""}
                     </div>
-
                 </div>
-
-
-
-
             </div>
 
             

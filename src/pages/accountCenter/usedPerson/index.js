@@ -2,7 +2,7 @@
  * @Description: 个人中心---常用人员
  * @Author: mzr
  * @Date: 2021-03-11 11:45:49
- * @LastEditTime: 2021-03-29 09:32:47
+ * @LastEditTime: 2021-04-06 10:16:57
  * @LastEditors: mzr
  */
 import React, { Component } from "react";
@@ -25,7 +25,8 @@ import Column from "antd/lib/table/Column";
 
 import EditBtn from "../../../static/edit_btn.png";
 import BlueWarn from "../../../static/warn_blue.png";
-import modalColse from "../../../static/modalColse.png";
+import ModalColse from "../../../static/modalColse.png";
+import AddCert from "../../../static/add_cert.png";
 
 const { Option } = Select;
 const { Search } = Input;
@@ -68,14 +69,13 @@ export default class index extends Component {
             personClass: true, // 默认新增人员
 
             handleData: {  // 新增/编辑人员
-                en_first_name: "mock",
-                en_last_name: "mock",
-                group_id: 1,
-                id: 1265836,
-                name: "乐乐",
-                phone: "17259883698",
-                sex: 0,
-                remark:"mock", // 备注
+                en_first_name: "",
+                en_last_name: "",
+                group_id: null,
+                name: "",
+                phone: "",
+                sex: null,
+                remark: "", // 备注
             },
             // birthday: "", // 生日
         };
@@ -87,12 +87,13 @@ export default class index extends Component {
     }
 
     // 获取常用人员列表
-    async getDataList(id) {
+    async getDataList() {
+        console.log(this.state.activeGroupId)
         let data = this.state.searchFrom;
         data['phone'] = this.state.searchFrom.phone;
         data["page"] = this.state.paginationData.page;
         data["limit"] = this.state.paginationData.per_page;
-        data["group_id"] = id || "";
+        data["group_id"] = this.state.activeGroupId ?? "";
         data['remark'] = this.state.handleData.remark;
 
         await this.$axios.post("/api/passenger/index", data).then((res) => {
@@ -102,14 +103,32 @@ export default class index extends Component {
                 newPage.current_page = res.data.current_page;
 
                 // 分组
+                let isNotGroup = false  // 声明一个变量 用来判断旅客列表内有没有未分组乘客
                 let dataList = res.data.data;
                 dataList.forEach((item) => {
                     this.state.groupList.forEach((oitem) => {
                         if (item.group_id === oitem.id) {
                             item['groupName'] = oitem.group_name
+                        } else if (!item.group_id) {
+                            isNotGroup = true  // 如果有未分组乘客 变量值为true
+                            item['groupName'] = '未分组'
+                            item['group_id'] = null
                         }
                     });
                 });
+
+                // 判断 
+
+                if (isNotGroup && JSON.stringify(this.state.groupList).indexOf('未分组') === -1) {
+                    let newGroupList = this.state.groupList
+                    newGroupList.push({
+                        group_name: '未分组',
+                        id: 0
+                    })
+                    this.setState({
+                        groupList: newGroupList
+                    })
+                }
 
                 console.log(dataList)
 
@@ -122,8 +141,8 @@ export default class index extends Component {
     }
 
     // 表格搜索 姓名查询
-    searchItem = (value,event) => {
-        console.log(value,event)
+    searchItem = (value, event) => {
+        console.log(value, event)
         let newData = this.state.searchFrom;
         newData["name"] = value;
         this.setState({
@@ -189,11 +208,11 @@ export default class index extends Component {
                     }
                 });
             });
-            let data ={
-                ids:this.state.selectedRowKeys
+            let data = {
+                ids: this.state.selectedRowKeys
             }
             this.$axios
-                .post("/api/passenger/dels",data)
+                .post("/api/passenger/dels", data)
                 .then((res) => {
                     if (res.errorcode === 10000) {
                         message.success(res.msg);
@@ -242,17 +261,17 @@ export default class index extends Component {
 
     // 乘客信息数组日期选择器
     arrDateBind = (e, index, val) => {
-        console.log(e,index,val)
+        console.log(e, index, val)
         let data = JSON.parse(JSON.stringify(this.state.divItem));
         data[index][e] = val;
         this.setState({
-            divItem:data,
+            divItem: data,
         })
     }
 
     // 乘客信息数组选择器
-    arrSelectBind = (e,index,val) => {
-        console.log(e,index,val)
+    arrSelectBind = (e, index, val) => {
+        console.log(e, index, val)
         let data = JSON.parse(JSON.stringify(this.state.divItem));
         data[index][e] = val;
         this.setState({
@@ -328,7 +347,7 @@ export default class index extends Component {
                 .then((res) => {
                     if (res.errorcode === 10000) {
                         message.success(res.msg);
-                        // this.getDataList();
+                        this.getDataList();
                         this.setState({
                             showModal: false
                         })
@@ -428,13 +447,12 @@ export default class index extends Component {
     };
 
     // 选中分组
-    activeGroup(val) {
-        console.log(val);
-        this.setState({
+    async activeGroup(val) {
+        console.log(val)
+        await this.setState({
             activeGroupId: val.id,
         });
-
-        this.getDataList(val.id);
+        await this.getDataList();
     }
 
     // 删除分组---弹出
@@ -498,7 +516,6 @@ export default class index extends Component {
                         <div className="usedPerson_div_menu">
                             <div className="menu_title">常用人员分组</div>
                             <div className="add_group">
-                                {" "}
                                 <Button onClick={() => this.addGroup()}>+添加分组</Button>
                             </div>
                             {this.state.groupList.map((item, index) => (
@@ -539,17 +556,23 @@ export default class index extends Component {
                         </div>
                         <div className="usedPerson_div_right">
                             <div className="content_nav">
+                                <div className="content_table_title">
+                                    <div className="nav_item">合作企业</div>
+                                    <span></span>
+                                    <div className="nav_item_action">人员总数：{this.state.dataList.length}</div>
+                                </div>
                                 <div className="content_action">
                                     <Button>文件导入</Button>
                                     <Button onClick={() => this.deleteBatch()}>批量删除</Button>
                                     <Button type="primary" onClick={() => this.addPerson()}>
                                         新增人员
-                  </Button>
+                                    </Button>
                                 </div>
                             </div>
                             <div className="content_list">
                                 <Table
                                     rowKey="id"
+                                    className="person_table"
                                     pagination={false}
                                     rowSelection={rowSelection}
                                     dataSource={this.state.dataList}
@@ -559,18 +582,23 @@ export default class index extends Component {
                                                 <p>当前分组暂无人员，请去添加</p>
                                                 <Button type="link" onClick={() => this.addPerson()}>
                                                     +新增人员
-                        </Button>
+                                                </Button>
                                             </div>
                                         ),
                                     }}
                                 >
-                                    <Column title="姓名" dataIndex="name"></Column>
+                                    <Column title="姓名"
+                                        render={(item, record) => { return record.name ? record.name : record.en_first_name + ' ' + record.en_last_name }}
+                                    ></Column>
                                     <Column title="手机号" dataIndex="phone"></Column>
-                                    <Column title="分组" dataIndex="groupName"></Column>
-                                    <Column 
-                                        title="备注" 
+                                    <Column
+                                        title="分组"
+                                        dataIndex="groupName"
+                                    ></Column>
+                                    <Column
+                                        title="备注"
                                         dataIndex="remark"
-                                        render={(item,record) => (
+                                        render={(item, record) => (
                                             <Tooltip placement="bottom" title={record}></Tooltip>
                                         )}
                                     ></Column>
@@ -585,7 +613,9 @@ export default class index extends Component {
                                                     className="delete_btn"
                                                     onClick={() => this.deleteItem(record.id)}
                                                 >
-                                                    <span></span>
+                                                    {/* <span></span> */}
+                                                    <img src={ModalColse} alt="删除" />
+
                                                 </div>
                                             </div>
                                         )}
@@ -620,176 +650,192 @@ export default class index extends Component {
                     }
                     footer={[
                         <Button onClick={() => this.setState({ showModal: false })}>取消</Button>,
-                        <Button type="primary" onClick={() => this.submitPerson()}>
-                            保存
-            </Button>,
+                        <Button type="primary" onClick={() => this.submitPerson()}>保存</Button>,
                     ]}
                 >
                     <div className="add_modal">
                         <div className="modal_title">基本信息</div>
                         <div className="modal_div">
-                            <div className="div_item">
-                                <div className="item_title">姓名</div>
-                                <div className="item_input">
-                                    <Input
-                                        style={{ width: 200 }}
-                                        placeholder="请填写"
-                                        allowClear
-                                        value={this.state.handleData.name}
-                                        onChange={this.inputBind.bind(this, "name")}
-                                    />
+
+                            <div className="item_system">
+                                <div className="div_item">
+                                    <div className="item_title">姓名</div>
+                                    <div className="item_input">
+                                        <Input
+                                            style={{ width: 200 }}
+                                            placeholder="请填写"
+                                            allowClear
+                                            value={this.state.handleData.name}
+                                            onChange={this.inputBind.bind(this, "name")}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="div_item">
+                                    <div className="item_title">英文名</div>
+                                    <div className="item_input">
+                                        <Input
+                                            style={{ width: 200 }}
+                                            placeholder="请填写"
+                                            allowClear
+                                            value={this.state.handleData.en_first_name}
+                                            onChange={this.inputBind.bind(this, "englishName")}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="div_item">
+                                    <div className="item_title">手机号</div>
+                                    <div className="item_input">
+                                        <Input
+                                            style={{ width: 200 }}
+                                            placeholder="请填写"
+                                            allowClear
+                                            value={this.state.handleData.phone}
+                                            onChange={this.inputBind.bind(this, "phone")}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                            <div className="div_item">
-                                <div className="item_title">英文名</div>
-                                <div className="item_input">
-                                    <Input
-                                        style={{ width: 200 }}
-                                        placeholder="请填写"
-                                        allowClear
-                                        value={this.state.handleData.en_first_name}
-                                        onChange={this.inputBind.bind(this, "englishName")}
-                                    />
+
+                            <div className="item_system_second">
+                                <div className="div_item">
+                                    <div className="item_title">邮箱</div>
+                                    <div className="item_input">
+                                        <Input
+                                            style={{ width: 200 }}
+                                            placeholder="请填写"
+                                            allowClear
+                                            value={this.state.handleData.email}
+                                            onChange={this.inputBind.bind(this, "email")}
+                                        />
+                                    </div>
+                                </div>
+                                <div className="div_item" style={{ marginLeft: 37 }}>
+                                    <div className="item_title">分组</div>
+                                    <div className="item_input">
+                                        <Select
+                                            style={{ width: 200 }}
+                                            placeholder="请选择"
+                                            value={this.state.handleData.group_id}
+                                            onChange={this.selectBind.bind(this, "groupId")}
+                                        >
+                                            {this.state.groupList.map((item, index) => (
+                                                <Option key={item.id}>{item.group_name}</Option>
+                                            ))}
+                                        </Select>
+                                    </div>
                                 </div>
                             </div>
-                            <div className="div_item">
-                                <div className="item_title">手机号</div>
-                                <div className="item_input">
-                                    <Input
-                                        style={{ width: 200 }}
-                                        placeholder="请填写"
-                                        allowClear
-                                        value={this.state.handleData.phone}
-                                        onChange={this.inputBind.bind(this, "phone")}
-                                    />
+
+                            <div className="item_system">
+                                <div className="div_item">
+                                    <div className="item_title">备注</div>
+                                    <div className="item_input">
+                                        <Input
+                                            style={{ width: 805 }}
+                                            placeholder="添加备注"
+                                            allowClear
+                                            value={this.state.handleData.remark}
+                                            onChange={this.inputBind.bind(this, "remark")}
+                                        />
+                                    </div>
                                 </div>
                             </div>
-                            <div className="div_item">
-                                <div className="item_title">邮箱</div>
-                                <div className="item_input">
-                                    <Input
-                                        style={{ width: 200 }}
-                                        placeholder="请填写"
-                                        allowClear
-                                        value={this.state.handleData.email}
-                                        onChange={this.inputBind.bind(this, "email")}
-                                    />
-                                </div>
-                            </div>
-                            <div className="div_item">
-                                <div className="item_title">分组</div>
-                                <div className="item_input">
-                                    <Select
-                                        style={{ width: 200 }}
-                                        placeholder="请选择"
-                                        value={this.state.handleData.group_id}
-                                        onChange={this.selectBind.bind(this, "groupId")}
-                                    >
-                                        {this.state.groupList.map((item, index) => (
-                                            <Option key={item.id}>{item.group_name}</Option>
-                                        ))}
-                                    </Select>
-                                </div>
-                            </div>
-                            <div className="div_item">
-                                <div className="item_title">备注</div>
-                                <div className="item_input">
-                                    <Input 
-                                        style={{ width: 782 }} 
-                                        placeholder="添加备注" 
-                                        allowClear
-                                        value={this.state.handleData.remark} 
-                                        onChange={this.inputBind.bind(this, "remark")}
-                                    />
-                                </div>
-                            </div>
+
                         </div>
 
                         {this.state.divItem.map((item, index) => (
                             <div key={index}>
                                 <div className="modal_title">证件信息{index + 1}</div>
                                 <div className="modal_div">
-                                    <div className="div_item">
-                                        <div className="item_title">证件类型</div>
-                                        <div className="item_input">
-                                            <Select
-                                                style={{ width: 200 }}
-                                                placeholder="请选择"
-                                                defaultValue="身份证"
-                                                value={item.cert_type}
-                                                onChange={this.arrSelectBind.bind(this, "cert_type",index)}
-                                            >
-                                                <Option value={1}>身份证</Option>
-                                                <Option value={2}>护照</Option>
-                                                <Option value={3}>港澳通行证</Option>
-                                                <Option value={4}>台胞证</Option>
-                                                <Option value={5}>回乡证</Option>
-                                                <Option value={6}>台湾通行证</Option>
-                                                <Option value={7}>入台证</Option>
-                                                <Option value={8}>国际海员证</Option>
-                                                <Option value={9}>其它证件</Option>
-                                            </Select>
+                                    <div className="item_system">
+                                        <div className="div_item">
+                                            <div className="item_title">证件类型</div>
+                                            <div className="item_input">
+                                                <Select
+                                                    style={{ width: 200 }}
+                                                    placeholder="请选择"
+                                                    defaultValue="身份证"
+                                                    value={item.cert_type}
+                                                    onChange={this.arrSelectBind.bind(this, "cert_type", index)}
+                                                >
+                                                    <Option value={1}>身份证</Option>
+                                                    <Option value={2}>护照</Option>
+                                                    <Option value={3}>港澳通行证</Option>
+                                                    <Option value={4}>台胞证</Option>
+                                                    <Option value={5}>回乡证</Option>
+                                                    <Option value={6}>台湾通行证</Option>
+                                                    <Option value={7}>入台证</Option>
+                                                    <Option value={8}>国际海员证</Option>
+                                                    <Option value={9}>其它证件</Option>
+                                                </Select>
+                                            </div>
+                                        </div>
+                                        <div className="div_item">
+                                            <div className="item_title">证件号码</div>
+                                            <div className="item_input">
+                                                <Input
+                                                    style={{ width: 200 }}
+                                                    placeholder="请输入"
+                                                    allowClear
+                                                    value={item.cert_no}
+                                                    onChange={this.arrInputBind.bind(this, "cert_no", index)}
+                                                />
+                                            </div>
+                                        </div>
+                                        <div className="div_item">
+                                            <div className="item_title">生日</div>
+                                            <div className="item_input">
+                                                <DatePicker
+                                                    value={item.birthday ? this.$moment(item.birthday) : null}
+                                                    onChange={this.arrDateBind.bind(this, "birthday", index)}
+                                                />
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="div_item">
-                                        <div className="item_title">证件号码</div>
-                                        <div className="item_input">
-                                            <Input
-                                                style={{ width: 200 }}
-                                                placeholder="请输入"
-                                                allowClear
-                                                value={item.cert_no}
-                                                onChange={this.arrInputBind.bind(this, "cert_no", index)}
-                                            />
-                                        </div>
-                                    </div>
-                                    <div className="div_item">
-                                        <div className="item_title">生日</div>
-                                        <div className="item_input">
-                                            <DatePicker
-                                                value={item.birthday ? this.$moment(item.birthday) : null}
-                                                onChange={this.arrDateBind.bind(this,"birthday",index)}
-                                            />
-                                        </div>
-                                    </div>
+
                                     {index > 0 ? (
                                         <span onClick={() => this.delCert(index)}>
-                                            <img src={modalColse} alt="关闭" />
+                                            <img src={ModalColse} alt="关闭" />
                                         </span>
                                     ) : ''}
-                                    <div className="div_item">
-                                        <div className="item_title">国籍</div>
-                                        <div className="item_input">
-                                            <Select
-                                                style={{ width: 200 }}
-                                                placeholder="请选择"
-                                                defaultValue="1"
-                                                disabled
-                                            >
-                                                <Option value="1">中国</Option>
-                                            </Select>
+
+                                    <div className="item_system_second">
+                                        <div className="div_item">
+                                            <div className="item_title">国籍</div>
+                                            <div className="item_input">
+                                                <Select
+                                                    style={{ width: 200 }}
+                                                    placeholder="请选择"
+                                                    defaultValue="1"
+                                                    disabled
+                                                >
+                                                    <Option value="1">中国</Option>
+                                                </Select>
+                                            </div>
+                                        </div>
+                                        <div className="div_item" style={{ marginLeft: 37 }}>
+                                            <div className="item_title">签发国</div>
+                                            <div className="item_input">
+                                                <Select
+                                                    style={{ width: 200 }}
+                                                    placeholder="请选择"
+                                                    defaultValue="1"
+                                                    disabled
+                                                >
+                                                    <Option value="1">中国</Option>
+                                                </Select>
+                                            </div>
                                         </div>
                                     </div>
-                                    <div className="div_item">
-                                        <div className="item_title">签发国</div>
-                                        <div className="item_input">
-                                            <Select
-                                                style={{ width: 200 }}
-                                                placeholder="请选择"
-                                                defaultValue="1"
-                                                disabled
-                                            >
-                                                <Option value="1">中国</Option>
-                                            </Select>
-                                        </div>
-                                    </div>
+
                                 </div>
                             </div>
                         ))}
 
                         <div className="add_button" onClick={this.addCert}>
-                            +添加证件
-            </div>
+                            <div className="button_icon"><img src={AddCert} alt="添加证件图标" /></div>
+                            添加证件
+                        </div>
                     </div>
                 </Modal>
                 {/* 新增/编辑分组 */}
@@ -828,9 +874,7 @@ export default class index extends Component {
                     }
                     footer={[
                         <Button onClick={() => this.setState({ showDelete: false })}>取消</Button>,
-                        <Button type="primary" onClick={() => this.removeRroup()}>
-                            确定
-            </Button>,
+                        <Button type="primary" onClick={() => this.removeRroup()}>确定</Button>,
                     ]}
                 >
                     <div className="delete_group">
@@ -838,7 +882,7 @@ export default class index extends Component {
                             <img src={BlueWarn} alt="警告图标" />
                         </div>
                         <p>是否确定删除分组？</p>
-                        <span>该分组内人员将会一并删除</span>
+                        {this.state.dataList.length > 0 ? (<span>该分组内人员将会一并删除</span>) : ""}
                     </div>
                 </Modal>
             </div>

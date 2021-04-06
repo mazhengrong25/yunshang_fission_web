@@ -292,6 +292,7 @@ img {
     opacity: 0.4;
   }
 }
+
 // 日期选择器弹窗
 .ant-picker-dropdown {
   .ant-picker-panel-container {
@@ -471,7 +472,7 @@ img {
       border-radius: 5px;
     }
     .ant-modal-footer button + button {
-      margin-left: 16px;
+      margin-left: 16px !important;
     }
   }
 }
@@ -522,4 +523,81 @@ img {
   -moz-transition: all 0.3s;
   -ms-transition: all 0.3s;
   -o-transition: all 0.3s;
+}
+
+// 表格
+.ant-table-wrapper {
+    // 表格第一行
+    .ant-table-thead > tr > th {
+      background-color: #EBEDF2;
+      color: #333333;
+      font-size: 14px;
+      font-weight: 400;
+      &:first-child{
+        border-top-left-radius: 5px;
+      }
+      &:last-child{
+        border-top-right-radius: 5px;
+      }
+    }
+    // 表头的行高
+    .ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td {
+      padding: 9px 3px;
+    }
+    // 表格里行高
+    .ant-table-tbody > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td {
+      padding: 12px 3px;
+    }
+    // 表格标题间距
+    table tr th.ant-table-selection-column, table tr td.ant-table-selection-column {
+      padding-right: 0px;
+      padding-left: 8px;
+    }
+    // 除了第一行的选中
+    .ant-checkbox-checked .ant-checkbox-inner {
+      background-color: #5b7cf0;
+      border-color: #5b7cf0 !important;
+    }
+    // 取消选中的背景颜色
+    .ant-table-tbody > tr.ant-table-row-selected > td {
+      background: none;
+    }
+    // 表头选中样式
+    .ant-table-thead {
+      .ant-checkbox-inner {
+          border: 1px solid #d9d9d9;
+          &::after {      
+            content: '';
+            background-color: #fff;
+            border: none;
+            transform: rotate(0);
+            -webkit-transform: rotate(0);
+            -moz-transform: rotate(0);
+            -ms-transform: rotate(0);
+            -o-transform: rotate(0);
+            height: 2px;
+            width: 60%;
+            margin-top: -1px;
+            border-radius: 2px;
+            -webkit-border-radius: 2px;
+            -moz-border-radius: 2px;
+            -ms-border-radius: 2px;
+            -o-border-radius: 2px;
+          }
+      }
+    }
+    // 暂无数据处理
+    .table_emptyText {
+        margin: 40px 0;
+        p {
+          font-size: 14px;
+          font-weight: 400;
+          color: #333333;
+          text-align: center;
+          margin-bottom: 3px;
+        }
+        .ant-btn-link {
+            color: #5b7cf0;
+        }
+    }
 }

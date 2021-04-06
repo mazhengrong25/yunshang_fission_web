@@ -2,7 +2,7 @@
  * @Description: 个人中心---个人信息
  * @Author: mzr
  * @Date: 2021-03-02 17:40:39
- * @LastEditTime: 2021-03-10 09:59:24
+ * @LastEditTime: 2021-03-29 17:19:58
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -136,8 +136,8 @@ export default class index extends Component {
                             <div className="action_title">{this.state.personInfo.department_name}</div>
                             <div className="action_time">登录时间：{this.state.personInfo.created_at}</div>
                             <div className="action_button">
-                                <Button onClick={() => this.openMessageModal()}>修改密码</Button>
-                                <Button>修改钱包密码</Button>
+                                <div className="button_item"><Button onClick={() => this.openMessageModal()}>修改密码</Button></div>
+                                <div className="button_item_other"><Button>修改钱包密码</Button></div>
                             </div>
                         </div>
                         <div className="top_img"><img src={personImage} alt="个人信息logo" /></div>
@@ -194,7 +194,7 @@ export default class index extends Component {
                 <div className="content_account">
                     <div className="account_title">
                         账号信息
-                        <Button type="link">修改换票单填开单位</Button>
+                        <Button type="link">修改换票单填开单位</Button>  
                     </div>
                     <div className="account_item">
                         <div className="div_space">
@@ -240,7 +240,7 @@ export default class index extends Component {
                     width={400}
                     title="修改密码"
                     footer={null}
-                    destroyOnClose //关闭时销毁子元素
+                    centered
                     visible={this.state.showModal}
                     onCancel={() => this.setState({
                         showModal: false
@@ -278,8 +278,8 @@ export default class index extends Component {
 
                             <Form.Item>
                                 <div className="edit_button">
-                                    <Button type="primary" onClick={this.onReset}>重置</Button>
                                     <Button htmlType="submit">确定</Button>
+                                    <Button type="primary" onClick={this.onReset}>重置</Button>
                                 </div>
                             </Form.Item>
 
