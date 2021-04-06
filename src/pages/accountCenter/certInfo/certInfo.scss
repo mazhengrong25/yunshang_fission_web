@@ -13,7 +13,7 @@
             border-bottom: 1px solid #DADDE2;
         }
         .cerInfo_div_item {
-            padding: 48px;
+            padding: 28px;
             display: flex;
             flex-wrap: wrap;
             .card_item {
@@ -24,8 +24,7 @@
                 border-radius: 20px;
                 padding: 24px;
                 display: flex;
-                margin-bottom: 48px;
-                margin-right: 20px;
+                margin: 20px;
                 .card_photo {
                     width: 144px;
                     height: 176px;
@@ -68,59 +67,93 @@
 }
 // 弹窗  
 .modal_content {
-    display: flex;
-    flex-wrap: wrap;
-    padding-bottom: 24px;
-    // border-bottom: 1px solid #DADDE2;
-    .modal_item {
-        display: inline-flex;
-        align-items: center;
-        margin: 0px 24px 24px 0px;
-        .item_title {
-            width: 56px;
-            font-size: 14px;
-            font-weight: 400;
-            color: #333;
-            margin-right: 10px;
-            text-align: right;
-        }
-        span {
-           
-            img {
-                cursor: pointer;
-                position: absolute;
-                width: 10px;
-                margin-left: 14px;
-                margin-top: -3px;
+    .item_system {
+        display: flex;
+        justify-content: space-between;
+        margin-bottom: 24px;
+        .modal_item {
+            display: inline-flex;
+            align-items: center;
+            .item_title {
+                width: 56px;
+                font-size: 14px;
+                font-weight: 400;
+                color: #333;
+                margin-right: 10px;
+                text-align: right;
+            }
+            span {
+               
+                img {
+                    cursor: pointer;
+                    position: absolute;
+                    width: 10px;
+                    margin-left: 14px;
+                    margin-top: -3px;
+                }
             }
         }
     }
-    .ant-input {
-        border: 1px solid #AFAFB5;
-        height: 40px;
-        border-radius: 5px;
-        &:hover 
-        {
-            border-color: #5b7cf0;
-        }
-        &:focus {
-            border-color: #5b7cf0;
+    .item_system_second {
+        display: flex;
+        justify-content: flex-start;
+        .modal_item {
+            display: inline-flex;
+            align-items: center;
+            .item_title {
+                width: 56px;
+                font-size: 14px;
+                font-weight: 400;
+                color: #333;
+                margin-right: 10px;
+                text-align: right;
+            }
+            span {
+               
+                img {
+                    cursor: pointer;
+                    position: absolute;
+                    width: 10px;
+                    margin-left: 14px;
+                    margin-top: -3px;
+                }
+            }
         }
     }
+    .ant-input-affix-wrapper {
+        height: 40px;
+        border-radius: 5px;
+        -webkit-border-radius: 5px;
+        -moz-border-radius: 5px;
+        -ms-border-radius: 5px;
+        -o-border-radius: 5px;
+    }
 }
+// 添加证件
 .add_cert {
     display: flex;
     align-items: center;
     justify-content: center;
     color: #5B7CF0;
     height: 40px;
-    border: 1px solid #5B7CF0;
-    border-style: dashed;
+    border: 1px dashed #5B7CF0;
     border-radius: 5px;
+    margin-top: 24px;
     cursor: pointer;
     -webkit-border-radius: 5px;
     -moz-border-radius: 5px;
     -ms-border-radius: 5px;
     -o-border-radius: 5px;
+    .button_icon {
+        width: 14px;
+        height: 14px;
+        margin-top: -11px;
+        margin-right: 6px;
+        img{
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+    }
     
 }

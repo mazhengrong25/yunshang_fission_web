@@ -2,16 +2,17 @@
  * @Description: 个人中心---证件信息
  * @Author: mzr
  * @Date: 2021-03-05 14:37:15
- * @LastEditTime: 2021-03-24 17:07:21
+ * @LastEditTime: 2021-03-30 17:45:02
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
 
-import { Button, Modal, Select, DatePicker, Input } from 'antd';
+import { Button, Modal, Select, DatePicker, Input, message } from 'antd';
 
 import './certInfo.scss'
 
-import modalColse from '../../../static/modalColse.png'
+import modalColse from '../../../static/modalColse.png';
+import AddCert from "../../../static/add_cert.png";
 
 const { Option } = Select;
 
@@ -41,12 +42,12 @@ export default class index extends Component {
 
     // 弹窗---添加证件
     addCertDiv() {
-
-        let newList = this.state.divItem;
-        newList.push(newCertList)
-        this.setState({
-            divItem: newList
-        })
+        return message.info('功能开发中')
+        // let newList = this.state.divItem;
+        // newList.push(newCertList)
+        // this.setState({
+        //     divItem: newList
+        // })
     }
 
     // 弹窗---删除证件
@@ -125,65 +126,78 @@ export default class index extends Component {
 
                         return(
                             <div className="modal_content" key={index}>
-                                <div className="modal_item">
-                                    <div className="item_title">证件类型</div>
-                                    <div className="item_select">
-                                        <Select 
-                                            style={{ width: 200 }}
-                                            value={item.cert_type}
-                                        >
-                                            <Option value={1}>身份证</Option>
-                                            <Option value={2}>护照</Option>
-                                            <Option value={3}>港澳通行证</Option>
-                                        </Select>
+
+                                <div className="item_system">
+                                    <div className="modal_item">
+                                        <div className="item_title">证件类型</div>
+                                        <div className="item_select">
+                                            <Select 
+                                                style={{ width: 200 }}
+                                                // value={item.cert_type}
+                                            >
+                                                <Option value={1}>身份证</Option>
+                                                <Option value={2}>护照</Option>
+                                                <Option value={3}>港澳通行证</Option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                    <div className="modal_item">
+                                        <div className="item_title">证件号码</div>
+                                        <div className="item_select">
+                                            <Input 
+                                                style={{ width: 200 }} 
+                                                placeholder="请输入证件号码" 
+                                                // value={item.cert_no}
+                                                allowClear
+                                            />
+                                        </div>
+                                    </div>
+                                    <div className="modal_item">
+                                        <div className="item_title">有效期</div>
+                                        <div className="item_select">
+                                            <DatePicker 
+                                                style={{ width: 200 }}
+                                                // value={item.valid_date}
+                                            />
+                                        </div>
+                                        { index > 1 ? (
+                                            <span onClick={() => this.delCertDiv()}><img src={modalColse} alt="关闭"/></span>
+                                        ):''} 
                                     </div>
                                 </div>
-                                <div className="modal_item">
-                                    <div className="item_title">证件号码</div>
-                                    <div className="item_select">
-                                        <Input 
-                                            style={{ width: 200 }} 
-                                            placeholder="请输入证件号码" 
-                                            value={item.cert_no}
-                                        />
+                                
+                                <div className="item_system_second">
+                                    <div className="modal_item">
+                                        <div className="item_title">国籍</div>
+                                        <div className="item_select">
+                                            <Select 
+                                                style={{ width: 200 }}>
+                                                <Option value={1}>身份证</Option>
+                                                <Option value={2}>护照</Option>
+                                                <Option value={3}>港澳通行证</Option>
+                                            </Select>
+                                        </div>
+                                    </div>
+                                    <div className="modal_item" style={{ marginLeft:37}}>
+                                        <div className="item_title">签发国</div>
+                                        <div className="item_select">
+                                            <Select 
+                                                style={{ width: 200 }}>
+                                                <Option value={1}>身份证</Option>
+                                                <Option value={2}>护照</Option>
+                                                <Option value={3}>港澳通行证</Option>
+                                            </Select>
+                                        </div>
                                     </div>
                                 </div>
-                                <div className="modal_item">
-                                    <div className="item_title">有效期</div>
-                                    <div className="item_select">
-                                        <DatePicker 
-                                            style={{ width: 200 }}
-                                            value={item.valid_date}
-                                        />
-                                    </div>
-                                    <span onClick={() => this.delCertDiv()}><img src={modalColse} alt="关闭"/></span>
-                                </div>
-                                <div className="modal_item">
-                                    <div className="item_title">国籍</div>
-                                    <div className="item_select">
-                                        <Select 
-                                            style={{ width: 200 }}>
-                                            <Option value={1}>身份证</Option>
-                                            <Option value={2}>护照</Option>
-                                            <Option value={3}>港澳通行证</Option>
-                                        </Select>
-                                    </div>
-                                </div>
-                                <div className="modal_item">
-                                    <div className="item_title">签发国</div>
-                                    <div className="item_select">
-                                        <Select 
-                                            style={{ width: 200 }}>
-                                            <Option value={1}>身份证</Option>
-                                            <Option value={2}>护照</Option>
-                                            <Option value={3}>港澳通行证</Option>
-                                        </Select>
-                                    </div>
-                                </div>
+
                             </div>
                         )
                     })}
-                    <div className="add_cert" onClick={() => this.addCertDiv()}>+ 添加证件</div>
+                    <div className="add_cert" onClick={() => this.addCertDiv()}>
+                        <div className="button_icon"><img src={AddCert} alt="添加证件图标"/></div>
+                        添加证件
+                    </div>
                 </Modal>
             </div>
         )
