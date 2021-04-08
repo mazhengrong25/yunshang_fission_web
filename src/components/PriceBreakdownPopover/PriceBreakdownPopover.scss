@@ -1,0 +1,67 @@
+// 票价信息浮窗
+.price_popover {
+  .ant-popover-content {
+    .ant-popover-arrow {
+      display: none;
+    }
+    .ant-popover-inner {
+      box-shadow: 0px 0px 20px rgba(15, 29, 66, 0.2);
+      border-radius: 5px;
+      .ant-popover-inner-content {
+        padding: 0;
+        .price_box {
+          padding: 14px 16px;
+          width: 304px;
+          .box_title {
+            font-size: 14px;
+            font-weight: bold;
+            color: #333333;
+          }
+          .price_content {
+            width: 272px;
+            background: #f0f1f5;
+            border-radius: 5px;
+            padding: 16px 16px 16px 12px;
+            margin: 15px 0px 8px;
+            .price_item {
+              display: flex;
+              justify-content: space-between;
+              &:not(:first-child) {
+                margin-top: 13px;
+              }
+              &:last-child {
+                margin-top: 3px;
+                justify-content: flex-end;
+              }
+              .detail_title {
+                font-size: 14px;
+                font-weight: 400;
+                color: #333333;
+              }
+              .detail_amount {
+                font-size: 14px;
+                font-weight: 400;
+                color: #333333;
+              }
+              .total_detail_amount {
+                font-size: 18px;
+                font-weight: bold;
+                color: #333333;
+              }
+              .tax_detail_amount {
+                font-size: 12px;
+                font-weight: 400;
+                color: #878791;
+              }
+            }
+          }
+          span {
+            font-size: 12px;
+            font-weight: 400;
+            color: #878791;
+          }
+        }
+      }
+    }
+  }
+}

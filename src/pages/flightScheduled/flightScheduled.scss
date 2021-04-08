@@ -396,13 +396,54 @@
       font-size: 14px;
       font-weight: 400;
       color: #5b7cf0;
-      > p:last-child {
-        margin-left: 8px;
-        &::before {
-          content: "|";
+      > p {
+        &:first-child {
+          cursor: pointer;
+        }
+        &:last-child {
+          margin-left: 8px;
+          &::before {
+            content: "|";
+            color: #5b7cf0;
+            opacity: 0.2;
+            margin-right: 8px;
+          }
+        }
+      }
+    }
+
+    // 金额明细
+    .price_message {
+      padding: 16px;
+      .message_list {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        font-size: 14px;
+        font-weight: 400;
+        color: #333333;
+        margin-bottom: 13px;
+      }
+      .message_total_Price {
+        margin-top: 23px;
+        display: flex;
+        justify-content: flex-end;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 400;
+        color: #333333;
+        span {
+          font-size: 16px;
+          font-weight: bold;
           color: #5b7cf0;
-          opacity: 0.2;
-          margin-right: 8px;
+          display: inline-block;
+          margin-left: 8px;
+          margin-right: 5px;
+        }
+        p {
+          font-size: 24px;
+          font-weight: bold;
+          color: #5b7cf0;
         }
       }
     }

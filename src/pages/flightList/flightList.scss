@@ -95,16 +95,36 @@
         }
       }
       .search_input {
-        .ant-input {
+        display: flex;
+        align-items: center;
+        .input_list {
+          position: relative;
+          .ant-input {
+            width: 240px;
+            background: #53566f;
+            border: 1px solid #5d6078;
+            border-radius: 5px;
+            color: #fff;
+            margin-right: 24px;
+            &:focus {
+              box-shadow: none;
+              border-color: #5b7cf0;
+            }
+          }
+        }
+
+        .ant-picker {
           width: 240px;
           background: #53566f;
-          border: 1px solid #5d6078;
+          border: 1px solid #5d6078 !important;
           border-radius: 5px;
-          color: #fff;
           margin-right: 24px;
-          &:focus {
+          input {
+            color: #fff !important;
+          }
+          &.ant-picker-focused {
             box-shadow: none;
-            border-color: #5b7cf0;
+            border-color: #5b7cf0 !important;
           }
         }
         .search_btn {
@@ -141,7 +161,25 @@
       }
       .search_content {
         padding: 20px 24px;
+        overflow-y: auto;
+        max-height: 85vh;
+        &::-webkit-scrollbar {
+          width: 6px;
+          height: 6px;
+          background-color: #f5f5f5;
+        }
 
+        &::-webkit-scrollbar-track {
+          -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+          border-radius: 10px;
+          background-color: #f5f5f5;
+        }
+
+        &::-webkit-scrollbar-thumb {
+          border-radius: 10px;
+          -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, 0.3);
+          background-color: #555;
+        }
         .search_list {
           &:not(:last-child) {
             margin-bottom: 35px;
@@ -210,7 +248,6 @@
                 &:not(:last-child) {
                   margin-bottom: 8px;
                 }
-               
               }
             }
           }
@@ -227,7 +264,6 @@
               .ant-checkbox {
                 margin-right: 8px;
               }
-              
             }
           }
           .airline_div {
@@ -238,8 +274,6 @@
                   margin-bottom: 20px;
                   margin-left: 0px;
                 }
-                display: flex;
-                align-items: center;
                 font-size: 16px;
                 font-weight: 400;
                 color: #333333;
@@ -259,9 +293,21 @@
                 &:not(:last-child) {
                   margin-bottom: 20px;
                 }
-                .ant-checkbox-checked .ant-checkbox-inner {
-                  background-color: #5b7cf0;
-                  border-color: #5b7cf0;
+                .ant-checkbox-checked {
+                  .ant-checkbox-inner {
+                    background-color: #5b7cf0;
+                    border-color: #5b7cf0;
+                  }
+                  &::after {
+                    width: 16px;
+                    height: 16px;
+                    top: auto;
+                    left: auto;
+                  }
+                }
+                .ant-checkbox {
+                  display: inline-flex;
+                  align-items: center;
                 }
                 .ant-checkbox + span {
                   padding-left: 16px;
@@ -272,7 +318,6 @@
               display: flex;
               align-items: center;
               justify-content: center;
-              width: 208px;
               height: 40px;
               background: #dadde2;
               border-radius: 5px;
@@ -649,230 +694,6 @@
                 color: #5b7cf0;
               }
             }
-          }
-        }
-      }
-    }
-  }
-}
-
-// 航班信息浮窗
-.air_popover {
-  max-width: unset;
-  .ant-popover-content {
-    .ant-popover-arrow {
-      display: none;
-    }
-    .ant-popover-inner {
-      box-shadow: 0px 0px 20px rgba(15, 29, 66, 0.2);
-      border-radius: 5px;
-      padding: 0;
-      .ant-popover-inner-content {
-        padding: 16px;
-        width: 456px;
-        height: 208px;
-      }
-      .air_info {
-        .info_title {
-          display: flex;
-          align-items: center;
-          font-size: 14px;
-          font-weight: 400;
-          color: #333333;
-          margin-bottom: 23px;
-          .title_icon {
-            width: 16px;
-            height: 16px;
-            object-fit: contain;
-            display: inline-block;
-            margin-right: 16px;
-          }
-        }
-        .info_main {
-          display: flex;
-          align-items: center;
-          flex-wrap: wrap;
-          height: 100%;
-          flex: 1;
-          .info_main_list {
-            width: 50%;
-            display: flex;
-            align-items: center;
-            margin-bottom: 14px;
-            .info_main_list_title {
-              width: 80px;
-              height: 24px;
-              background: #f0f1f5;
-              border-radius: 5px;
-              display: inline-flex;
-              align-items: center;
-              padding: 0 8px;
-              font-size: 12px;
-              font-weight: 400;
-              color: #333333;
-              margin-right: 8px;
-            }
-            .info_main_list_message {
-              font-size: 12px;
-              font-weight: bold;
-              color: #333333;
-            }
-          }
-        }
-        .info_bottom {
-          font-size: 12px;
-          font-weight: 400;
-          color: #878791;
-        }
-      }
-    }
-  }
-}
-
-// 退改签信息浮窗
-.refund_popover {
-  .ant-popover-content {
-    .ant-popover-arrow {
-      display: none;
-    }
-    .ant-popover-inner {
-      box-shadow: 0px 0px 20px rgba(15, 29, 66, 0.2);
-      border-radius: 5px;
-      .ant-popover-inner-content {
-        padding: 10px 5px 10px 0;
-        .refund_box {
-          padding: 6px 16px 14px;
-          width: 456px;
-          max-height: 392px;
-          overflow-y: auto;
-          &::-webkit-scrollbar {
-            width: 5px;
-            height: 5px;
-            background-color: #f5f5f5;
-          }
-          &::-webkit-scrollbar-thumb {
-            border-radius: 4px;
-            background-color: #dadde2;
-            -webkit-border-radius: 4px;
-            -moz-border-radius: 4px;
-            -ms-border-radius: 4px;
-            -o-border-radius: 4px;
-          }
-          .refund_title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #333333;
-            margin-bottom: 14px;
-          }
-          .refund_main {
-            &:not(:last-child) {
-              margin-bottom: 16px;
-            }
-            .refund_main_title {
-              height: 32px;
-              background: #f0f1f5;
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              font-size: 12px;
-              font-weight: 400;
-              color: #333333;
-            }
-            .refund_main_box {
-              display: flex;
-              align-items: center;
-              justify-content: center;
-              border-bottom: 1px solid #f0f1f5;
-              border-left: 1px solid #f0f1f5;
-              border-right: 1px solid #f0f1f5;
-              margin-top: -1px;
-
-              > p {
-                margin: 0;
-                padding: 0 8px;
-                height: 40px;
-                display: inline-flex;
-                align-items: center;
-                font-size: 12px;
-                font-weight: 400;
-                color: #333333;
-                &:first-child {
-                  width: 70%;
-                  border-right: 1px solid #f0f1f5;
-                }
-                &:last-child {
-                  width: 30%;
-                }
-              }
-            }
-          }
-        }
-      }
-    }
-  }
-}
-
-// 票价信息浮窗
-.price_popover {
-  .ant-popover-content {
-    .ant-popover-arrow {
-      display: none;
-    }
-    .ant-popover-inner {
-      box-shadow: 0px 0px 20px rgba(15, 29, 66, 0.2);
-      border-radius: 5px;
-      .ant-popover-inner-content {
-        padding: 0;
-        .price_box {
-          padding: 14px 16px;
-          width: 304px;
-          .box_title {
-            font-size: 14px;
-            font-weight: bold;
-            color: #333333;
-          }
-          .price_content {
-            width: 272px;
-            background: #f0f1f5;
-            border-radius: 5px;
-            padding: 16px 16px 16px 12px;
-            margin: 15px 0px 8px;
-            .price_item {
-              display: flex;
-              justify-content: space-between;
-              &:not(:first-child) {
-                margin-top: 13px;
-              }
-              &:last-child {
-                margin-top: 3px;
-                justify-content: flex-end;
-              }
-              .detail_title {
-                font-size: 14px;
-                font-weight: 400;
-                color: #333333;
-              }
-              .detail_amount {
-                font-size: 14px;
-                font-weight: 400;
-                color: #333333;
-              }
-              .total_detail_amount {
-                font-size: 18px;
-                font-weight: bold;
-                color: #333333;
-              }
-              .tax_detail_amount {
-                font-size: 12px;
-                font-weight: 400;
-                color: #878791;
-              }
-            }
-          }
-          span {
-            font-size: 12px;
-            font-weight: 400;
-            color: #878791;
           }
         }
       }

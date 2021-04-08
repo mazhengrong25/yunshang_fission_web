@@ -256,23 +256,28 @@
         .ant-table-thead > tr > th {
           background: #ebedf2;
         }
+        .ant-table-container table > thead > tr:first-child th:first-child,
+        .ant-table-container table > tbody > tr td:first-child {
+          padding-left: 16px;
+        }
       }
       .route {
         font-size: 12px;
         font-weight: 400;
         color: #333333;
         display: flex;
-        .single_direction {
-          width: 11px;
-          height: 2px;
-          margin-top: 9px;
-          background: url("../../../static/single_direction.png") no-repeat center center;
-        }
-        .mul_direction {
-          width: 11px;
-          height: 2px;
-          margin-top: 9px;
-          background: url("../../../static/mul_direction.png") no-repeat center center;
+        align-items: center;
+        .direction {
+          width: 15px;
+          margin: 0 3px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+          }
         }
       }
       .route_time {
@@ -327,6 +332,7 @@
             background: #fff;
             &:hover {
               background-color: #5b7cf0;
+              border-color: #5b7cf0;
               color: #fff;
             }
           }
