@@ -223,8 +223,11 @@
         flex-direction: column;
         padding: 24px;
         .item_space {
-          &:not(:last-child) {
+          &:first-child {
             margin-bottom: 26px;
+          }
+          &:last-child {
+            margin-top: 10px;
           }
           display: inline-flex;
           // .ant-btn {
@@ -321,6 +324,7 @@
               border: 1px solid #dadde2;
               border-radius: 5px;
               background: #5b7cf0;
+              border-color: #5b7cf0;
               color: #fff;
             }
           }
@@ -549,6 +553,7 @@
               font-weight: 400;
               color: #333333;
               margin-right: 8px;
+              margin-left: 5px;
             }
             .middle_fly_share {
               width: 36px;
@@ -589,22 +594,33 @@
         }
       }
     }
-    .modal_box {
-      display: inline-flex;
-      .modal_item {
-        display: inline-flex;
-        .modal_title {
-          margin-right: 8px;
-        }
-        .modal_content {
-        }
-      }
-    }
-    .ant-modal-content .ant-modal-header {
-      text-align: center;
-    }
   }
 }
+
+// 发送短信弹窗
+.send_msm_modal {
+  .modal_item {
+    display: flex;
+    flex: 1;
+    &:not(:first-child) {
+      margin-top: 20px;
+    }
+    .modal_title {
+      margin-right: 8px;
+      min-width: 80px;
+    }
+    .modal_content {
+      flex: 1;
+    }
+  }
+  .item_tips{
+    padding-left: 88px;
+    font-size: 12px;
+    color: #999;
+    margin-top: 5px;
+  }
+}
+
 // 退票弹窗
 .refund_modal {
   .ant-modal-content .ant-modal-close-x {

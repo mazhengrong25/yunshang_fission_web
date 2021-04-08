@@ -2,7 +2,7 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-04-06 15:23:13
+ * @LastEditTime: 2021-04-06 19:16:03
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -13,11 +13,14 @@ import {
   Button,
   Breadcrumb,
   Modal,
-  Radio,
   Input,
   Statistic,
   Spin,
   message,
+  Checkbox,
+  Row,
+  Col,
+  Select,
 } from "antd";
 
 import { Base64 } from "js-base64";
@@ -31,6 +34,10 @@ import Column from "antd/lib/table/Column";
 
 import BlueWarn from "../../../static/warn_blue.png";
 
+import AircraftTypePopover from "../../../components/AircraftTypePopover"; // 航班信息 机型信息组件
+import RefundsAndChangesPopover from "../../../components/RefundsAndChangesPopover"; // 退改签说明弹窗
+
+const { Option } = Select;
 const { TextArea } = Input;
 const { Countdown } = Statistic;
 const { confirm } = Modal;
@@ -49,6 +56,13 @@ export default class index extends Component {
       showModal: false, //弹出发送短信
       loadDetail: true, //加载详情页面
       showRefund: false, //弹出退票
+
+      sendSMS: {}, // 发送短信默认值
+      sendPassenger: [], // 该订单联系人与所有乘机人联系方式
+      MSMTemplateList: {
+        modelList: [],
+      }, // 短信模板
+      MSMMessage: {}, // 短信信息
     };
   }
 
@@ -68,11 +82,128 @@ export default class index extends Component {
     });
   }
 
-  // 发送短信的收起展开
-  openModal() {
+  // 打开发送短信弹窗
+  openModal(name, phone) {
+    this.getMSMTemplate();
+    // 组装联系人与乘机人信息
+    let sendPassenger = [];
+    sendPassenger.push({
+      type: "联系人",
+      PassengerName: this.state.detailData.contact,
+      phone: this.state.detailData.phone,
+    });
+    sendPassenger = sendPassenger.concat(this.state.detailPassenger);
+
+    let data = {
+      name: [name],
+      phone: [phone],
+    };
+    console.log(data);
+
     this.setState({
+      sendPassenger: sendPassenger,
+      sendSMS: data,
       showModal: true,
     });
+  }
+
+  // 选择发送短信人员
+  selectSendMSM = (val) => {
+    console.log(val);
+    let data = this.state.sendSMS;
+    data.name = val;
+    data.phone = [];
+    data.name.forEach((oitem) => {
+      this.state.sendPassenger.forEach((item) => {
+        if (item.PassengerName === oitem) {
+          data.phone.push(item.phone);
+        }
+      });
+    });
+
+    data.phone = [...data.phone];
+
+    this.setState({
+      sendSMS: data,
+    });
+  };
+
+  // 获取短信模板
+  getMSMTemplate() {
+    this.$axios.get("/api/admin_msg/sendMsg/" + this.state.urlData.detail).then((res) => {
+      this.setState({
+        MSMTemplateList: res,
+      });
+    });
+  }
+
+  // 选择短信模板
+  selectMSMTemplate = (val) => {
+    console.log(val);
+    let data = {
+      id: "",
+      message: "",
+    };
+    this.state.MSMTemplateList.modelList.forEach((item) => {
+      if (val === item.id) {
+        data.id = item.id;
+        data.message = item.msg;
+      }
+    });
+
+    console.log(data);
+
+    this.setState({
+      MSMMessage: data,
+    });
+  };
+
+  // 修改手机号
+  changeSendPhone = (val) => {
+    let data = this.state.sendSMS;
+    data.phone = val.target.value;
+    this.setState({
+      sendSMS: data,
+    });
+  };
+  // 修改短信
+  changeSendMessage = (val) => {
+    let data = this.state.MSMMessage;
+    data.message = val.target.value;
+    this.setState({
+      MSMMessage: data,
+    });
+  };
+
+  // 发送短信
+  sendMessageBtn() {
+    if (!String(this.state.sendSMS.phone)) {
+      return message.warning("请选择短信接收人员");
+    }
+    if (!this.state.MSMMessage.id) {
+      return message.warning("请选择短信模板");
+    }
+
+    let data = {
+      phone: String(this.state.sendSMS.phone),
+      msg_content: this.state.MSMMessage.message,
+      user_type: this.state.MSMTemplateList.user_type,
+      is_timer: this.state.MSMTemplateList.is_timer,
+      msg_model_id: this.state.MSMMessage.id || "",
+    };
+
+    this.$axios
+      .post("/api/admin_msg/sendMsg/" + this.state.urlData.detail, data)
+      .then((res) => {
+        if (res.errorcode === 10000) {
+          message.success(res.msg);
+          this.setState({
+            showModal: false,
+          });
+        } else {
+          message.warning(res.msg);
+        }
+      });
   }
 
   // 退票弹窗
@@ -115,7 +246,6 @@ export default class index extends Component {
           detailInsure: res.data.insurance_msg,
           insurancePassenger: insuranceList,
         });
-        console.log("detailData", this.state.detailData);
       } else {
         this.setState({
           loadDetail: false,
@@ -155,15 +285,14 @@ export default class index extends Component {
 
   // 表格合计
   sumTicketPrice() {
-    console.log();
     let newData = 0;
     for (let i = 0; i < this.state.detailPassenger.length; i++) {
       newData += Number(this.state.detailPassenger[i].total_price);
-      console.log(this.state.detailPassenger[i]);
     }
     return newData;
   }
 
+  // 拷贝订单号
   copyOrderNo(val) {
     if (copy(val)) {
       message.success("已复制订单号至剪切板");
@@ -196,16 +325,22 @@ export default class index extends Component {
 
   // 取消订单
   cancelOrder() {
+    let _that = this;
     confirm({
       title: "警告！",
       icon: <ExclamationCircleOutlined />,
       content: "是否确认取消当前订单？",
       onOk() {
         let data = {
-          order_no: this.state.urlData.detail || "",
+          order_no: _that.state.urlData.detail || "",
         };
-        this.$axios.post("/api/cancle/orders", data).then((res) => {
-          
+        _that.$axios.post("/api/cancle/orders", data).then((res) => {
+          if (res.result === 10000) {
+            message.success(res.msg);
+            _that.getDetail();
+          } else {
+            message.warning(res.msg);
+          }
         });
       },
     });
@@ -382,9 +517,15 @@ export default class index extends Component {
                     </div>
                   </div>
                   <div className="flight_entry">
-                    <div className="entry_item">退改20%-100%</div>
+                    <div className="entry_item">
+                      <RefundsAndChangesPopover
+                        refundsAndChangesData={
+                          item.rule_infos ? JSON.parse(item.rule_infos) : {}
+                        }
+                      ></RefundsAndChangesPopover>
+                    </div>
                     <Divider type="vertical" />
-                    <div className="entry_item">行李额20KG</div>
+                    <div className="entry_item">行李额{item.baggage}KG</div>
                   </div>
                 </div>
                 {/* 展开内容 */}
@@ -421,12 +562,17 @@ export default class index extends Component {
                         <img src={this.$url + item.image} alt="" />
                       </div>
                       <div className="middle_fly_type">{item.airline_CN}</div>
+
                       <div className="middle_fly_modal">
-                        {`${item.flight_no}
-                                                    机型 ${item.model}`}
+                        <AircraftTypePopover
+                          className=""
+                          aircraftTypeData={item}
+                          dateStatus={true}
+                        ></AircraftTypePopover>
                       </div>
+
                       <div className="middle_fly_cabin">
-                        {`${item.cabin} ${
+                        {` ${
                           item.cabin_level === "ECONOMY"
                             ? "经济舱"
                             : item.cabin_level === "FIRST"
@@ -434,9 +580,8 @@ export default class index extends Component {
                             : item.cabin_level === "BUSINESS"
                             ? "公务舱"
                             : item.cabin_level
-                        }`}
+                        } ${item.cabin}`}
                       </div>
-                      {/* <div className="middle_fly_meal"></div> */}
                     </div>
                     <div className="open_right">
                       <div className="right_icon"></div>
@@ -470,8 +615,11 @@ export default class index extends Component {
                         ""
                       )}
                     </div>
-                    <Button type="link" onClick={() => this.openModal()}>
-                      给该乘机人发送行程通知（短信，邮件）
+                    <Button
+                      type="link"
+                      onClick={() => this.openModal(item.PassengerName, item.phone)}
+                    >
+                      给该乘机人发送行程通知
                     </Button>
                   </div>
                   <div className="message_div">
@@ -483,7 +631,7 @@ export default class index extends Component {
                       </div>
                       <div className="message_info">
                         <div className="div_item">
-                          <div className="div_title">证件:</div>
+                          <div className="div_title">证件：</div>
                           <div className="div_input">
                             {item.Credential === "0"
                               ? "身份证"
@@ -507,15 +655,15 @@ export default class index extends Component {
                           </div>
                         </div>
                         <div className="div_item">
-                          <div className="div_title">证件号:</div>
+                          <div className="div_title">证件号：</div>
                           <div className="div_input">{item.CredentialNo}</div>
                         </div>
                         <div className="div_item">
-                          <div className="div_title">手机:</div>
+                          <div className="div_title">手机：</div>
                           <div className="div_input">{item.phone}</div>
                         </div>
                         <div className="div_item">
-                          <div className="div_title">邮箱:</div>
+                          <div className="div_title">邮箱：</div>
                           <div className="div_input">{item.email || "无"}</div>
                         </div>
                       </div>
@@ -537,10 +685,10 @@ export default class index extends Component {
                     <div className="div_title">手机:</div>
                     <div className="div_input">{this.state.detailData.phone}</div>
                   </div>
-                  <div className="div_item">
+                  {/* <div className="div_item">
                     <div className="div_title">邮箱:</div>
-                    <div className="div_input">296324796@qq.com</div>
-                  </div>
+                    <div className="div_input"></div>
+                  </div> */}
                 </div>
                 <div className="item_space">
                   <div className="div_item">
@@ -552,9 +700,14 @@ export default class index extends Component {
                   <Button
                     type="link"
                     style={{ padding: 0 }}
-                    onClick={() => this.openModal()}
+                    onClick={() =>
+                      this.openModal(
+                        this.state.detailData.contact,
+                        this.state.detailData.phone
+                      )
+                    }
                   >
-                    给该乘机人发送行程通知（短信，邮件）
+                    给该联系人发送行程通知
                   </Button>
                 </div>
               </div>
@@ -757,43 +910,79 @@ export default class index extends Component {
             )}
             {/* 发送短信弹出 */}
             <Modal
-              width={800}
+              width={700}
               title="发送短信"
+              centered
               visible={this.state.showModal}
               onCancel={() =>
                 this.setState({
                   showModal: false,
                 })
               }
+              onOk={() => this.sendMessageBtn()}
             >
-              <div className="modal_box">
+              <div className="send_msm_modal">
                 <div className="modal_item">
                   <div className="modal_title">发送对象</div>
                   <div className="modal_content">
-                    <Radio.Group>
-                      <Radio value={1}>联系人</Radio>
-                      <Radio value={2}>乘机人</Radio>
-                    </Radio.Group>
+                    <Checkbox.Group
+                      style={{ width: "100%" }}
+                      onChange={this.selectSendMSM}
+                      value={this.state.sendSMS.name}
+                    >
+                      <Row>
+                        {this.state.sendPassenger.map((item, index) => (
+                          <Col span={9} key={index}>
+                            <Checkbox value={item.PassengerName}>
+                              {item.type || "乘机人"}：{item.PassengerName}
+                            </Checkbox>
+                          </Col>
+                        ))}
+                      </Row>
+                    </Checkbox.Group>
                   </div>
                 </div>
                 <div className="modal_item">
                   <div className="modal_title">手机号</div>
                   <div className="modal_content">
-                    <Input placeholder="请输入手机号" />
+                    <Input
+                      placeholder="请输入手机号"
+                      value={String(this.state.sendSMS.phone)}
+                      onChange={this.changeSendPhone}
+                    />
                   </div>
                 </div>
+                <div className="item_tips">多个手机号用 , (半角逗号)隔开</div>
                 <div className="modal_item">
                   <div className="modal_title">选择模板</div>
-                  <div className="modal_content"></div>
+                  <div className="modal_content">
+                    <Select
+                      style={{ width: "100%" }}
+                      onChange={this.selectMSMTemplate}
+                      placeholder="请选择短信模板"
+                    >
+                      {this.state.MSMTemplateList.modelList.map((item) => (
+                        <Option value={item.id} key={item.id}>
+                          {item.model_name}
+                        </Option>
+                      ))}
+                    </Select>
+                  </div>
                 </div>
                 <div className="modal_item">
                   <div className="modal_title">发送内容</div>
                   <div className="modal_content">
                     <TextArea
+                      value={this.state.MSMMessage.message}
                       placeholder="请填写发送内容"
-                      autoSize={{ minRows: 3, maxRows: 5 }}
+                      rows={4}
+                      onChange={this.changeSendMessage}
                     />
                   </div>
+                </div>
+                <div className="item_tips">
+                  请勿删除内容末尾的【云上航空】或自定义签名，否则信息将被运营商拦截，消息记录永久保留
+                  ，发送无关信息将承担全部法律责任！
                 </div>
               </div>
             </Modal>
@@ -803,15 +992,19 @@ export default class index extends Component {
               centered
               className="refund_modal"
               visible={this.state.showRefund}
-              onCancel={() =>this.setState({ showRefund: false})}
+              onCancel={() => this.setState({ showRefund: false })}
               footer={[
-                  <Button onClick={() => this.setState({ showRefund: false })}>取消</Button>,
-                  <Button type="primary" onClick={() => this.jumpRefundDetail()}>确定</Button>,
+                <Button onClick={() => this.setState({ showRefund: false })}>
+                  取消
+                </Button>,
+                <Button type="primary" onClick={() => this.jumpRefundDetail()}>
+                  确定
+                </Button>,
               ]}
             >
               <div className="refund_group">
                 <div className="middle_warn">
-                    <img src={BlueWarn} alt="警告图标" />
+                  <img src={BlueWarn} alt="警告图标" />
                 </div>
                 <p>是否确定退票？</p>
               </div>

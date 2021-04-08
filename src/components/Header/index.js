@@ -2,7 +2,7 @@
  * @Description: 导航栏
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:43:50
- * @LastEditTime: 2021-04-06 14:04:56
+ * @LastEditTime: 2021-04-07 15:25:41
  * @LastEditors: wish.WuJunLong
  * @LastEditTime: 2021-02-06 11:51:24
  * @LastEditors: wish.WuJunLong
@@ -56,16 +56,26 @@ class Index extends React.Component {
   }
 
   componentWillReceiveProps(nextProps, nextState) {
+    // 路由发生变化时判断本地token是否失效
     if (
       this.props.location.pathname !== nextProps.location.pathname &&
       !localStorage.getItem("token")
     ) {
-      // 路由发生了变化
       this.setState({
         loginBox: true,
       });
       this.props.history.push("/");
     }
+
+    // console.log(this.props.location.pathname)
+    // // 脱离订单页时清空订单列表页筛选状态
+    // if (
+    //   sessionStorage.getItem("orderList") &&
+    //   (this.props.location.pathname.indexOf("order") !== -1 ||
+    //     this.props.location.pathname.indexOf("Detail") !== -1)
+    // ) {
+    //   sessionStorage.removeItem("orderList");
+    // }
   }
 
   // 账号登录
@@ -118,7 +128,7 @@ class Index extends React.Component {
         loginStatus: false,
         loginBox: true,
       });
-      this.props.history.push("/");
+      // this.props.history.push("/");
     });
   }
 
@@ -160,7 +170,7 @@ class Index extends React.Component {
               </div>
               <div
                 className={[
-                  this.state.activeUrl.indexOf('/orderList') !== -1
+                  this.state.activeUrl.indexOf("/orderList") !== -1
                     ? "header__nav__main__box__item active"
                     : "header__nav__main__box__item",
                 ]}

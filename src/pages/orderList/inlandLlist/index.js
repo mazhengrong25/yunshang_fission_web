@@ -2,7 +2,7 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
- * @LastEditTime: 2021-04-06 14:40:19
+ * @LastEditTime: 2021-04-06 16:04:16
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -11,6 +11,9 @@ import { Input, DatePicker, Select, Button, Table, Tag, Pagination } from "antd"
 
 import "./inlandList.scss";
 import Column from "antd/lib/table/Column";
+
+import singleDirectionIcon from "../../../static/single_direction.png"; // 单程图标
+import mulDirectionIcon from "../../../static/mul_direction.png"; // 往返图标
 
 const { RangePicker } = DatePicker;
 const { Option } = Select;
@@ -22,7 +25,7 @@ export default class index extends Component {
       isShow: false,
       dataList: [],
       searchFrom: {
-        status: "-1", //状态
+        status: 0, //状态
         passengerName: "", //乘机人
         order_no: "", //订单号
         created_at: this.$moment().subtract(3, "days").format("YYYY-MM-DD"),
@@ -218,7 +221,7 @@ export default class index extends Component {
             <div className="order_table">
               <Table rowKey="id" pagination={false} dataSource={this.state.dataList}>
                 <Column
-                  width={"17%"}
+                  width={"12%"}
                   title="类型"
                   dataIndex="segment_type"
                   render={(text) => (
@@ -254,13 +257,16 @@ export default class index extends Component {
                       {
                         <div className="route">
                           <p>{render.ticket_segments[0].departure_CN.city_name}</p>
-                          {render.segment_type === 1 ? (
-                            <div className="single_direction"></div>
-                          ) : render.segment_type === 2 ? (
-                            <div className="mul_direction"></div>
-                          ) : (
-                            ""
-                          )}
+                          <div className="direction">
+                            <img
+                              src={
+                                render.segment_type === 1
+                                  ? singleDirectionIcon
+                                  : mulDirectionIcon
+                              }
+                            ></img>
+                          </div>
+
                           <p>
                             {
                               render.ticket_segments[render.ticket_segments.length - 1]
@@ -273,6 +279,7 @@ export default class index extends Component {
                   )}
                 ></Column>
                 <Column
+                  width={"17%"}
                   title="行程时间"
                   render={(text, render) => (
                     <>
@@ -292,9 +299,10 @@ export default class index extends Component {
                     </>
                   )}
                 ></Column>
-                <Column title="金额" dataIndex="total_price"></Column>
+                <Column width={"10%"} title="金额" dataIndex="total_price"></Column>
                 <Column
                   title="状态"
+                  width={"10%"}
                   dataIndex="status"
                   render={(text, render) => (
                     <>

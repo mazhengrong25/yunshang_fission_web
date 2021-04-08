@@ -68,10 +68,21 @@ img {
 }
 
 // 输入框
+.ant-input {
+  border-color: #afafb5;
+  height: 40px;
+  border-radius: 5px;
+  &:hover {
+    border-color: #5b7cf0;
+  }
+}
 .ant-input-affix-wrapper {
   border-color: #afafb5;
   &:hover {
     border-color: #5b7cf0;
+  }
+  .ant-input {
+    height: auto;
   }
 }
 
@@ -215,9 +226,8 @@ img {
         -ms-border-radius: 0 !important;
         -o-border-radius: 0 !important;
         border-color: #dadde2 !important;
-        .ant-select-selection-search{
-          .ant-select-selection-search-input{
-
+        .ant-select-selection-search {
+          .ant-select-selection-search-input {
             height: 24px !important;
           }
         }
@@ -229,10 +239,10 @@ img {
         }
       }
     }
-    &:hover{
+    &:hover {
       .ant-select {
         .ant-select-selector {
-          &:hover{
+          &:hover {
             border-color: #5b7cf0 !important;
           }
         }
@@ -278,7 +288,7 @@ img {
 
 // 日期选择器
 .ant-picker {
-  width: 200px;
+  min-width: 200px;
   height: 40px;
   border: 1px solid #afafb5 !important;
   border-radius: 5px;
@@ -463,6 +473,9 @@ img {
       height: 36px;
       border: 1px solid #dadde2;
       border-radius: 5px;
+      &:not(.ant-btn-primary):hover {
+        color: #5b7cf0;
+      }
     }
     .ant-btn-primary {
       width: 96px;
@@ -484,11 +497,11 @@ img {
     font-weight: 400;
     color: #878791;
     cursor: pointer;
-    &:hover{
+    &:hover {
       color: #5b7cf0;
     }
   }
-  .ant-breadcrumb-separator{
+  .ant-breadcrumb-separator {
     color: transparent;
     background: url("../src/static/breadcrumb_icon.png") no-repeat center center;
     background-size: 5px 9px;
@@ -501,7 +514,7 @@ img {
 }
 
 // 加载蒙版
-.ant-spin-nested-loading{
+.ant-spin-nested-loading {
   width: 100%;
 }
 
@@ -527,77 +540,84 @@ img {
 
 // 表格
 .ant-table-wrapper {
-    // 表格第一行
-    .ant-table-thead > tr > th {
-      background-color: #EBEDF2;
-      color: #333333;
+  // 表格第一行
+  .ant-table-thead > tr > th {
+    background-color: #ebedf2;
+    color: #333333;
+    font-size: 14px;
+    font-weight: 400;
+    &:first-child {
+      border-top-left-radius: 5px;
+    }
+    &:last-child {
+      border-top-right-radius: 5px;
+    }
+  }
+  // 表头的行高
+  .ant-table-thead > tr > th,
+  .ant-table-tbody > tr > td,
+  .ant-table tfoot > tr > th,
+  .ant-table tfoot > tr > td {
+    padding: 9px 3px;
+  }
+  // 表格里行高
+  .ant-table-tbody > tr > th,
+  .ant-table-tbody > tr > td,
+  .ant-table tfoot > tr > th,
+  .ant-table tfoot > tr > td {
+    padding: 12px 3px;
+  }
+  // 表格标题间距
+  table tr th.ant-table-selection-column,
+  table tr td.ant-table-selection-column {
+    padding-right: 0px;
+    padding-left: 8px;
+  }
+  // 除了第一行的选中
+  .ant-checkbox-checked .ant-checkbox-inner {
+    background-color: #5b7cf0;
+    border-color: #5b7cf0 !important;
+  }
+  // 取消选中的背景颜色
+  .ant-table-tbody > tr.ant-table-row-selected > td {
+    background: none;
+  }
+  // 表头选中样式
+  .ant-table-thead {
+    .ant-checkbox-inner {
+      border: 1px solid #d9d9d9;
+      &::after {
+        content: "";
+        background-color: #fff;
+        border: none;
+        transform: rotate(0);
+        -webkit-transform: rotate(0);
+        -moz-transform: rotate(0);
+        -ms-transform: rotate(0);
+        -o-transform: rotate(0);
+        height: 2px;
+        width: 60%;
+        margin-top: -1px;
+        border-radius: 2px;
+        -webkit-border-radius: 2px;
+        -moz-border-radius: 2px;
+        -ms-border-radius: 2px;
+        -o-border-radius: 2px;
+      }
+    }
+  }
+  // 暂无数据处理
+  .table_emptyText {
+    margin: 40px 0;
+    p {
       font-size: 14px;
       font-weight: 400;
-      &:first-child{
-        border-top-left-radius: 5px;
-      }
-      &:last-child{
-        border-top-right-radius: 5px;
-      }
+      color: #333333;
+      text-align: center;
+      margin-bottom: 3px;
     }
-    // 表头的行高
-    .ant-table-thead > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td {
-      padding: 9px 3px;
+    .ant-btn-link {
+      color: #5b7cf0;
     }
-    // 表格里行高
-    .ant-table-tbody > tr > th, .ant-table-tbody > tr > td, .ant-table tfoot > tr > th, .ant-table tfoot > tr > td {
-      padding: 12px 3px;
-    }
-    // 表格标题间距
-    table tr th.ant-table-selection-column, table tr td.ant-table-selection-column {
-      padding-right: 0px;
-      padding-left: 8px;
-    }
-    // 除了第一行的选中
-    .ant-checkbox-checked .ant-checkbox-inner {
-      background-color: #5b7cf0;
-      border-color: #5b7cf0 !important;
-    }
-    // 取消选中的背景颜色
-    .ant-table-tbody > tr.ant-table-row-selected > td {
-      background: none;
-    }
-    // 表头选中样式
-    .ant-table-thead {
-      .ant-checkbox-inner {
-          border: 1px solid #d9d9d9;
-          &::after {      
-            content: '';
-            background-color: #fff;
-            border: none;
-            transform: rotate(0);
-            -webkit-transform: rotate(0);
-            -moz-transform: rotate(0);
-            -ms-transform: rotate(0);
-            -o-transform: rotate(0);
-            height: 2px;
-            width: 60%;
-            margin-top: -1px;
-            border-radius: 2px;
-            -webkit-border-radius: 2px;
-            -moz-border-radius: 2px;
-            -ms-border-radius: 2px;
-            -o-border-radius: 2px;
-          }
-      }
-    }
-    // 暂无数据处理
-    .table_emptyText {
-        margin: 40px 0;
-        p {
-          font-size: 14px;
-          font-weight: 400;
-          color: #333333;
-          text-align: center;
-          margin-bottom: 3px;
-        }
-        .ant-btn-link {
-            color: #5b7cf0;
-        }
-    }
+  }
 }

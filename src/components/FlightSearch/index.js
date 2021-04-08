@@ -2,16 +2,18 @@
  * @Description: 机票搜索
  * @Author: wish.WuJunLong
  * @Date: 2021-01-12 14:07:43
- * @LastEditTime: 2021-03-23 15:57:38
+ * @LastEditTime: 2021-04-08 10:56:23
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
 
 import "./flightSearch.scss";
 
-import { Radio, Select, message, Modal, Tabs, DatePicker, Button } from "antd";
+import { Radio, Select, message, DatePicker, Button } from "antd";
+
+import SelectCity from "../SelectCity"; // 选择城市组件
+
 const { Option } = Select;
-const { TabPane } = Tabs;
 
 let timeout;
 let currentValue;
@@ -40,6 +42,8 @@ export default class index extends Component {
       cityList: [], // 城市列表
       hotCity: [], // 热门城市列表
       cityUnitList: [...Array(26).keys()].map((i) => String.fromCharCode(i + 65)), // 生成A-Z数组
+
+      cabinLevel: null, // 舱位等级
     };
   }
 
@@ -288,11 +292,22 @@ export default class index extends Component {
   // 舱位等级筛选
   cabinSelect = (val) => {
     console.log(val);
+    this.setState({
+      cabinLevel: val,
+    });
   };
 
   // 航班搜索
   searchSubmit() {
-    let url = `/flightList?start=${this.state.searchCity.startCode}&startAddress=${this.state.searchCity.startAir}&end=${this.state.searchCity.endCode}&endAddress=${this.state.searchCity.endAir}&date=${this.state.searchCity.startDate}`;
+    let url = `/flightList?start=${this.state.searchCity.startCode}&startAddress=${
+      this.state.searchCity.startAir
+    }&end=${this.state.searchCity.endCode}&endAddress=${
+      this.state.searchCity.endAir
+    }&date=${this.state.searchCity.startDate}${
+      this.state.cabinLevel ? "&cabin=" + this.state.cabinLevel : ""
+    }`;
+
+    console.log(url);
 
     this.props.history.push(encodeURI(url));
   }
@@ -379,70 +394,18 @@ export default class index extends Component {
                     </Option>
                   ))}
                 </Select>
-                <Modal
-                  title={false}
-                  mask={false}
-                  maskClosable={false}
-                  keyboard={false}
-                  getContainer={false}
-                  closable={false}
-                  footer={null}
-                  visible={this.state.cityModal}
-                  onCancel={() => this.setState({ cityModal: false })}
-                  width="670px"
-                >
-                  <div className="citySelectModal">
-                    <div className="citySelectModal__header">
-                      <div className="citySelectModal__header__title">
-                        <span>支持中文/拼音/简拼/三字输入</span>
-                        <div
-                          className="citySelectModal__header__title__closeBtn"
-                          onClick={() => this.setState({ cityModal: false })}
-                        ></div>
-                      </div>
-                    </div>
-
-                    <div className="citySelectModal__cityChecked">
-                      <Tabs tabPosition="left" tabBarGutter={0}>
-                        <TabPane tab="热门城市" key="hot">
-                          <div className="city_list_box">
-                            {this.state.hotCity.map((item) => (
-                              <div
-                                className="city_list"
-                                key={item.id}
-                                onClick={() => this.selectAir(item, "start")}
-                              >
-                                {item.city_name}
-                              </div>
-                            ))}
-                          </div>
-                        </TabPane>
-
-                        {this.state.cityList.map((item) => (
-                          <TabPane tab={item.unit} key={item.unit}>
-                            <div className="city_list_box">
-                              {item.data.map((oitem) => (
-                                <div className="city_list_main" key={oitem.unit}>
-                                  <span>{oitem.unit}</span>
-
-                                  {oitem.data.map((pitem) => (
-                                    <div
-                                      className="city_list"
-                                      key={pitem.id}
-                                      onClick={() => this.selectAir(pitem, "start")}
-                                    >
-                                      {pitem.city_name}
-                                    </div>
-                                  ))}
-                                </div>
-                              ))}
-                            </div>
-                          </TabPane>
-                        ))}
-                      </Tabs>
-                    </div>
-                  </div>
-                </Modal>
+                <SelectCity
+                  hotCity={this.state.hotCity}
+                  cityList={this.state.cityList}
+                  cityModal={this.state.cityModal}
+                  selectAir={(val, type) => this.selectAir(val, type)}
+                  airType="start"
+                  closeAirModal={() =>
+                    this.setState({
+                      cityModal: false,
+                    })
+                  }
+                ></SelectCity>
               </div>
             </div>
 
@@ -489,70 +452,19 @@ export default class index extends Component {
                     </Option>
                   ))}
                 </Select>
-                <Modal
-                  title={false}
-                  mask={false}
-                  maskClosable={false}
-                  keyboard={false}
-                  getContainer={false}
-                  closable={false}
-                  footer={null}
-                  visible={this.state.cityToModal}
-                  onCancel={() => this.setState({ cityToModal: false })}
-                  width="670px"
-                >
-                  <div className="citySelectModal">
-                    <div className="citySelectModal__header">
-                      <div className="citySelectModal__header__title">
-                        <span>支持中文/拼音/简拼/三字输入</span>
-                        <div
-                          className="citySelectModal__header__title__closeBtn"
-                          onClick={() => this.setState({ cityToModal: false })}
-                        ></div>
-                      </div>
-                    </div>
 
-                    <div className="citySelectModal__cityChecked">
-                      <Tabs tabPosition="left" tabBarGutter={0}>
-                        <TabPane tab="热门城市" key="hot">
-                          <div className="city_list_box">
-                            {this.state.hotCity.map((item) => (
-                              <div
-                                className="city_list"
-                                key={item.id}
-                                onClick={() => this.selectAir(item, "end")}
-                              >
-                                {item.city_name}
-                              </div>
-                            ))}
-                          </div>
-                        </TabPane>
-
-                        {this.state.cityList.map((item) => (
-                          <TabPane tab={item.unit} key={item.unit}>
-                            <div className="city_list_box">
-                              {item.data.map((oitem) => (
-                                <div className="city_list_main" key={oitem.unit}>
-                                  <span>{oitem.unit}</span>
-
-                                  {oitem.data.map((pitem) => (
-                                    <div
-                                      className="city_list"
-                                      key={pitem.id}
-                                      onClick={() => this.selectAir(pitem, "end")}
-                                    >
-                                      {pitem.city_name}
-                                    </div>
-                                  ))}
-                                </div>
-                              ))}
-                            </div>
-                          </TabPane>
-                        ))}
-                      </Tabs>
-                    </div>
-                  </div>
-                </Modal>
+                <SelectCity
+                  hotCity={this.state.hotCity}
+                  cityList={this.state.cityList}
+                  cityModal={this.state.cityToModal}
+                  selectAir={(val, type) => this.selectAir(val, type)}
+                  airType="end"
+                  closeAirModal={() =>
+                    this.setState({
+                      cityToModal: false,
+                    })
+                  }
+                ></SelectCity>
               </div>
             </div>
           </div>
@@ -562,6 +474,7 @@ export default class index extends Component {
               <div className="flightSearch__main__list__item__title">起飞时间</div>
               <div className="flightSearch__main__list__item__input">
                 <DatePicker
+                  style={{ width: 200 }}
                   allowClear={false}
                   showToday={false}
                   disabledDate={(current) => {
@@ -579,6 +492,7 @@ export default class index extends Component {
               <div className="flightSearch__main__list__item__title">返程时间</div>
               <div className="flightSearch__main__list__item__input">
                 <DatePicker
+                  style={{ width: 200 }}
                   showToday={false}
                   disabledDate={(current) => {
                     return (
@@ -604,10 +518,9 @@ export default class index extends Component {
                   placeholder="选择舱位等级"
                   value={this.state.cabinLevel}
                 >
-                  <Option value={0}>经济舱</Option>
-                  <Option value={1}>超级经济舱</Option>
-                  <Option value={2}>明珠经济舱</Option>
-                  <Option value={3}>公务舱</Option>
+                  <Option value="经济舱">经济舱</Option>
+                  <Option value="公务舱">公务舱</Option>
+                  <Option value="头等舱">头等舱</Option>
                 </Select>
               </div>
             </div>

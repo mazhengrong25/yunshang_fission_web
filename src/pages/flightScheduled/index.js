@@ -2,7 +2,7 @@
  * @Description: 机票预订页面
  * @Author: wish.WuJunLong
  * @Date: 2021-02-19 13:54:59
- * @LastEditTime: 2021-03-29 10:44:31
+ * @LastEditTime: 2021-04-07 19:44:43
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -14,6 +14,8 @@ import AddPassengerIcon from "../../static/add_passenger_icon.png"; // 添加乘
 import PassengerAvatar from "../../static/passenger_avatar.png"; // 乘机人头像
 
 import TicketImage from "../../static/flight_fly.png";
+
+import RefundsAndChangesPopover from "../../components/RefundsAndChangesPopover"; // 退改签说明弹窗
 
 const { CheckableTag } = Tag;
 const { Option } = Select;
@@ -63,6 +65,7 @@ export default class index extends Component {
       }, // 联系人信息
 
       insuranceList: [], // 保险列表
+      selectInsurance: {}, // 选中保险数据
     };
   }
 
@@ -77,7 +80,7 @@ export default class index extends Component {
   }
 
   // 获取航班预定信息
-  getReserveData(key) {
+  async getReserveData(key) {
     let data = {
       keys: [key],
     };
@@ -86,6 +89,8 @@ export default class index extends Component {
         this.setState({
           reserveMessage: res.data[key],
         });
+
+        console.log(res.data[key]);
       } else {
         let secondsToGo = 5;
 
@@ -114,6 +119,17 @@ export default class index extends Component {
         }, secondsToGo * 1001);
       }
     });
+  }
+
+  // 获取联系人信息
+  getContactMessage(){
+    this.$axios.post('/api/me')
+      .then(res => {
+        console.log(res)
+        // this.setState({
+        //   contactsMessage: res.data
+        // })
+      })
   }
 
   // 获取旅客列表
@@ -180,6 +196,7 @@ export default class index extends Component {
   addPassengerList() {
     let newList = this.state.selectContactList;
     newList.push(defaultPassenger);
+    console.log(newList);
     this.setState({ selectContactList: newList });
   }
 
@@ -202,6 +219,8 @@ export default class index extends Component {
   editPassenger = (name, index, val) => {
     let newData = this.state.selectContactList;
     newData[index][name] = val.target.value;
+
+    console.log(newData);
 
     this.setState({ selectContactList: newData });
   };
@@ -289,9 +308,16 @@ export default class index extends Component {
   };
 
   // 保险选择
-  insuranceSelect =(val) =>{
-    console.log(val)
-  }
+  insuranceSelect = (val) => {
+    console.log(val);
+    this.state.insuranceList.forEach((item) => {
+      if (item.id === val) {
+        this.setState({
+          selectInsurance: item,
+        });
+      }
+    });
+  };
 
   // 预定下单按钮
   submitOrderBtn() {
@@ -300,8 +326,9 @@ export default class index extends Component {
     this.state.selectContactList.forEach((item) => {
       passengers.push({
         PassengerName: item.name,
-        PassengerType: "ADT",
-        Gender: "M",
+        PassengerType: parseInt(this.$moment(item.birthday, 'YYYY-MM-DD').fromNow(), 10) < 2? 'INF': 
+        parseInt(this.$moment(item.birthday, 'YYYY-MM-DD').fromNow(), 10) > 2 && parseInt(this.$moment(item.birthday, 'YYYY-MM-DD').fromNow(), 10)  > 12 ? 'CHD': parseInt(this.$moment(item.birthday, 'YYYY-MM-DD').fromNow(), 10) > 12? 'ADT': "",
+        Gender: parseInt(item.cert_no.substr(16, 1)) % 2 === 1 ? "F" : "M",
         Birthday: item.birthday,
         Credential:
           item.cert_type === "身份证"
@@ -331,7 +358,7 @@ export default class index extends Component {
 
     let data = {
       keys: this.state.orderKey,
-      insurance_id: 1,
+      insurance_id: this.state.selectInsurance.id || 0,
       contacts: this.state.contactsMessage,
       passengers: passengers,
     };
@@ -487,6 +514,7 @@ export default class index extends Component {
                       <div className="info_title">出生日期</div>
                       <div className="info_input">
                         <DatePicker
+                          style={{ width: 200 }}
                           allowClear={false}
                           showToday={false}
                           placeholder="出生日期"
@@ -571,19 +599,24 @@ export default class index extends Component {
               <div className="box_select">
                 <div className="select_title">选择保险</div>
 
-                <Select style={{width: 300}} placeholder="请选择保险" onChange={this.insuranceSelect}>
+                <Select
+                  style={{ width: 300 }}
+                  placeholder="请选择保险"
+                  onChange={this.insuranceSelect}
+                >
                   {this.state.insuranceList.map((item) => (
-                    <Option key={item.id} value={item.id}>{item.insure_desc}</Option>
+                    <Option key={item.id} value={item.id}>
+                      {item.insure_desc}
+                    </Option>
                   ))}
                 </Select>
               </div>
 
               <div className="insurance_price">
                 <span>&yen;</span>
-
+                {this.state.selectInsurance.sell_price}
                 <p>/份</p>
               </div>
-
             </div>
           </div>
 
@@ -700,13 +733,58 @@ export default class index extends Component {
 
           {/* 退改信息 */}
           <div className="baggage_info">
-            <p>退改20%-100%</p>
-            <p>行李额20KG</p>
+            <RefundsAndChangesPopover
+              refundsAndChangesData={
+                this.state.reserveMessage.ItineraryInfo
+                  ? this.state.reserveMessage.ItineraryInfo.ruleInfos
+                  : {}
+              }
+            ></RefundsAndChangesPopover>
+            <p>
+              行李额
+              {this.state.reserveMessage.ItineraryInfo
+                ? this.state.reserveMessage.ItineraryInfo.cabinInfo.baggage_config
+                : 0}
+              KG
+            </p>
           </div>
 
           <div className="message_box">
             <div className="box_title">价格明细</div>
-            <div className="price_message"></div>
+            <div className="price_message">
+              <div className="message_list">
+                <p>成人票价</p>
+                <p>&yen; 0 x 0</p>
+              </div>
+              <div className="message_list">
+                <p>儿童票价</p>
+                <p>&yen; 0 x 0</p>
+              </div>
+              <div className="message_list">
+                <p>婴儿票价</p>
+                <p>&yen; 0 x 0</p>
+              </div>
+              <div className="message_list">
+                <p>机建</p>
+                <p>&yen; 0 x 0</p>
+              </div>
+              <div className="message_list">
+                <p>燃油</p>
+                <p>&yen; 0 x 0</p>
+              </div>
+              <div className="message_list">
+                <p>保险</p>
+                <p>&yen; 0 x 0</p>
+              </div>
+              <div className="message_list">
+                <p>配送费</p>
+                <p>&yen; 0</p>
+              </div>
+
+              <div className="message_total_Price">
+                共计 <span>&yen;</span> <p>0</p>
+              </div>
+            </div>
           </div>
         </div>
 

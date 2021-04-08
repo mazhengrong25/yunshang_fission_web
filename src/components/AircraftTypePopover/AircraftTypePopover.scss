@@ -1,0 +1,72 @@
+// 航班信息浮窗
+.air_popover {
+  max-width: unset;
+  .ant-popover-content {
+    .ant-popover-arrow {
+      display: none;
+    }
+    .ant-popover-inner {
+      box-shadow: 0px 0px 20px rgba(15, 29, 66, 0.2);
+      border-radius: 5px;
+      padding: 0;
+      .ant-popover-inner-content {
+        padding: 16px;
+        width: 456px;
+        height: 208px;
+      }
+      .air_info {
+        .info_title {
+          display: flex;
+          align-items: center;
+          font-size: 14px;
+          font-weight: 400;
+          color: #333333;
+          margin-bottom: 23px;
+          .title_icon {
+            width: 16px;
+            height: 16px;
+            object-fit: contain;
+            display: inline-block;
+            margin-right: 16px;
+          }
+        }
+        .info_main {
+          display: flex;
+          align-items: center;
+          flex-wrap: wrap;
+          height: 100%;
+          flex: 1;
+          .info_main_list {
+            width: 50%;
+            display: flex;
+            align-items: center;
+            margin-bottom: 14px;
+            .info_main_list_title {
+              width: 80px;
+              height: 24px;
+              background: #f0f1f5;
+              border-radius: 5px;
+              display: inline-flex;
+              align-items: center;
+              padding: 0 8px;
+              font-size: 12px;
+              font-weight: 400;
+              color: #333333;
+              margin-right: 8px;
+            }
+            .info_main_list_message {
+              font-size: 12px;
+              font-weight: bold;
+              color: #333333;
+            }
+          }
+        }
+        .info_bottom {
+          font-size: 12px;
+          font-weight: 400;
+          color: #878791;
+        }
+      }
+    }
+  }
+}

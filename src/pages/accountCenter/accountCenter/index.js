@@ -2,8 +2,8 @@
  * @Description: 个人中心
  * @Author: mzr
  * @Date: 2021-03-02 15:27:47
- * @LastEditTime: 2021-03-30 15:35:57
- * @LastEditors: mzr
+ * @LastEditTime: 2021-04-06 19:26:57
+ * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from 'react'
 
@@ -55,7 +55,7 @@ export default class index extends Component {
                                 className="account_menu"
                                 mode="inline"
                                 style={{width:184}}
-                                defaultSelectedKeys={['perInfo']}
+                                selectedKeys={[this.state.itemKey]}
                             >
                                 <Menu.Item 
                                     key="perInfo" 
