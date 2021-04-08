@@ -2,8 +2,8 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
- * @LastEditTime: 2021-04-06 14:40:19
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-04-06 18:27:54
+ * @LastEditors: mzr
  */
 import React, { Component } from "react";
 
@@ -86,6 +86,11 @@ export default class index extends Component {
   jumpDetail(val) {
     console.log(this.props.history);
     this.props.history.push(`/inlandDetail?detail=${val}`);
+  }
+
+  // 跳转到退票详情页面
+  jumpRefundDetail(e) {
+    this.props.history.push(`/refundDetail?detail=${e}`);
   }
 
   // 分页
@@ -320,7 +325,7 @@ export default class index extends Component {
                         <Tag color="#F87C2E">支付</Tag>
                       ) : render.status === 3 ? (
                         <div className="ticket_issue">
-                          <Tag>退票</Tag>
+                          <Tag onClick={() => this.jumpRefundDetail(render.order_no)}>退票</Tag>
                           <Tag>改签</Tag>
                         </div>
                       ) : (
