@@ -2,7 +2,7 @@
  * @Description: 个人中心
  * @Author: mzr
  * @Date: 2021-03-02 15:27:47
- * @LastEditTime: 2021-04-06 19:26:57
+ * @LastEditTime: 2021-04-08 18:33:12
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from 'react'
@@ -61,18 +61,18 @@ export default class index extends Component {
                                     key="perInfo" 
                                     icon={<div className="account_icon_perInfo"></div>}
                                     onClick={this.openMenuItem.bind(this)}>个人信息</Menu.Item>
-                                <Menu.Item 
+                                {/* <Menu.Item 
                                     key="cerInfo" 
                                     icon={<div className="account_icon_cerInfo"></div>}
-                                    onClick={this.openMenuItem.bind(this)}>证件信息</Menu.Item>
+                                    onClick={this.openMenuItem.bind(this)}>证件信息</Menu.Item> */}
                                 <Menu.Item 
                                     key="usedPer" 
                                     icon={<div className="account_icon_usedPer"></div>}
                                     onClick={this.openMenuItem.bind(this)}>常用人员</Menu.Item>
-                                <Menu.Item 
+                                {/* <Menu.Item 
                                     key="usedAdd" 
                                     icon={<div className="account_icon_usedAdd"></div>}
-                                    onClick={this.openMenuItem.bind(this)}>常用地址</Menu.Item>
+                                    onClick={this.openMenuItem.bind(this)}>常用地址</Menu.Item> */}
                                 <Menu.Item 
                                     key="wallAcc" 
                                     icon={<div className="account_icon_wallAcc"></div>}

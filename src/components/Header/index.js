@@ -2,7 +2,7 @@
  * @Description: 导航栏
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:43:50
- * @LastEditTime: 2021-04-07 15:25:41
+ * @LastEditTime: 2021-04-09 14:17:35
  * @LastEditors: wish.WuJunLong
  * @LastEditTime: 2021-02-06 11:51:24
  * @LastEditors: wish.WuJunLong
@@ -65,6 +65,10 @@ class Index extends React.Component {
         loginBox: true,
       });
       this.props.history.push("/");
+    }
+
+    if( this.props.location.pathname !== nextProps.location.pathname){
+      sessionStorage.removeItem('activePassengerList')
     }
 
     // console.log(this.props.location.pathname)
@@ -225,6 +229,7 @@ class Index extends React.Component {
           maskClosable={false}
           keyboard={false}
           closable={false}
+          width="460px"
           onCancel={() => this.setState({ loginBox: false })}
         >
           <div className="header__loginBox">

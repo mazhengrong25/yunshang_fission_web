@@ -1,121 +1,152 @@
 .walletInfo {
-    .walletInfo_content_div {
-        background: #FFFFFF;
-        box-shadow: 0px 50px 80px #EBEDF2;
-        border-radius: 5px;
-        .walletInfo_div_title {
-            font-size: 16px;
-            font-weight: bold;
-            color: #333333;
-            padding: 16px 24px;
-            border-bottom: 1px solid #DADDE2;
-        }
-        .content_div {
-            background: #FFFFFF;
-            padding: 35px 24px;
-            .content_nav {
-                display: flex;
-                .content_item{
-                    display: inline-flex;
-                    align-items: center;
-                    margin-right: 32px;
-                    .item_title {
-                        
-                        font-size: 14px;
-                        font-weight: 400;
-                        color: #333333;
-                        margin-right: 2px;
-                    }
-                    .wallet_picker {
-                        margin-left: 8px;
-                        margin-right: 8px;
-                    }
-                }
-                .ant-btn-primary {
-                    width: 112px;
-                    height: 40px;
-                    background: #5B7CF0;
-                    border-radius: 5px;
-                    font-size: 14px;
-                    font-weight: bold;
-                    color: #FFFFFF;
-                }
-            }
-            .content_list {
-                padding-top: 24px;
-                .table_pagination {
-                    display: flex;
-                    justify-content: flex-end;
-                    padding: 30px;
-                }
-                .ant-table-thead > tr > th {
-                    background: #ebedf2;
-                    // padding-left: 16px;
-                }
-            }
-        }
-    }
-}
-// 气泡卡片
-.ant-popover-content {
-
-    .ant-popover-inner-content {
-        padding: 15px 16px;
-    }
-    .ant-popover-placement-bottom, .ant-popover-placement-bottomLeft, .ant-popover-placement-bottomRight {
-        padding-left: none;
-    }
-}
-.wall_popover {
-    width: 456px;
+  .walletInfo_content_div {
+    background: #ffffff;
+    box-shadow: 0px 50px 80px #ebedf2;
     border-radius: 5px;
-    .popover_div {
-        .wall_title {
-            
+    .walletInfo_div_title {
+      font-size: 16px;
+      font-weight: bold;
+      color: #333333;
+      padding: 16px 24px;
+      border-bottom: 1px solid #dadde2;
+    }
+    .content_div {
+      background: #ffffff;
+      padding: 24px;
+      .content_nav {
+        display: flex;
+        .content_item {
+          display: inline-flex;
+          align-items: center;
+          margin-right: 32px;
+          .item_title {
             font-size: 14px;
-            font-weight: bold;
+            font-weight: 400;
             color: #333333;
+            margin-right: 2px;
+          }
+          .wallet_picker {
+            margin-left: 8px;
+            margin-right: 8px;
+          }
         }
-        .wall_table {
-            margin-bottom: 16px;
-            .table_title {
-                display: flex;
-                align-items: center;
-                justify-content: center;
-                height: 32px;
-                background: #F0F1F5;
+        .ant-btn-primary {
+          width: 112px;
+          height: 40px;
+          background: #5b7cf0;
+          border-radius: 5px;
+          font-size: 14px;
+          font-weight: bold;
+          color: #ffffff;
+          border-color: #5b7cf0;
+        }
+      }
+      .content_list {
+        padding-top: 24px;
+        table {
+          thead {
+            tr {
+              th {
+                font-size: 14px;
+                font-weight: 400;
+                color: #333333;
+                &:first-child {
+                  padding-left: 16px;
+                }
+              }
+            }
+          }
+          tbody {
+            tr {
+              td {
                 font-size: 12px;
                 font-weight: 400;
                 color: #333333;
-                margin-top: 14px;
-
-            }
-            .table_content {
-                height: 280px;
-                border: 1px solid #F0F1F5;
-                .row {
-                    display: inline-flex;
-                    .col_fir {
-                        width: 112px;
-                        height: 40px;
-                        border-right: 1px solid #F0F1F5;
-                        border-bottom: 1px solid #F0F1F5;
-                        padding: 12px 8px;
-                        font-size: 12px;
-                        font-weight: 400;
-                        color: #333333;
-                    }
-                    .col_sec {
-                        width: 312px;
-                        height: 40px;
-                        border-bottom: 1px solid #F0F1F5;
-                        padding: 12px 8px;
-                        font-size: 12px;
-                        font-weight: 400;
-                        color: #333333;
-                    }
+                &:first-child {
+                  padding-left: 16px;
                 }
+              }
             }
+          }
         }
+        .details_btn {
+          cursor: pointer;
+          font-size: 12px;
+          font-weight: 400;
+          color: #5b7cf0;
+        }
+        .table_pagination {
+          display: flex;
+          justify-content: flex-end;
+          padding: 30px;
+        }
+        .ant-table-thead > tr > th {
+          background: #ebedf2;
+          // padding-left: 16px;
+        }
+      }
     }
+  }
+}
+// 气泡卡片
+.ant-popover-content {
+  .ant-popover-inner-content {
+    padding: 15px 16px;
+  }
+  .ant-popover-placement-bottom,
+  .ant-popover-placement-bottomLeft,
+  .ant-popover-placement-bottomRight {
+    padding-left: none;
+  }
+}
+.wall_popover {
+  width: 456px;
+  border-radius: 5px;
+  .popover_div {
+    .wall_title {
+      font-size: 14px;
+      font-weight: bold;
+      color: #333333;
+    }
+    .wall_table {
+      margin-bottom: 16px;
+      .table_title {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 32px;
+        background: #f0f1f5;
+        font-size: 12px;
+        font-weight: 400;
+        color: #333333;
+        margin-top: 14px;
+      }
+      .table_content {
+        height: 280px;
+        border: 1px solid #f0f1f5;
+        .row {
+          display: inline-flex;
+          .col_fir {
+            width: 112px;
+            height: 40px;
+            border-right: 1px solid #f0f1f5;
+            border-bottom: 1px solid #f0f1f5;
+            padding: 12px 8px;
+            font-size: 12px;
+            font-weight: 400;
+            color: #333333;
+          }
+          .col_sec {
+            width: 312px;
+            height: 40px;
+            border-bottom: 1px solid #f0f1f5;
+            padding: 12px 8px;
+            font-size: 12px;
+            font-weight: 400;
+            color: #333333;
+          }
+        }
+      }
+    }
+  }
 }

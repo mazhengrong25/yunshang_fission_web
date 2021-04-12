@@ -2,7 +2,7 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-04-06 19:16:03
+ * @LastEditTime: 2021-04-09 19:48:35
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -27,12 +27,12 @@ import { Base64 } from "js-base64";
 
 import copy from "copy-to-clipboard";
 
-import { ExclamationCircleOutlined } from "@ant-design/icons";
-
 import "./inlandDetail.scss";
 import Column from "antd/lib/table/Column";
 
-import BlueWarn from "../../../static/warn_blue.png";
+import airIcon from "../../../static/flight_fly.png"; // 航班航程图标
+
+import WarningModal from "../../../components/WarningModal";
 
 import AircraftTypePopover from "../../../components/AircraftTypePopover"; // 航班信息 机型信息组件
 import RefundsAndChangesPopover from "../../../components/RefundsAndChangesPopover"; // 退改签说明弹窗
@@ -40,7 +40,6 @@ import RefundsAndChangesPopover from "../../../components/RefundsAndChangesPopov
 const { Option } = Select;
 const { TextArea } = Input;
 const { Countdown } = Statistic;
-const { confirm } = Modal;
 
 export default class index extends Component {
   constructor(props) {
@@ -63,6 +62,8 @@ export default class index extends Component {
         modelList: [],
       }, // 短信模板
       MSMMessage: {}, // 短信信息
+
+      showCancel: false, // 取消订单弹窗
     };
   }
 
@@ -247,6 +248,7 @@ export default class index extends Component {
           insurancePassenger: insuranceList,
         });
       } else {
+        message.warning(res.msg);
         this.setState({
           loadDetail: false,
         });
@@ -325,24 +327,16 @@ export default class index extends Component {
 
   // 取消订单
   cancelOrder() {
-    let _that = this;
-    confirm({
-      title: "警告！",
-      icon: <ExclamationCircleOutlined />,
-      content: "是否确认取消当前订单？",
-      onOk() {
-        let data = {
-          order_no: _that.state.urlData.detail || "",
-        };
-        _that.$axios.post("/api/cancle/orders", data).then((res) => {
-          if (res.result === 10000) {
-            message.success(res.msg);
-            _that.getDetail();
-          } else {
-            message.warning(res.msg);
-          }
-        });
-      },
+    let data = {
+      order_no: this.state.urlData.detail || "",
+    };
+    this.$axios.post("/api/cancle/orders", data).then((res) => {
+      if (res.result === 10000) {
+        message.success(res.msg);
+        this.getDetail();
+      } else {
+        message.warning(res.msg);
+      }
     });
   }
 
@@ -353,9 +347,10 @@ export default class index extends Component {
           <div className="content_div">
             <div className="content_nav">
               <Breadcrumb separator="<">
-                <Breadcrumb.Item>我的订单</Breadcrumb.Item>
-                <Breadcrumb.Item href="">机票订单</Breadcrumb.Item>
-                <Breadcrumb.Item href="">订单详情</Breadcrumb.Item>
+                <Breadcrumb.Item href="/orderList?type=inland_ticket">
+                  机票订单
+                </Breadcrumb.Item>
+                <Breadcrumb.Item>订单详情</Breadcrumb.Item>
               </Breadcrumb>
             </div>
             {/* 待支付 */}
@@ -427,7 +422,7 @@ export default class index extends Component {
                   <div className="order_div">
                     <div className="order_number">预定人</div>
                     <div className="input_number_crease">
-                      {this.state.detailData.book_user}
+                      {this.state.detailData.contact}
                     </div>
                   </div>
                   {this.state.detailData.status === 1 ? (
@@ -506,7 +501,9 @@ export default class index extends Component {
                         {`${item.departure_CN.city_name}${item.departure_CN.air_port_name}机场${item.departure_terminal}`}
                       </div>
                     </div>
-                    <div className="flight_icon"></div>
+                    <div className="flight_icon">
+                      <img src={airIcon} alt="航程图标"></img>
+                    </div>
                     <div className="center_route" style={{ textAlign: "right" }}>
                       <div className="flight_time">
                         {this.$moment(item.arrive_time).format("HH:mm")}
@@ -615,12 +612,12 @@ export default class index extends Component {
                         ""
                       )}
                     </div>
-                    <Button
-                      type="link"
+                    <p
+                      className="open_send_sms"
                       onClick={() => this.openModal(item.PassengerName, item.phone)}
                     >
                       给该乘机人发送行程通知
-                    </Button>
+                    </p>
                   </div>
                   <div className="message_div">
                     <div className="item_space">
@@ -697,9 +694,8 @@ export default class index extends Component {
                   </div>
                 </div>
                 <div className="item_space">
-                  <Button
-                    type="link"
-                    style={{ padding: 0 }}
+                  <p
+                    className="open_send_sms"
                     onClick={() =>
                       this.openModal(
                         this.state.detailData.contact,
@@ -708,28 +704,21 @@ export default class index extends Component {
                     }
                   >
                     给该联系人发送行程通知
-                  </Button>
+                  </p>
                 </div>
               </div>
             </div>
             {/* 保险服务 */}
-            {/* <div className="insure_div">
-                            <div className="insure_space">
-                                <div className="space_title">{this.state.detailInsure.insure_desc}</div>
-                                <div className="space_amount">&yen;{20}</div>
-                            </div>
-                            <div className="insure_space">
-                                <div className="insure_item">
-                                    <div className="insure_icon"></div>
-                                </div>
-                            </div>
-                        </div> */}
             <div className="content_item">
               <div className="item_title">保险服务</div>
 
               {this.state.insurancePassenger.length > 0 ? (
                 <div className="insure_table">
-                  <Table pagination={false} dataSource={this.state.insurancePassenger}>
+                  <Table
+                    rowKey="id"
+                    pagination={false}
+                    dataSource={this.state.insurancePassenger}
+                  >
                     <Column title="乘客姓名" dataIndex="PassengerName" />
                     <Column
                       title="保险名称"
@@ -751,25 +740,6 @@ export default class index extends Component {
                 </div>
               )}
             </div>
-            {/* 报销凭证 */}
-            {/* <div className="content_item">
-                            <div className="item_title">报销凭证</div>
-                            <div className="voucher_div">
-                                <div className="item_space">
-                                    <div className="div_item">
-                                        <div className="div_title">配送方式</div>
-                                        <div className="div_input">邮寄（20元）</div>
-                                    </div>
-                                    <div className="div_item">
-                                        <div className="div_title">支付方式</div>
-                                        <div className="div_input">线上支付</div>
-                                    </div>
-                                </div>
-                                <div className="item_space">
-                                    <div className="address_div"></div>
-                                </div>
-                            </div>
-                        </div> */}
             {/* 价格明细 */}
             <div className="content_item">
               <div className="item_title">价格明细</div>
@@ -875,7 +845,9 @@ export default class index extends Component {
                   (this.state.detailData.status === 1 &&
                     this.state.detailData.pay_status === 2) ? (
                   <div className="price_button">
-                    <Button onClick={() => this.backList()}>返回</Button>
+                    <div className="back_btn">
+                      <Button onClick={() => this.backList()}>返回</Button>
+                    </div>
                   </div>
                 ) : (
                   ""
@@ -893,7 +865,15 @@ export default class index extends Component {
                     <Button onClick={() => this.backList()}>返回</Button>
                   </div>
                   <div className="cancel_btn">
-                    <Button onClick={() => this.cancelOrder()}>取消订单</Button>
+                    <Button
+                      onClick={() =>
+                        this.setState({
+                          showCancel: true,
+                        })
+                      }
+                    >
+                      取消订单
+                    </Button>
                   </div>
                   <div className="pay_btn">
                     <Button onClick={() => this.orderPayBtn()}>
@@ -986,29 +966,28 @@ export default class index extends Component {
                 </div>
               </div>
             </Modal>
+            {/* 取消订单弹窗 */}
+            <WarningModal
+              modalStatus={this.state.showCancel}
+              modalMessage="是否确认取消当前订单？"
+              modalSubmit={() => this.cancelOrder()}
+              modalClose={() =>
+                this.setState({
+                  showCancel: false,
+                })
+              }
+            ></WarningModal>
             {/* 退票弹窗 */}
-            <Modal
-              width={400}
-              centered
-              className="refund_modal"
-              visible={this.state.showRefund}
-              onCancel={() => this.setState({ showRefund: false })}
-              footer={[
-                <Button onClick={() => this.setState({ showRefund: false })}>
-                  取消
-                </Button>,
-                <Button type="primary" onClick={() => this.jumpRefundDetail()}>
-                  确定
-                </Button>,
-              ]}
-            >
-              <div className="refund_group">
-                <div className="middle_warn">
-                  <img src={BlueWarn} alt="警告图标" />
-                </div>
-                <p>是否确定退票？</p>
-              </div>
-            </Modal>
+            <WarningModal
+              modalStatus={this.state.showRefund}
+              modalMessage="是否确定退票？"
+              modalSubmit={() => this.jumpRefundDetail()}
+              modalClose={() =>
+                this.setState({
+                  showRefund: false,
+                })
+              }
+            ></WarningModal>
           </div>
         </Spin>
       </div>

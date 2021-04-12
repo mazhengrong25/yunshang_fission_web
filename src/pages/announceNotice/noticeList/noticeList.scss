@@ -1,99 +1,95 @@
 .noticeList {
-    
-    width: 1200px;
-    background-color: #fff;
-    margin: auto;
-    .content_title {
+  width: 1200px;
+  background-color: #fff;
+  margin: auto;
+  .content_title {
+    font-size: 16px;
+    font-weight: bold;
+    color: #333333;
+    padding: 21px 24px;
+    border-bottom: 1px solid #dadde2;
+  }
+  .content_action {
+    padding: 24px;
+    .action_item {
+      display: inline-flex;
+      align-items: center;
+      margin-right: 30px;
+      .action_title {
+        width: 33px;
         font-size: 16px;
-        font-weight: bold;
+        font-weight: 400;
         color: #333333;
-        padding: 21px 24px;
-        border-bottom: 1px solid #DADDE2;
+        margin-right: 10px;
+      }
+      .ant-input-affix-wrapper {
+        height: 40px;
+        border-radius: 5px;
+      }
     }
-    .content_action {
-        padding: 24px;
-        .action_item {
-            display: inline-flex;
-            align-items: center;
-            margin-right: 30px;
-            .action_title {
-                width: 33px;
-                font-size: 16px;
-                font-weight: 400;
-                color: #333333;
-                margin-right: 10px;
-            }
-            .ant-input-affix-wrapper {
-                height: 40px; 
-                border: 1px solid #AFAFB5;
-                border-radius: 5px;
-            } 
-        }
-        .ant-btn-primary {
-            width: 112px;
-            height: 40px;
-            background: #5B7CF0;
-            border-radius: 5px;
-            font-size: 14px;
-            font-weight: bold;
-            color: #FFFFFF;
-        }
+    .ant-btn-primary {
+      width: 112px;
+      height: 40px;
+      background: #5b7cf0;
+      border-radius: 5px;
+      font-size: 14px;
+      font-weight: bold;
+      color: #ffffff;
+      border-color: #5b7cf0;
     }
-    .content_list {
-        padding: 24px;
-        .list_item {
-            padding: 24px 16px;
-            border-bottom: 1px solid #EBEDF2;
-            &:hover {
-                background-color: #5B7CF0;
-                box-shadow: 0px 5px 20px rgba(91, 124, 240, 0.4);
-                border-radius: 5px;
-                cursor: pointer;
-                transition: all 0.3s;
-                .item_top {
-
-                    .item_title {
-                        color: #fff;
-                    }
-                    .item_time {
-                        color: #fff;
-                    }
-                }
-                .item_content {
-                    color: #fff;
-                }
-            }
-            .item_top {
-                display: flex;
-                justify-content: space-between;
-                align-items: center;
-                margin-bottom: 13px;
-                .item_title {
-                    font-size: 14px;
-                    font-weight: bold;
-                    color: #333333;
-                }
-                .item_time {
-                    font-size: 12px;
-                    font-weight: 400;
-                    color: #878791;
-                }
-            }
-            .item_content {
-                font-size: 13px;
-                font-weight: 400;
-                color: #333333;
-                white-space: nowrap;
-                overflow: hidden;
-                text-overflow: ellipsis;
-                margin-bottom: 16px;
-            }
-            
+  }
+  .content_list {
+    padding: 0 24px 24px;
+    .list_item {
+      padding: 24px 16px 16px;
+      border-bottom: 1px solid #ebedf2;
+      &:hover {
+        background-color: #5b7cf0;
+        box-shadow: 0px 5px 20px rgba(91, 124, 240, 0.4);
+        border-radius: 5px;
+        cursor: pointer;
+        transition: all 0.3s;
+        .item_top {
+          .item_title {
+            color: #fff;
+          }
+          .item_time {
+            color: #fff;
+          }
         }
-    }
-    .list_pagination {
+        .item_content {
+          color: #fff;
+        }
+      }
+      .item_top {
         display: flex;
-        justify-content: flex-end;
-        padding: 30px;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 13px;
+        .item_title {
+          font-size: 14px;
+          font-weight: bold;
+          color: #333333;
+        }
+        .item_time {
+          font-size: 12px;
+          font-weight: 400;
+          color: #878791;
+        }
+      }
+      .item_content {
+        font-size: 13px;
+        font-weight: 400;
+        color: #333333;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
     }
+  }
+  .list_pagination {
+    display: flex;
+    justify-content: flex-end;
+    padding: 30px;
+  }
 }
