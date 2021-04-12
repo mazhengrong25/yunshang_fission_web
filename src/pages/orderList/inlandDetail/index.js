@@ -2,7 +2,7 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-04-12 16:38:32
+ * @LastEditTime: 2021-04-12 16:41:08
  * @LastEditors: mzr
  */
 import React, { Component } from "react";
@@ -978,32 +978,6 @@ export default class index extends Component {
               }
             ></WarningModal>
             {/* 退票弹窗 */}
-<<<<<<< HEAD
-            <Modal
-              width={400}
-              centered
-              className="refund_modal"
-              visible={this.state.showRefund}
-              onCancel={() => this.setState({ showRefund: false })}
-              footer={[
-                <div key="inlandDetailModal">
-                  <Button key="back" onClick={() => this.setState({ showRefund: false })}>
-                    取消
-                  </Button>
-                  <Button key="submit" type="primary" onClick={() => this.jumpRefundDetail()}>
-                    确定
-                  </Button>
-                </div>
-              ]}
-            >
-              <div className="refund_group">
-                <div className="middle_warn">
-                  <img src={BlueWarn} alt="警告图标" />
-                </div>
-                <p>是否确定退票？</p>
-              </div>
-            </Modal>
-=======
             <WarningModal
               modalStatus={this.state.showRefund}
               modalMessage="是否确定退票？"
@@ -1014,7 +988,6 @@ export default class index extends Component {
                 })
               }
             ></WarningModal>
->>>>>>> 8774032f6494999674d8ab23349385b4efe617d0
           </div>
         </Spin>
       </div>
