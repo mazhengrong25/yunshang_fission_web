@@ -110,16 +110,30 @@
     }
   }
   &__loginBox {
+    height: 200px;
+    padding-top: 15px;
+    padding-bottom: 15px;
+    display: flex;
+    flex-direction: column;
     &__inputBox {
       margin-bottom: 20px;
       input {
         width: 100%;
       }
     }
-  }
-}
-.header + div {
-  &:not(.home) {
-    margin-top: 26px;
+    .ant-btn {
+      margin-top: auto;
+      height: 40px;
+      background: linear-gradient(48deg, #375de2 0%, #7ab8f5 100%);
+      box-shadow: 3px 5px 10px rgba(91, 141, 240, 0.4);
+      opacity: 1;
+      border-radius: 5px;
+      border: none;
+      &:hover {
+        opacity: 0.8;
+        background: linear-gradient(48deg, #375de2 0%, #7ab8f5 100%);
+        box-shadow: 3px 5px 10px rgba(91, 141, 240, 0.4);
+      }
+    }
   }
 }

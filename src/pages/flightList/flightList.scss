@@ -1,5 +1,6 @@
 .flightList {
   max-width: 1200px;
+  width: 100%;
   margin: 0 auto;
   .flight_list_header {
     width: 100%;
@@ -72,6 +73,8 @@
         font-size: 14px;
         font-weight: bold;
         color: #3a3b50;
+        box-shadow: none;
+        border: none;
       }
     }
     .header_search {
@@ -119,6 +122,12 @@
           border: 1px solid #5d6078 !important;
           border-radius: 5px;
           margin-right: 24px;
+          .ant-picker-input{
+            .ant-picker-suffix{
+              background: url("../../static/date_select_icon_black.png") no-repeat center center;
+              background-size: contain;
+            }
+          }
           input {
             color: #fff !important;
           }
@@ -478,11 +487,14 @@
                 color: #878791;
               }
               .time_icon {
-                background: url("../../static/flight_fly.png") no-repeat center center;
-                background-size: contain;
                 width: 155px;
                 height: 30px;
                 margin-top: 5px;
+                img{
+                  width: 100%;
+                  height: 100%;
+                  object-fit: contain;
+                }
               }
             }
           }

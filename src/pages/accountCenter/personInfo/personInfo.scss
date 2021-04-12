@@ -225,39 +225,88 @@
 }
 
 .edit_message {
-  .ant-form-item-label {
-    width: 100px;
-    text-align: right !important;
+  .ant-form {
+    .ant-form-item {
+      &:last-child{
+        margin-bottom: 0 !important;
+      }
+      .ant-form-item-label {
+        width: 100px;
+        .ant-form-item-required{
+          height: 40px;
+        }
+      }
+      .ant-form-item-control {
+        .ant-form-item-control-input {
+          
+          .ant-form-item-control-input-content {
+            .ant-input-affix-wrapper {
+              width: 200px;
+              height: 40px;
+              border-radius: 5px;
+            }
+          }
+        }
+      }
+    }
+    .edit_button{
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      .ant-btn{
+        &:not(:last-child){
+          margin-right: 16px;
+        }
+        width: 96px;
+        height: 36px;
+        border: 1px solid #dadde2;
+        border-radius: 5px;
+        &:not(.ant-btn-primary):hover {
+          color: #5b7cf0;
+          border-color: #5b7cf0;
+        }
+      }
+      .ant-btn-primary {
+        width: 96px;
+        height: 36px;
+        background: #5b7cf0;
+        border: 1px solid #5b7cf0;
+        border-radius: 5px;
+      }
+    }
   }
-  .ant-form-item-control-input-content {
-    flex: none;
-  }
-  .ant-input-affix-wrapper {
-    width: 200px;
-    height: 40px;
-    border-radius: 5px;
+  // .ant-form-item-label {
+  //   width: 100px;
+  //   text-align: right !important;
+  // }
+  // .ant-form-item-control-input-content {
+  //   flex: none;
+  // }
+  // .ant-input-affix-wrapper {
+  //   width: 200px;
+  //   height: 40px;
+  //   border-radius: 5px;
 
-    -webkit-border-radius: 5px;
-    -moz-border-radius: 5px;
-    -ms-border-radius: 5px;
-    -o-border-radius: 5px;
-  }
+  //   -webkit-border-radius: 5px;
+  //   -moz-border-radius: 5px;
+  //   -ms-border-radius: 5px;
+  //   -o-border-radius: 5px;
+  // }
   .edit_button {
-    margin-left: 83px;
-    margin-bottom: -40px;
-    .ant-btn-primary {
-      margin-left: 16px;
-      width: 96px;
-      height: 36px;
-      background: #5b7cf0;
-      border-color: #5b7cf0;
-    }
-    .ant-btn {
-      width: 96px;
-      height: 36px;
-    }
+    // .ant-btn-primary {
+    //   margin-left: 16px;
+    //   width: 96px;
+    //   height: 36px;
+    //   background: #5b7cf0;
+    //   border-color: #5b7cf0;
+    // }
+    // .ant-btn {
+    //   width: 96px;
+    //   height: 36px;
+    // }
   }
-  .anticon {
-    display: none;
-  }
+  // .anticon {
+  //   display: none;
+  // }
 }

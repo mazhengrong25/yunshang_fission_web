@@ -7,6 +7,16 @@
   max-width: 1200px;
   width: 100%;
   margin: 0 auto !important;
+
+  // 发送短信按钮
+  .open_send_sms {
+    font-size: 14px;
+    font-weight: 400;
+    line-height: 19px;
+    color: #5b7cf0;
+    cursor: pointer;
+  }
+
   .content_spin {
     position: absolute;
     width: 100%;
@@ -21,13 +31,13 @@
     }
     .pay_div {
       display: flex;
+      align-items: center;
       justify-content: center;
       height: 56px;
       background: #3a3b50;
       box-shadow: 0px 0px 30px rgba(15, 29, 66, 0.15);
       border-radius: 5px;
       margin-bottom: 16px;
-      padding-top: 16px;
       .pay_title {
         font-size: 18px;
         font-weight: bold;
@@ -40,10 +50,14 @@
         background: #ffffff;
         border-radius: 5px;
         text-align: center;
-        .ant-statistic-content {
-          font-size: 18px;
-          font-weight: bold;
-          color: #f36969;
+        .ant-statistic {
+          line-height: 32px;
+
+          .ant-statistic-content {
+            font-size: 18px;
+            font-weight: bold;
+            color: #f36969;
+          }
         }
       }
     }
@@ -51,12 +65,12 @@
       background: #ffffff;
       border-radius: 5px;
       margin-bottom: 16px;
-      padding: 24px;
+      padding: 22px 24px 20px;
       .order_space {
         display: flex;
         justify-content: space-between;
         &:not(:last-child) {
-          margin-bottom: 27px;
+          margin-bottom: 5px;
         }
         .order_message {
           display: flex;
@@ -217,6 +231,18 @@
       }
       .insure_table {
         padding: 24px;
+        .ant-table {
+          tr {
+            > *:first-child {
+              padding-left: 16px;
+            }
+            td {
+              font-size: 12px;
+              font-weight: 400;
+              color: #333333;
+            }
+          }
+        }
       }
       .contact_div {
         display: flex;
@@ -227,7 +253,7 @@
             margin-bottom: 26px;
           }
           &:last-child {
-            margin-top: 10px;
+            margin-top: 20px;
           }
           display: inline-flex;
           // .ant-btn {
@@ -306,18 +332,27 @@
         .price_button {
           display: flex;
           justify-content: center;
-          margin: 24px 10px;
+          margin: 24px 10px 0;
+          .ant-btn {
+          }
+          > div {
+            &:not(:last-child) {
+              margin-right: 16px;
+            }
+          }
           .back_btn {
-            margin-right: 16px;
             .ant-btn {
               width: 112px;
               height: 40px;
               border: 1px solid #dadde2;
               border-radius: 5px;
+              &:hover {
+                border-color: #5b7cf0;
+                color: #5b7cf0;
+              }
             }
           }
           .btn_item {
-            margin-right: 16px;
             .ant-btn {
               width: 112px;
               height: 40px;
@@ -334,8 +369,13 @@
         padding: 24px;
         display: flex;
         justify-content: center;
+
+        > div {
+          &:not(:last-child) {
+            margin-right: 16px;
+          }
+        }
         .cancel_btn {
-          margin-right: 16px;
           .ant-btn {
             width: 112px;
             height: 40px;
@@ -345,6 +385,10 @@
             font-weight: 400;
             color: #333333;
             letter-spacing: 2px;
+            &:hover {
+              border-color: #5b7cf0;
+              color: #5b7cf0;
+            }
           }
         }
         .pay_btn {
@@ -360,7 +404,6 @@
             border: none;
           }
           .pay_money {
-            margin-left: 8px;
             font-size: 18px;
             font-weight: bold;
             color: #ffffff;
@@ -438,9 +481,12 @@
           .flight_icon {
             width: 154px;
             height: 28px;
-            object-fit: contain;
-            background: url("../../../static/flight_fly.png") no-repeat center center;
-            background-size: contain;
+            margin-top: 5px;
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
           }
         }
         .flight_entry {
@@ -613,37 +659,10 @@
       flex: 1;
     }
   }
-  .item_tips{
+  .item_tips {
     padding-left: 88px;
     font-size: 12px;
     color: #999;
     margin-top: 5px;
-  }
-}
-
-// 退票弹窗
-.refund_modal {
-  .ant-modal-content .ant-modal-close-x {
-    color: #878791;
-  }
-  .ant-modal-footer {
-    padding: 0;
-  }
-  .refund_group {
-    .middle_warn {
-      height: 56px;
-      margin: 24px;
-      img {
-        width: 100%;
-        height: 100%;
-        object-fit: contain;
-      }
-    }
-    p {
-      font-size: 20px;
-      font-weight: 400;
-      color: #333333;
-      text-align: center;
-    }
   }
 }

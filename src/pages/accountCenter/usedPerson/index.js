@@ -2,7 +2,7 @@
  * @Description: 个人中心---常用人员
  * @Author: mzr
  * @Date: 2021-03-11 11:45:49
- * @LastEditTime: 2021-04-07 10:21:59
+ * @LastEditTime: 2021-04-09 19:00:14
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -17,13 +17,14 @@ import {
   DatePicker,
   message,
   Popover,
-  Tooltip,
   Row,
   Col,
 } from "antd";
 
 import "./usedPerson.scss";
 import Column from "antd/lib/table/Column";
+
+import WarningModal from "../../../components/WarningModal"; // 警告弹窗
 
 import EditBtn from "../../../static/edit_btn.png";
 import BlueWarn from "../../../static/warn_blue.png";
@@ -67,6 +68,8 @@ export default class index extends Component {
       activeGroupId: "", // 选中分组ID
       tableItemID: "", // 表格id
 
+      activeGroupName: "全部人员", // 选中分组名称
+
       groupClass: true, // 默认新增分组
       personClass: true, // 默认新增人员
 
@@ -80,7 +83,9 @@ export default class index extends Component {
         sex: null,
         remark: "", // 备注
       },
-      // birthday: "", // 生日
+
+      showRemovePassenger: false,
+      checkedPassengerId: "", // 删除乘客ID
     };
   }
 
@@ -95,43 +100,33 @@ export default class index extends Component {
     data["phone"] = this.state.searchFrom.phone;
     data["page"] = this.state.paginationData.page;
     data["limit"] = this.state.paginationData.per_page;
-    data["group_id"] = this.state.activeGroupId ?? "";
     data["remark"] = this.state.handleData.remark;
+    if (this.state.activeGroupId || this.state.activeGroupId === 0) {
+      if (this.state.activeGroupId !== -1) {
+        data["group_id"] = this.state.activeGroupId ?? "";
+      } else {
+        delete data["group_id"];
+      }
+    }
 
     await this.$axios.post("/api/passenger/index", data).then((res) => {
       if (res.errorcode === 10000) {
         let newPage = this.state.paginationData;
-        newPage.total = res.data.to;
+        newPage.total = res.data.total;
         newPage.current_page = res.data.current_page;
 
         // 分组
-        let isNotGroup = false; // 声明一个变量 用来判断旅客列表内有没有未分组乘客
         let dataList = res.data.data;
         dataList.forEach((item) => {
           this.state.groupList.forEach((oitem) => {
             if (item.group_id === oitem.id) {
               item["groupName"] = oitem.group_name;
             } else if (!item.group_id) {
-              isNotGroup = true; // 如果有未分组乘客 变量值为true
               item["groupName"] = "未分组";
-              item["group_id"] = null;
+              item["group_id"] = 0;
             }
           });
         });
-
-        // 判断
-
-        if (isNotGroup && JSON.stringify(this.state.groupList).indexOf("未分组") === -1) {
-          let newGroupList = this.state.groupList;
-          newGroupList.push({
-            group_name: "未分组",
-            id: 0,
-          });
-          this.setState({
-            groupList: newGroupList,
-          });
-        }
-
         this.setState({
           dataList: dataList,
           paginationData: newPage,
@@ -158,6 +153,18 @@ export default class index extends Component {
         this.setState({
           groupList: res.data.data,
         });
+
+        // 判断
+        if (this.state.groupList.indexOf("未分组") === -1) {
+          let newGroupList = this.state.groupList;
+          newGroupList.push({
+            group_name: "未分组",
+            id: 0,
+          });
+          this.setState({
+            groupList: newGroupList,
+          });
+        }
       }
     });
   }
@@ -195,31 +202,42 @@ export default class index extends Component {
     this.setState({ selectedRowKeys });
   };
 
+  // 打开批量删除弹窗
+  openRemovePassengerModal() {
+    if (this.state.selectedRowKeys.length < 1) {
+      return message.warn("请勾选选项");
+    }
+
+    this.setState({
+      checkedPassengerId: "",
+      showRemovePassenger: true,
+    });
+  }
+
   // 表格批量删除
   deleteBatch() {
-    if (this.state.selectedRowKeys.length < 1) {
-      message.warn("请勾选选项");
-    } else {
-      let dataList = [];
-      this.state.dataList.forEach((item) => {
-        this.state.selectedRowKeys.forEach((oitem) => {
-          if (item.id === oitem) {
-            dataList.push(item);
-          }
-        });
-      });
-      let data = {
-        ids: this.state.selectedRowKeys,
-      };
-      this.$axios.post("/api/passenger/dels", data).then((res) => {
-        if (res.errorcode === 10000) {
-          message.success(res.msg);
-          this.getDataList();
-        } else {
-          message.error(res.msg);
+    let dataList = [];
+    this.state.dataList.forEach((item) => {
+      this.state.selectedRowKeys.forEach((oitem) => {
+        if (item.id === oitem) {
+          dataList.push(item);
         }
       });
-    }
+    });
+    let data = {
+      ids: this.state.selectedRowKeys,
+    };
+    this.$axios.post("/api/passenger/dels", data).then((res) => {
+      if (res.errorcode === 10000) {
+        message.success(res.msg);
+        this.setState({
+          showRemovePassenger: false,
+        });
+        this.getDataList();
+      } else {
+        message.error(res.msg);
+      }
+    });
   }
 
   // 表格---添加证件
@@ -278,8 +296,18 @@ export default class index extends Component {
 
   //  弹窗---新增人员
   addPerson() {
-    console.log(this.state.divItem);
+    let newPassengerData = {
+      en_first_name: "",
+      en_last_name: "",
+      group_id: this.state.activeGroupId || null,
+      name: "",
+      phone: "",
+      sex: null,
+      remark: "", // 备注
+    };
     this.setState({
+      handleData: newPassengerData,
+      divItem: [newPassengerList],
       showModal: true,
       personClass: true,
     });
@@ -287,9 +315,7 @@ export default class index extends Component {
 
   //  弹窗---编辑人员
   eidtPerson(val) {
-    console.log(val);
-    console.log(this.state.handleData);
-    let data = this.state.divItem;
+    let data = JSON.parse(JSON.stringify(this.state.divItem));
 
     data[0] = {
       cert_type: val.cert_type,
@@ -301,6 +327,7 @@ export default class index extends Component {
       showModal: true,
       personClass: false,
       handleData: val,
+      divItem: data,
       tableItemID: val.id, //获取表格中每条数据的id
     });
   }
@@ -316,43 +343,43 @@ export default class index extends Component {
       phone: this.state.handleData.phone, //类型：Number  必有字段  备注：手机号 ()
       cert_type: newCard.cert_type, //类型：String  必有字段  备注：证件类型，身份证；护照；港澳通行证；台胞证；回乡证；台湾通行证；入台证；国际海员证；其它证件
       cert_no: newCard.cert_no, //类型：String  必有字段  备注：证件号
-      group_id: this.state.handleData.groupId, //类型：Number  必有字段  备注：分组id ()
+      group_id: this.state.handleData.group_id, //类型：Number  必有字段  备注：分组id ()
 
       en_first_name: this.state.handleData.en_first_name, //类型：String  可有字段  备注：英文FirstName ()
       en_last_name: this.state.handleData.en_last_name, //类型：String  可有字段  备注：英文LastName ()
       birthplace: "", //类型：String  可有字段  备注：出生地 ()
       email: this.state.handleData.email, //类型：String  可有字段  备注：邮箱 ()
-      cert_ex_date: "", //类型：String  可有字段  备注：证件过期时间 ()
-      remark: this.state.handleData.remark,
+      cert_ex_date: null, //类型：String  可有字段  备注：证件过期时间 ()
+      remark: this.state.handleData.remark || "",
     };
-    // if (this.state.personClass) {
-    //   this.$axios.post("/api/passenger/add", data).then((res) => {
-    //     if (res.errorcode === 10000) {
-    //       message.success(res.msg);
-    //       this.getDataList();
-    //       this.setState({
-    //         showModal: false,
-    //       });
-    //     } else {
-    //       message.warn(res.msg);
-    //     }
-    //   });
-    // } else {
-    //   this.$axios
-    //     .post("/api/passenger/edit/" + this.state.tableItemID, data)
-    //     .then((res) => {
-    //       if (res.errorcode === 10000) {
-    //         message.success(res.msg);
-    //         this.getDataList();
-    //         this.setState({
-    //           showModal: false,
-    //         });
-    //       } else {
-    //         message.error(res.msg);
-    //       }
-    //     });
-    // }
     console.log(data);
+    if (this.state.personClass) {
+      this.$axios.post("/api/passenger/add", data).then((res) => {
+        if (res.errorcode === 10000) {
+          message.success(res.msg);
+          this.getDataList();
+          this.setState({
+            showModal: false,
+          });
+        } else {
+          message.warn(res.msg);
+        }
+      });
+    } else {
+      this.$axios
+        .post("/api/passenger/edit/" + this.state.tableItemID, data)
+        .then((res) => {
+          if (res.errorcode === 10000) {
+            message.success(res.msg);
+            this.getDataList();
+            this.setState({
+              showModal: false,
+            });
+          } else {
+            message.error(res.msg);
+          }
+        });
+    }
   }
 
   // 输入框
@@ -374,17 +401,10 @@ export default class index extends Component {
     });
   };
 
-  // 日期选择框
-  // dateBind = (date, dateString) => {
-  //     console.log(date, dateString);
-  //     this.setState({
-  //         birthday: dateString,
-  //     });
-  // };
-
   // 弹窗---新增分组
   addGroup() {
     this.setState({
+      groupName: "",
       showGroup: true,
       groupClass: true,
     });
@@ -410,6 +430,7 @@ export default class index extends Component {
         if (res.errorcode === 10000) {
           message.success(res.msg);
           this.getGroupList();
+          this.getDataList();
           this.setState({
             showGroup: false,
           });
@@ -429,6 +450,7 @@ export default class index extends Component {
               showGroup: false,
             });
             this.getGroupList();
+            this.getDataList();
           } else {
             message.error(res.msg);
           }
@@ -447,6 +469,7 @@ export default class index extends Component {
   async activeGroup(val) {
     console.log(val);
     await this.setState({
+      activeGroupName: val.group_name,
       activeGroupId: val.id,
     });
     await this.getDataList();
@@ -467,10 +490,13 @@ export default class index extends Component {
         console.log(res);
         if (res.errorcode === 10000) {
           message.success(res.msg);
+          this.getGroupList();
           this.setState({
+            activeGroupName: "全部人员",
+            activeGroupId: -1,
             showDelete: false,
           });
-          this.getGroupList();
+          this.getDataList();
         } else {
           message.error(res.msg);
         }
@@ -478,15 +504,20 @@ export default class index extends Component {
   }
 
   // 表格---删除人员
-  deleteItem(val) {
-    this.$axios.post("/api/passenger/del/" + val).then((res) => {
-      if (res.errorcode === 10000) {
-        message.success(res.msg);
-        this.getDataList();
-      } else {
-        message.error(res.msg);
-      }
-    });
+  deleteItem() {
+    this.$axios
+      .post("/api/passenger/del/" + this.state.checkedPassengerId)
+      .then((res) => {
+        if (res.errorcode === 10000) {
+          message.success(res.msg);
+          this.getDataList();
+          this.setState({
+            showRemovePassenger: false,
+          });
+        } else {
+          message.error(res.msg);
+        }
+      });
   }
 
   render() {
@@ -530,6 +561,7 @@ export default class index extends Component {
                     placement="bottomLeft"
                     overlayClassName="group_popover"
                     autoAdjustOverflow={false}
+                    trigger="click"
                     content={() => (
                       <div className="divide_div">
                         <div className="edit_modal" onClick={() => this.editGroup()}>
@@ -553,15 +585,17 @@ export default class index extends Component {
             <div className="usedPerson_div_right">
               <div className="content_nav">
                 <div className="content_table_title">
-                  <div className="nav_item">合作企业</div>
+                  <div className="nav_item">{this.state.activeGroupName}</div>
                   <span></span>
                   <div className="nav_item_action">
-                    人员总数：{this.state.dataList.length}
+                    人员总数：{this.state.paginationData.total}
                   </div>
                 </div>
                 <div className="content_action">
                   {/* <Button>文件导入</Button> */}
-                  <Button onClick={() => this.deleteBatch()}>批量删除</Button>
+                  <Button onClick={() => this.openRemovePassengerModal()}>
+                    批量删除
+                  </Button>
                   <Button type="primary" onClick={() => this.addPerson()}>
                     新增人员
                   </Button>
@@ -594,15 +628,27 @@ export default class index extends Component {
                         : record.en_first_name + " " + record.en_last_name;
                     }}
                   ></Column>
-                  <Column width="20%" title="手机号" dataIndex="phone"></Column>
-                  <Column width="18%" title="分组" dataIndex="groupName"></Column>
+                  <Column
+                    width="20%"
+                    title="手机号"
+                    dataIndex="phone"
+                    render={(text) => {
+                      return text ? text : "-";
+                    }}
+                  ></Column>
+                  <Column
+                    width="18%"
+                    title="分组"
+                    dataIndex="groupName"
+                    render={(text) => {
+                      return text ? text : "-";
+                    }}
+                  ></Column>
                   <Column
                     width="24%"
                     title="备注"
                     dataIndex="remark"
-                    render={(item, record) => (
-                      <Tooltip placement="bottom" title={record}></Tooltip>
-                    )}
+                    render={(text) => text || "-"}
                   ></Column>
                   <Column
                     title="操作"
@@ -613,9 +659,13 @@ export default class index extends Component {
                         </div>
                         <div
                           className="delete_btn"
-                          onClick={() => this.deleteItem(record.id)}
+                          onClick={() =>
+                            this.setState({
+                              showRemovePassenger: true,
+                              checkedPassengerId: record.id,
+                            })
+                          }
                         >
-                          {/* <span></span> */}
                           <img src={ModalColse} alt="删除" />
                         </div>
                       </div>
@@ -643,6 +693,7 @@ export default class index extends Component {
         <Modal
           title={this.state.personClass ? "新增人员" : "编辑人员"}
           width={920}
+          centered
           visible={this.state.showModal}
           onCancel={() =>
             this.setState({
@@ -744,10 +795,12 @@ export default class index extends Component {
                           style={{ width: "100%" }}
                           placeholder="请选择"
                           value={this.state.handleData.group_id}
-                          onChange={this.selectBind.bind(this, "groupId")}
+                          onChange={this.selectBind.bind(this, "group_id")}
                         >
                           {this.state.groupList.map((item, index) => (
-                            <Option key={item.id}>{item.group_name}</Option>
+                            <Option key={index} value={item.id}>
+                              {item.group_name}
+                            </Option>
                           ))}
                         </Select>
                       </div>
@@ -893,7 +946,9 @@ export default class index extends Component {
           title={this.state.groupClass ? "新增分组" : "编辑分组"}
           width={520}
           className="add_group"
+          zIndex={9999}
           visible={this.state.showGroup}
+          centered
           onCancel={() =>
             this.setState({
               showGroup: false,
@@ -908,7 +963,12 @@ export default class index extends Component {
           <div className="add_group">
             <div className="group_item">
               <div className="item_title">分组名称</div>
-              <Input placeholder="请输入" allowClear onChange={this.InputItem} />
+              <Input
+                placeholder="请输入"
+                value={this.state.groupName}
+                allowClear
+                onChange={this.InputItem}
+              />
             </div>
           </div>
         </Modal>
@@ -917,6 +977,8 @@ export default class index extends Component {
           width={400}
           className="remove_group"
           visible={this.state.showDelete}
+          centered
+          zIndex={9999}
           onCancel={() =>
             this.setState({
               showDelete: false,
@@ -934,9 +996,27 @@ export default class index extends Component {
               <img src={BlueWarn} alt="警告图标" />
             </div>
             <p>是否确定删除分组？</p>
-            {this.state.dataList.length > 0 ? <span>该分组内人员将会一并删除</span> : ""}
+            {this.state.dataList.length > 0 ? (
+              <span>该分组内人员将会归为未分组</span>
+            ) : (
+              ""
+            )}
           </div>
         </Modal>
+
+        {/* 删除乘客弹窗 */}
+        <WarningModal
+          modalStatus={this.state.showRemovePassenger}
+          modalMessage="是否确认删除所选择乘客？"
+          modalSubmit={() =>
+            this.state.checkedPassengerId ? this.deleteItem() : this.deleteBatch()
+          }
+          modalClose={() =>
+            this.setState({
+              showRemovePassenger: false,
+            })
+          }
+        ></WarningModal>
       </div>
     );
   }

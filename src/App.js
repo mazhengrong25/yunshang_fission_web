@@ -2,17 +2,19 @@
  * @Description: 主模块
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-04-12 15:37:46
+ * @LastEditTime: 2021-04-12 16:39:35
  * @LastEditors: mzr
  */
 import React, { Fragment } from "react";
 
-import { BackTop, ConfigProvider } from "antd";
+import { BackTop, ConfigProvider, Layout } from "antd";
+
+
 
 import Login from "./pages/login";
 import Home from "./pages/home"; // 主页
-import AnnounceNoticeList from "./pages/announceNotice/noticeList" // 平台公告列表
-import AnnounceNoticeDetail from './pages/announceNotice/noticeDetail' //公告列表详情
+import AnnounceNoticeList from "./pages/announceNotice/noticeList"; // 平台公告列表
+import AnnounceNoticeDetail from "./pages/announceNotice/noticeDetail"; //公告列表详情
 import AccountCenter from "./pages/accountCenter/accountCenter"; //个人中心
 
 import OrderList from "./pages/orderList/orderList"; // 订单列表
@@ -35,32 +37,44 @@ import locale from "antd/lib/locale/zh_CN";
 
 import "./global.scss";
 
+const { Header, Footer } = Layout;
+
 function App() {
   return (
     <ConfigProvider locale={locale}>
       <BrowserRouter>
         <HeaderTemplate />
-
-        <Fragment>
-          <Switch>
-            <Route exact path="/orderPay" component={OrderPay}></Route>
-            <Route exact path="/FlightScheduled" component={FlightScheduled}></Route>
-            <Route exact path="/flightList" component={FlightList} />
-            <Route exact path="/orderRefund" component={OrderRefund}/>
-            <Route exact path="/inlandDetail" component={InlandDetail} />
-            <Route exact path="/refundDetail" component={RefundDetail}/>
-            <Route exact path="/orderList" component={OrderList} />
-            <Route exact path="/accountCenter" component={AccountCenter} />
-            <Route exact path="/announceNotice" component={AnnounceNoticeList} /> 
-            <Route exact path="/announceNoticeDetail" component={AnnounceNoticeDetail} /> 
-            <Route exact path="/login" component={Login} />
-            <Route exact path="/home" component={Home} />
-            <Route exact path="/" component={Home} />
-            <Redirect to={"/home"} />
-          </Switch>
-        </Fragment>
-
         <FooterTemplate />
+        <Layout>
+          <Header>
+            <HeaderTemplate />
+          </Header>
+          <Fragment>
+              <Switch>
+                <Route exact path="/orderPay" component={OrderPay}></Route>
+                <Route exact path="/FlightScheduled" component={FlightScheduled}></Route>
+                <Route exact path="/flightList" component={FlightList} />
+                <Route exact path="/orderRefund" component={OrderRefund}/>
+                <Route exact path="/refundDetail" component={RefundDetail} />
+                <Route exact path="/inlandDetail" component={InlandDetail} />
+                <Route exact path="/orderList" component={OrderList} />
+                <Route exact path="/accountCenter" component={AccountCenter} />
+                <Route exact path="/announceNotice" component={AnnounceNoticeList} />
+                <Route
+                  exact
+                  path="/announceNoticeDetail"
+                  component={AnnounceNoticeDetail}
+                />
+                <Route exact path="/login" component={Login} />
+                <Route exact path="/home" component={Home} />
+                <Route exact path="/" component={Home} />
+                <Redirect to={"/home"} />
+              </Switch>
+            </Fragment>
+          <Footer>
+            <FooterTemplate/>
+          </Footer>
+        </Layout>
 
         <BackTop>
           <div className="back_top"></div>

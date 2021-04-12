@@ -2,7 +2,7 @@
  * @Description: 主页
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:08:05
- * @LastEditTime: 2021-03-29 14:40:48
+ * @LastEditTime: 2021-04-08 16:08:16
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -161,6 +161,7 @@ export default class index extends Component {
   // 打开公告详情
   jumpNoticeDetail(val) {
     console.log(val);
+    this.props.history.push(`/announceNoticeDetail?id=${val.id}`);
   }
 
   // 公告 查看更多 跳转
@@ -168,14 +169,13 @@ export default class index extends Component {
     this.props.history.push("/announceNotice");
   }
 
-
   render() {
     return (
       <div className="home">
-        <NoticeBanners noticeMessage={this.state.notice} />
+        <NoticeBanners noticeMessage={this.state.notice} history={this.props.history}/>
         <div className="home__banner">
           <div className="home__banner__background">
-            <img src={HomeBanner} alt="首页banner"/>
+            <img src={HomeBanner} alt="首页banner" />
           </div>
           <div className="home__banner__main">
             <div className="home__banner__main__ticketBox">
@@ -440,7 +440,9 @@ export default class index extends Component {
                       return "";
                     }
                   })}
-                  <div className="moreNotice" onClick={() => this.jumpNoticeMore()}>查看更多</div>
+                  <div className="moreNotice" onClick={() => this.jumpNoticeMore()}>
+                    查看更多
+                  </div>
                 </div>
               </div>
             </div>

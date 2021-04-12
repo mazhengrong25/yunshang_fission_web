@@ -1,6 +1,5 @@
 .footer {
   background: #3a3b50;
-  margin-top: 48px;
   position: relative;
   z-index: 10;
   .footer_main {
@@ -42,6 +41,9 @@
         color: rgba($color: #ffffff, $alpha: 0.6);
         &:not(:last-child){
           margin-right: 40px;
+        }
+        &:hover{
+          color: rgba($color: #ffffff, $alpha: 1);
         }
       }
     }

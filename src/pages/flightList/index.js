@@ -2,7 +2,7 @@
  * @Description: 机票列表
  * @Author: wish.WuJunLong
  * @Date: 2021-02-05 18:31:03
- * @LastEditTime: 2021-04-08 13:40:37
+ * @LastEditTime: 2021-04-10 18:34:42
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -18,11 +18,14 @@ import {
   Result,
   Modal,
   DatePicker,
+  message,
 } from "antd";
 
 import { SmileOutlined } from "@ant-design/icons";
 
 import QueueAnim from "rc-queue-anim";
+
+import AirIcon from "../../static/flight_fly.png"
 
 import SelectCity from "../../components/SelectCity"; // 选择城市组件
 
@@ -94,7 +97,7 @@ export default class index extends Component {
 
       airList: "", // 当前航班列表所有航司
 
-      navShow: [0], //航班筛选状态 0---起飞时段   1---舱位  2---航空公司
+      navShow: [0, 1, 2], //航班筛选状态 0---起飞时段   1---舱位  2---航空公司
       airlineList: [], //航空公司列表
 
       navExpand: 5, //航空公司展开更多
@@ -106,9 +109,21 @@ export default class index extends Component {
     });
 
     console.log(this.state.urlData);
+
     await this.setState({
       searchCabin: this.state.urlData.cabin ? [this.state.urlData.cabin] : ["all"],
     });
+
+
+    if(!this.state.urlData.start || !this.state.urlData.end || !this.state.urlData.date){
+      this.setState({
+        editFlightType: true,
+        skeletonList: [],
+        flightListStatus: false,
+      })
+      return message.warning('航班查询信息不完整，请完善查询信息后重新查询')
+    }
+
 
     await this.getFlightList();
     this.getAirlineList();
@@ -142,6 +157,7 @@ export default class index extends Component {
           skeletonList: [],
         });
       } else {
+        message.warning(res.msg)
         this.setState({
           flightListStatus: false,
         });
@@ -165,9 +181,7 @@ export default class index extends Component {
 
   // 更改航程 打开航程选择栏
   openEditFlight() {
-    if (this.state.hotCity.length < 1 || this.state.cityList.length < 1) {
-      this.getAirList();
-    }
+    this.getAirList();
     let data = {
       endAir: this.state.urlData.endAddress,
       endCode: this.state.urlData.end,
@@ -217,12 +231,12 @@ export default class index extends Component {
     let url = `/flightList?start=${this.state.searchCity.startCode}&startAddress=${this.state.searchCity.startAir}&end=${this.state.searchCity.endCode}&endAddress=${this.state.searchCity.endAir}&date=${this.state.searchCity.startDate}`;
 
     await this.props.history.push(encodeURI(url));
-    
+
     await this.setState({
       urlData: React.$filterUrlParams(decodeURI(this.props.location.search)),
-      flightList: []
+      flightList: [],
     });
-    console.log(this.state.urlData)
+    console.log(this.state.urlData);
     await this.getFlightList();
     await this.getAirlineList();
   }
@@ -454,6 +468,9 @@ export default class index extends Component {
 
   // 筛选栏 时间筛选
   searchTime = (e) => {
+    if (this.state.flightList.length < 1) {
+      return message.warning("航班信息获取中");
+    }
     let type = e.target.value;
     console.log(type);
     let flightList = this.state.flightList;
@@ -495,6 +512,9 @@ export default class index extends Component {
 
   // 筛选栏 舱位筛选
   changeSearchCabin = async (e) => {
+    if (this.state.flightList.length < 1) {
+      return message.warning("航班信息获取中");
+    }
     let newData;
 
     if (e[e.length - 1] === "all" || e.length < 1) {
@@ -592,7 +612,7 @@ export default class index extends Component {
               </div>
               <div className="info_date">
                 <p>{`${this.state.urlData.date}(${this.$moment(
-                  this.state.urlData.date
+                  this.state.urlData.date || ""
                 ).format("ddd")})`}</p>
                 <p>{this.state.urlData.returnDate ? "往返" : "单程"}</p>
               </div>
@@ -682,7 +702,15 @@ export default class index extends Component {
                 <div className="search_list fiy_time">
                   <div className="list_title" onClick={() => this.openNavMenu(0)}>
                     起飞时段{" "}
-                    <div className="search_open_btn">
+                    <div
+                      className="search_open_btn"
+                      style={{
+                        transform:
+                          String(this.state.navShow).indexOf(0) !== -1
+                            ? "rotate(180deg)"
+                            : "rotate(0)",
+                      }}
+                    >
                       <img src={MoreCabinBtn} alt="航班筛选展开按钮"></img>
                     </div>
                   </div>
@@ -750,7 +778,15 @@ export default class index extends Component {
                 <div className="search_list">
                   <div className="list_title" onClick={() => this.openNavMenu(1)}>
                     舱位{" "}
-                    <div className="search_open_btn">
+                    <div
+                      className="search_open_btn"
+                      style={{
+                        transform:
+                          String(this.state.navShow).indexOf(1) !== -1
+                            ? "rotate(180deg)"
+                            : "rotate(0)",
+                      }}
+                    >
                       <img src={MoreCabinBtn} alt="航班筛选展开按钮"></img>
                     </div>
                   </div>
@@ -785,7 +821,15 @@ export default class index extends Component {
                 <div className="search_list">
                   <div className="list_title" onClick={() => this.openNavMenu(2)}>
                     航空公司{" "}
-                    <div className="search_open_btn">
+                    <div
+                      className="search_open_btn"
+                      style={{
+                        transform:
+                          String(this.state.navShow).indexOf(2) !== -1
+                            ? "rotate(180deg)"
+                            : "rotate(0)",
+                      }}
+                    >
                       <img src={MoreCabinBtn} alt="航班筛选展开按钮"></img>
                     </div>
                   </div>
@@ -864,7 +908,7 @@ export default class index extends Component {
               <QueueAnim>
                 {this.state.flightListStatus &&
                   this.state.flightList.map((item, index) => (
-                    <div key={index}>
+                    <div key={item.segments_key}>
                       {/* 判断当前数据是否显示 如没有当前参数则判断时候为为筛选状态 */}
                       {(item.searchType || this.state.searchTime === "notTime") &&
                       (item.searchAir || this.state.searchAir.indexOf("all") !== -1) ? (
@@ -911,7 +955,9 @@ export default class index extends Component {
                                 {Math.floor(item.segments[0].duration / 60)}h
                                 {Math.floor(item.segments[0].duration % 60)}m
                               </div>
-                              <div className="time_icon"></div>
+                              <div className="time_icon">
+                                <img src={AirIcon} alt="航程图标"></img>
+                              </div>
                             </div>
                             <div className="message_info">
                               <div className="time">
@@ -973,11 +1019,8 @@ export default class index extends Component {
                                 item.segments_key + oitem.name ===
                                   this.state.openCabinName) ||
                               pindex === 0 ? (
-                                <>
-                                  <div
-                                    className="cabin_list"
-                                    key={oitem.name + "__" + pindex}
-                                  >
+                                <div key={oitem.name + "__" + pindex}>
+                                  <div className="cabin_list">
                                     <div className="list_info">
                                       <div
                                         className="list_name"
@@ -1088,7 +1131,7 @@ export default class index extends Component {
                                   ) : (
                                     ""
                                   )}
-                                </>
+                                </div>
                               ) : (
                                 ""
                               )
@@ -1112,7 +1155,14 @@ export default class index extends Component {
                   <Result
                     icon={<SmileOutlined />}
                     title="暂无航班信息，请更换日期进行查询"
-                    extra={<Button type="primary">更改航程</Button>}
+                    extra={
+                      <Button
+                        type="primary"
+                        onClick={() => this.setState({ editFlightType: true })}
+                      >
+                        更改航程
+                      </Button>
+                    }
                   />
                 ) : (
                   ""

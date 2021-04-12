@@ -2,8 +2,13 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
- * @LastEditTime: 2021-04-12 15:02:21
+<<<<<<< HEAD
+ * @LastEditTime: 2021-04-12 16:39:51
  * @LastEditors: mzr
+=======
+ * @LastEditTime: 2021-04-12 16:36:11
+ * @LastEditors: wish.WuJunLong
+>>>>>>> 8774032f6494999674d8ab23349385b4efe617d0
  */
 import React, { Component } from "react";
 
@@ -169,38 +174,6 @@ export default class index extends Component {
             <div className="list_title">机票订单</div>
             <div className="list_nav">
               <div className="nav_item">
-                <div className="item_title">乘机人</div>
-                <div className="item_import">
-                  <Input
-                    placeholder="请填写"
-                    allowClear
-                    value={this.state.searchFrom.passengerName}
-                    onChange={this.InputItem.bind(this, "passengerName")}
-                  />
-                </div>
-              </div>
-              <div className="nav_item">
-                <div className="item_title">行程日期</div>
-                <RangePicker
-                  value={[
-                    this.$moment(this.state.searchFrom.created_at),
-                    this.$moment(this.state.searchFrom.created_at_end),
-                  ]}
-                  onChange={this.PickerItem.bind(this, "created_at", "created_at_end")}
-                />
-              </div>
-              <div className="nav_item">
-                <div className="item_title">订单号</div>
-                <div className="item_import">
-                  <Input
-                    allowClear
-                    placeholder="请输入订单号"
-                    value={this.state.searchFrom.order_no}
-                    onChange={this.InputItem.bind(this, "order_no")}
-                  />
-                </div>
-              </div>
-              <div className="nav_item">
                 <div className="item_title">订单状态</div>
                 <div className="item_import">
                   <Select
@@ -217,6 +190,29 @@ export default class index extends Component {
                   </Select>
                 </div>
               </div>
+              <div className="nav_item">
+                <div className="item_title">行程日期</div>
+                <RangePicker
+                  value={[
+                    this.$moment(this.state.searchFrom.created_at),
+                    this.$moment(this.state.searchFrom.created_at_end),
+                  ]}
+                  onChange={this.PickerItem.bind(this, "created_at", "created_at_end")}
+                />
+              </div>
+
+              <div className="nav_item">
+                <div className="item_title">订单号</div>
+                <div className="item_import">
+                  <Input
+                    allowClear
+                    placeholder="请输入订单号"
+                    value={this.state.searchFrom.order_no}
+                    onChange={this.InputItem.bind(this, "order_no")}
+                  />
+                </div>
+              </div>
+
               <div className="nav_item" style={{ marginLeft: 20 }}>
                 <Button type="primary" onClick={() => this.serachBtn()}>
                   查询
@@ -226,7 +222,7 @@ export default class index extends Component {
             <div className="order_table">
               <Table rowKey="id" pagination={false} dataSource={this.state.dataList}>
                 <Column
-                  width={"12%"}
+                  width={"10%"}
                   title="类型"
                   dataIndex="segment_type"
                   render={(text) => (
@@ -242,7 +238,7 @@ export default class index extends Component {
                   )}
                 ></Column>
                 <Column
-                  width={"17%"}
+                  width={"17.5%"}
                   title="乘机人"
                   render={(text, render) => (
                     <div className="table_passenger">
@@ -255,7 +251,7 @@ export default class index extends Component {
                   )}
                 ></Column>
                 <Column
-                  width={"17%"}
+                  width={"17.5%"}
                   title="行程"
                   render={(text, render) => (
                     <>
@@ -285,7 +281,7 @@ export default class index extends Component {
                   )}
                 ></Column>
                 <Column
-                  width={"17%"}
+                  width={"17.5%"}
                   title="行程时间"
                   render={(text, render) => (
                     <>
