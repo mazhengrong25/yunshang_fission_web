@@ -2,8 +2,13 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
+<<<<<<< HEAD:src/pages/orderList/inlandLlist/index.js
  * @LastEditTime: 2021-04-10 17:10:36
  * @LastEditors: wish.WuJunLong
+=======
+ * @LastEditTime: 2021-04-08 14:17:04
+ * @LastEditors: mzr
+>>>>>>> 8ccfefcefd62d8a394856be828a9a97249a7a1cd:src/pages/orderList/inlandList/index.js
  */
 import React, { Component } from "react";
 
@@ -89,6 +94,11 @@ export default class index extends Component {
   jumpDetail(val) {
     console.log(this.props.history);
     this.props.history.push(`/inlandDetail?detail=${val}`);
+  }
+
+  // 跳转到退票详情页面
+  jumpRefundDetail(e) {
+    this.props.history.push(`/refundDetail?detail=${e}`);
   }
 
   // 分页
@@ -320,7 +330,7 @@ export default class index extends Component {
                         <Tag color="#F87C2E">支付</Tag>
                       ) : render.status === 3 ? (
                         <div className="ticket_issue">
-                          <Tag>退票</Tag>
+                          <Tag onClick={() => this.jumpRefundDetail(render.order_no)}>退票</Tag>
                           <Tag>改签</Tag>
                         </div>
                       ) : (
