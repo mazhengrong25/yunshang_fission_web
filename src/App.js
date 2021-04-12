@@ -2,8 +2,8 @@
  * @Description: 主模块
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-04-12 16:39:35
- * @LastEditors: mzr
+ * @LastEditTime: 2021-04-12 16:42:08
+ * @LastEditors: wish.WuJunLong
  */
 import React, { Fragment } from "react";
 
@@ -43,8 +43,6 @@ function App() {
   return (
     <ConfigProvider locale={locale}>
       <BrowserRouter>
-        <HeaderTemplate />
-        <FooterTemplate />
         <Layout>
           <Header>
             <HeaderTemplate />

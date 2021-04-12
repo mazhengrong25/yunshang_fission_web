@@ -2,7 +2,7 @@
  * @Description: 机票预订页面
  * @Author: wish.WuJunLong
  * @Date: 2021-02-19 13:54:59
- * @LastEditTime: 2021-04-12 09:18:13
+ * @LastEditTime: 2021-04-12 16:49:43
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -169,8 +169,30 @@ export default class index extends Component {
   // 获取联系人信息
   async getContactMessage() {
     this.$axios.post("/api/me").then((res) => {
+      let thisList = this.state.commonlyContact
+      let thisPassenger = {
+        birthday: res.birthday || null,
+        cert_no: res.cert_no || "",
+        cert_type: res.cert_type || "身份证",
+        id: res.id,
+        name: res.role_name,
+        phone: res.phone,
+        sex: res.sex || null,
+        userType: res.birthday
+          ? this.$moment().diff(res.birthday, "years") < 2
+            ? "INF"
+            : this.$moment().diff(res.birthday, "years") >= 2 &&
+              this.$moment().diff(res.birthday, "years") < 12
+            ? "CHD"
+            : this.$moment().diff(res.birthday, "years") >= 12
+            ? "ADT"
+            : ""
+          : "ADT",
+      };
+      thisList.unshift(thisPassenger)
       this.setState({
         contactsMessage: res,
+        commonlyContact: thisList
       });
     });
   }
@@ -228,26 +250,8 @@ export default class index extends Component {
       if (res.errorcode === 10000) {
         // 组装当前账号人员信息
         console.log(this.state.contactsMessage);
-        let thisPassenger = {
-          birthday: this.state.contactsMessage.birthday || null,
-          cert_no: this.state.contactsMessage.cert_no || "",
-          cert_type: this.state.contactsMessage.cert_type || "身份证",
-          id: this.state.contactsMessage.id,
-          name: this.state.contactsMessage.role_name,
-          phone: this.state.contactsMessage.phone,
-          sex: this.state.contactsMessage.sex || null,
-          userType: this.state.contactsMessage.birthday
-            ? this.$moment().diff(this.state.contactsMessage.birthday, "years") < 2
-              ? "INF"
-              : this.$moment().diff(this.state.contactsMessage.birthday, "years") >= 2 &&
-                this.$moment().diff(this.state.contactsMessage.birthday, "years") < 12
-              ? "CHD"
-              : this.$moment().diff(this.state.contactsMessage.birthday, "years") >= 12
-              ? "ADT"
-              : ""
-            : "ADT",
-        };
-        let thisCommonlyContact = [thisPassenger];
+        
+        let thisCommonlyContact = this.state.commonlyContact;
 
         let passengerList = JSON.parse(sessionStorage.getItem("activePassengerList"));
 
