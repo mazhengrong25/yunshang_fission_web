@@ -1,4 +1,4 @@
-.refundDetail {
+.inland_redund_Detail {
     background: rgba(240, 241, 245, 1);
     display: flex;
     align-items: center;
@@ -8,546 +8,591 @@
     width: 100%;
     margin: 0 auto !important;
     .content_spin {
-        position: absolute;
-        width: 100%;
-        height: 100%;
-        top: 0;
-        left: 0;
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      top: 0;
+      left: 0;
     }
-    .refund_content {
-        width: 100%;
-        .refund_content_nav {
-            margin: 16px 0;
+    .content_div {
+      width: 100%;
+      .content_nav {
+        margin: 16px 0;
+      }
+      .pay_div {
+        display: flex;
+        justify-content: center;
+        height: 56px;
+        background: #3a3b50;
+        box-shadow: 0px 0px 30px rgba(15, 29, 66, 0.15);
+        border-radius: 5px;
+        margin-bottom: 16px;
+        padding-top: 16px;
+        .pay_title {
+          font-size: 18px;
+          font-weight: bold;
+          color: #ffffff;
+          margin-right: 16px;
         }
-        .refund_content_status {
-            background: #ffffff;
-            border-radius: 5px;
-            margin-bottom: 16px;
-            padding: 24px;
-            .order_space {
-              display: flex;
-              justify-content: space-between;
+        .pay_time {
+          width: 80px;
+          height: 32px;
+          background: #ffffff;
+          border-radius: 5px;
+          text-align: center;
+          .ant-statistic-content {
+            font-size: 18px;
+            font-weight: bold;
+            color: #f36969;
+          }
+        }
+      }
+      .content_status {
+        background: #ffffff;
+        border-radius: 5px;
+        margin-bottom: 16px;
+        padding: 24px;
+        .order_space {
+          display: flex;
+          justify-content: space-between;
+          &:not(:last-child) {
+            margin-bottom: 27px;
+          }
+          .order_message {
+            display: flex;
+            align-items: center;
+            .order_div {
               &:not(:last-child) {
-                margin-bottom: 27px;
+                margin-right: 80px;
               }
-              .order_message {
+            }
+          }
+          .order_div {
+            display: flex;
+            align-items: center;
+            .order_number {
+              font-size: 14px;
+              font-weight: 400;
+              color: #878791;
+              margin-right: 10px;
+            }
+            .input_number_crease {
+              font-size: 14px;
+              font-weight: bold;
+              color: #333333;
+            }
+            .input_number {
+              span {
+                font-weight: bold;
+                font-size: 16px;
+                margin-right: 4px;
+              }
+              font-size: 24px;
+              font-weight: bold;
+              color: #333333;
+            }
+            .number_copy {
+              width: 16px;
+              height: 17px;
+              background: url("../../../static/number_copy.png") no-repeat center center;
+              background-size: contain;
+              cursor: pointer;
+              margin-left: 13px;
+            }
+          }
+          .order_status {
+            font-size: 18px;
+            font-weight: bold;
+            color: #f36969;
+          }
+          .order_not_pay {
+            display: flex;
+            align-items: center;
+          }
+        }
+      }
+      .content_item {
+        background: #ffffff;
+        border-radius: 5px;
+        margin-bottom: 16px;
+        .item_title {
+          font-size: 18px;
+          font-weight: bold;
+          color: #3a3b50;
+          border-bottom: 1px solid #dadde2;
+          padding: 16px 24px;
+        }
+        .passenger_message {
+          padding: 24px;
+          .message_nav {
+            display: flex;
+            justify-content: space-between;
+            .passenger_item {
+              display: flex;
+              .passenger_number {
+                font-size: 16px;
+                font-weight: bold;
+                color: #3a3b50;
+                margin-right: 14px;
+              }
+              .passenger_ticketno {
+                min-width: 144px;
+                height: 26px;
+                background: rgba(91, 124, 240, 0.1);
+                border-radius: 5px;
+                font-size: 14px;
+                font-weight: 400;
+                color: #5b7cf0;
                 display: flex;
                 align-items: center;
-                .order_div {
-                  &:not(:last-child) {
-                    margin-right: 80px;
-                  }
+                padding-left: 12px;
+              }
+            }
+  
+            .ant-checkbox-checked .ant-checkbox-inner {
+              background-color: #5b7cf0;
+              border-color: #5b7cf0;
+            }
+          }
+          .message_div {
+            display: flex;
+            flex-direction: column;
+            background: rgba(243, 243, 247, 0.7);
+            margin-top: 13px;
+            padding: 21px 16px;
+            .item_space {
+              display: flex;
+              align-items: center;
+              .message_item {
+                display: inline-flex;
+                align-items: center;
+                margin-right: 40px;
+                flex-shrink: 0;
+                .message_head {
+                  width: 32px;
+                  height: 32px;
+                  background: url("../../../static/message_head.png") no-repeat center
+                    center #000;
+                  background-size: 50% 50%;
+                  border-radius: 50%;
+                  margin-right: 10px;
+                  -webkit-border-radius: 50%;
+                  -moz-border-radius: 50%;
+                  -ms-border-radius: 50%;
+                  -o-border-radius: 50%;
                 }
-              }
-              .order_div {
-                display: flex;
-                align-items: center;
-                .order_number {
+                .passenger_name {
+                  font-size: 16px;
+                  font-weight: bold;
+                  color: #3a3b50;
+                  margin-right: 10px;
+                }
+                .passenger_identity {
                   font-size: 14px;
                   font-weight: 400;
                   color: #878791;
-                  margin-right: 10px;
-                }
-                .input_number_crease {
-                  font-size: 14px;
-                  font-weight: bold;
-                  color: #333333;
-                }
-                .input_number {
-                  span {
-                    font-weight: bold;
-                    font-size: 16px;
-                    margin-right: 4px;
-                  }
-                  font-size: 24px;
-                  font-weight: bold;
-                  color: #333333;
-                }
-                .number_copy {
-                  width: 16px;
-                  height: 17px;
-                  background: url("../../../static/number_copy.png") no-repeat center center;
-                  background-size: contain;
-                  cursor: pointer;
-                  margin-left: 13px;
                 }
               }
-              .order_status {
-                font-size: 18px;
-                font-weight: bold;
-                color: #f36969;
-              }
-              .order_not_pay {
+              .message_info {
                 display: flex;
-                align-items: center;
-              }
-            }
-        }
-        .refund_content_item {
-            background: #ffffff;
-            border-radius: 5px;
-            margin-bottom: 16px;
-            // 多选框
-            .ant-checkbox-group {
-                display: block;
-            }
-            .item_title {
-                font-size: 18px;
-                font-weight: bold;
-                color: #3a3b50;
-                border-bottom: 1px solid #dadde2;
-                padding: 16px 24px;
-            }
-            .refund_message {
-                display: flex;
-                padding: 24px;
-                min-height: 88px;
-                .choice_item {
-                    display: inline-flex;
-                    align-items: center;
-                    &:not(:last-child) {
-                        margin-right: 80px;
-                    }
-                    .choice_title {
-                        font-size: 14px;
-                        font-weight: 400;
-                        color: #878791;
-                        margin-right: 10px;
-                    }
-                }
-            }
-            .contact_div {
-                display: flex;
-                flex-direction: column;
-                padding: 24px;
-                .item_space {
-                  &:not(:last-child) {
-                    margin-bottom: 26px;
-                  }
+                flex-wrap: wrap;
+                .div_item {
                   display: inline-flex;
-                  // .ant-btn {
-                  //   padding: 0;
-                  // }
-                  .div_item {
-                    display: inline-flex;
-                    margin-right: 40px;
-                    .div_title {
-                      font-size: 14px;
-                      font-weight: 400;
-                      color: #878791;
-                      margin-right: 8px;
-                    }
-                    .div_input {
-                      font-size: 14px;
-                      font-weight: 400;
-                      color: #333333;
-                    }
+                  margin-right: 40px;
+                  .div_title {
+                    font-size: 14px;
+                    font-weight: 400;
+                    color: #878791;
+                    margin-right: 8px;
                   }
-                }
-                .not_insure {
-                  font-size: 16px;
-                  font-weight: 400;
-                  color: #333333;
-                }
-            }
-            .passenger_message {
-                padding: 24px;
-                .message_nav {
-                  display: flex;
-                  justify-content: space-between;
-                  .passenger_item {
-                    display: flex;
-                    .passenger_checkbox {
-                        display: inline-flex;
-                        .passenger_number {
-                          font-size: 16px;
-                          font-weight: bold;
-                          color: #3a3b50;
-                          margin-right: 14px;
-                        }
-                    }
-                    .passenger_ticketno {
-                      min-width: 144px;
-                      height: 26px;
-                      background: rgba(91, 124, 240, 0.1);
-                      border-radius: 5px;
-                      font-size: 14px;
-                      font-weight: 400;
-                      color: #5b7cf0;
-                      display: flex;
-                      align-items: center;
-                      padding-left: 12px;
-                    }
-                  }
-        
-                  .ant-checkbox-checked .ant-checkbox-inner {
-                    background-color: #5b7cf0;
-                    border-color: #5b7cf0;
-                  }
-                }
-                .message_div {
-                  display: flex;
-                  flex-direction: column;
-                  background: rgba(243, 243, 247, 0.7);
-                  margin-top: 13px;
-                  padding: 21px 16px;
-                  .item_space {
-                    display: flex;
-                    align-items: center;
-                    .message_item {
-                      display: inline-flex;
-                      align-items: center;
-                      margin-right: 40px;
-                      flex-shrink: 0;
-                      .message_head {
-                        width: 32px;
-                        height: 32px;
-                        background: url("../../../static/message_head.png") no-repeat center
-                          center #000;
-                        background-size: 50% 50%;
-                        border-radius: 50%;
-                        margin-right: 10px;
-                        -webkit-border-radius: 50%;
-                        -moz-border-radius: 50%;
-                        -ms-border-radius: 50%;
-                        -o-border-radius: 50%;
-                      }
-                      .passenger_name {
-                        font-size: 16px;
-                        font-weight: bold;
-                        color: #3a3b50;
-                        margin-right: 10px;
-                      }
-                      .passenger_identity {
-                        font-size: 14px;
-                        font-weight: 400;
-                        color: #878791;
-                      }
-                    }
-                    .message_info {
-                      display: flex;
-                      flex-wrap: wrap;
-                      .div_item {
-                        display: inline-flex;
-                        margin-right: 40px;
-                        .div_title {
-                          font-size: 14px;
-                          font-weight: 400;
-                          color: #878791;
-                          margin-right: 8px;
-                        }
-                        .div_input {
-                          font-size: 14px;
-                          font-weight: 400;
-                          color: #333333;
-                        }
-                      }
-                    }
-                  }
-                }
-            }
-            .price_div {
-                padding: 24px;
-                .ticket_price {
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  font-size: 24px;
-                  font-weight: bold;
-                  color: #5b7cf0;
-                  span {
-                    font-weight: bold;
-                    font-size: 16px;
-                    margin-right: 4px;
-                    &:first-child {
-                      font-size: 14px;
-                      font-weight: 400;
-                      color: #333333;
-                      margin-right: 10px;
-                    }
-                  }
-                }
-                .ant-table-thead {
-                  .ant-table-cell {
-                    padding: 9px 16px;
-                    border-bottom: none;
+                  .div_input {
                     font-size: 14px;
                     font-weight: 400;
                     color: #333333;
                   }
                 }
-                .ant-table-tbody {
-                  .ant-table-row {
-                    &:first-child {
-                      .ant-table-cell {
-                        &:last-child {
-                          border-left: 1px solid #ebedf2;
-                        }
-                      }
-                    }
-                    .ant-table-cell {
-                      padding: 13px 16px;
-                      border-bottom-color: #ebedf2 !important;
-                      font-size: 12px;
-                      font-weight: 400;
-                      color: #333333;
-                    }
-                  }
-                }
-                .price_button {
-                  display: flex;
-                  justify-content: center;
-                  margin: 24px 10px;
-                  .back_btn {
-                    margin-right: 16px;
-                    .ant-btn {
-                      width: 112px;
-                      height: 40px;
-                      border: 1px solid #dadde2;
-                      border-radius: 5px;
-                    }
-                  }
-                  .btn_item {
-                    margin-right: 16px;
-                    .ant-btn {
-                      width: 112px;
-                      height: 40px;
-                      border: 1px solid #dadde2;
-                      border-radius: 5px;
-                      background: #5b7cf0;
-                      color: #fff;
-                    }
-                  }
-                }
+              }
             }
-            .insure_table {
-                padding: 24px;
-            }
+          }
         }
-        .refund_content_flight {
-            background: #ffffff;
-            border-radius: 5px;
-            margin-bottom: 16px;
-            .flight_title {
+        .insure_table {
+          padding: 24px;
+        }
+        .contact_div {
+          display: flex;
+          flex-direction: column;
+          padding: 24px;
+          .item_space {
+            &:first-child {
+              margin-bottom: 26px;
+            }
+            &:last-child {
+              margin-top: 10px;
+            }
+            display: inline-flex;
+            // .ant-btn {
+            //   padding: 0;
+            // }
+            .div_item {
+              display: inline-flex;
+              margin-right: 40px;
+              .div_title {
+                font-size: 14px;
+                font-weight: 400;
+                color: #878791;
+                margin-right: 8px;
+              }
+              .div_input {
+                font-size: 14px;
+                font-weight: 400;
+                color: #333333;
+              }
+            }
+          }
+          .not_insure {
+            font-size: 16px;
+            font-weight: 400;
+            color: #333333;
+          }
+        }
+        .price_div {
+          padding: 24px;
+          .ticket_price {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            font-weight: bold;
+            color: #5b7cf0;
+            span {
+              font-weight: bold;
+              font-size: 16px;
+              margin-right: 4px;
+              &:first-child {
+                font-size: 14px;
+                font-weight: 400;
+                color: #333333;
+                margin-right: 10px;
+              }
+            }
+          }
+          .ant-table-thead {
+            .ant-table-cell {
+              padding: 9px 16px;
+              border-bottom: none;
+              font-size: 14px;
+              font-weight: 400;
+              color: #333333;
+            }
+          }
+          .ant-table-tbody {
+            .ant-table-row {
+              &:first-child {
+                .ant-table-cell {
+                  &:last-child {
+                    border-left: 1px solid #ebedf2;
+                  }
+                }
+              }
+              .ant-table-cell {
+                padding: 13px 16px;
+                border-bottom-color: #ebedf2 !important;
+                font-size: 12px;
+                font-weight: 400;
+                color: #333333;
+              }
+            }
+          }
+          .price_button {
+            display: flex;
+            justify-content: center;
+            margin: 24px 10px;
+            .back_btn {
+              margin-right: 16px;
+              .ant-btn {
+                width: 112px;
+                height: 40px;
+                border: 1px solid #dadde2;
+                border-radius: 5px;
+              }
+            }
+            .btn_item {
+              margin-right: 16px;
+              .ant-btn {
+                width: 112px;
+                height: 40px;
+                border: 1px solid #dadde2;
+                border-radius: 5px;
+                background: #5b7cf0;
+                border-color: #5b7cf0;
+                color: #fff;
+              }
+            }
+          }
+        }
+        .payment_div {
+          padding: 24px;
+          display: flex;
+          justify-content: center;
+          .cancel_btn {
+            margin-right: 16px;
+            .ant-btn {
+              width: 112px;
+              height: 40px;
+              border: 1px solid #dadde2;
+              border-radius: 5px;
+              font-size: 14px;
+              font-weight: 400;
+              color: #333333;
+              letter-spacing: 2px;
+            }
+          }
+          .pay_btn {
+            .ant-btn {
+              width: 160px;
+              height: 40px;
+              background: #f87c2e;
+              border-radius: 5px;
+              font-size: 14px;
+              font-weight: 400;
+              color: #ffffff;
+              letter-spacing: 2px;
+              border: none;
+            }
+            .pay_money {
+              margin-left: 8px;
               font-size: 18px;
               font-weight: bold;
-              color: #3a3b50;
-              border-bottom: 1px solid #dadde2;
-              padding: 16px 24px;
+              color: #ffffff;
             }
-            .flight_detail {
+          }
+        }
+      }
+      .flight_div {
+        background: #ffffff;
+        border-radius: 5px;
+        margin-bottom: 16px;
+        .flight_title {
+          font-size: 18px;
+          font-weight: bold;
+          color: #3a3b50;
+          border-bottom: 1px solid #dadde2;
+          padding: 16px 24px;
+        }
+        .flight_detail {
+          display: flex;
+          align-items: center;
+          justify-content: space-between;
+          padding: 24px 24px 21px;
+          .flight_message {
+            width: 28%;
+            .flight_type {
+              background: #5b7cf0;
+              border-radius: 2px;
+              color: #fff;
+              font-weight: 400;
+              font-size: 12px;
+              padding: 0 5px;
+              margin-right: 16px;
+              display: inline-flex;
+              position: relative;
+              top: -5px;
+            }
+            .flight_route {
+              display: inline-flex;
+              flex-direction: column;
+              .flight_address {
+                font-size: 28px;
+                font-weight: bold;
+                color: #333333;
+              }
+              .flight_date {
+                font-size: 14px;
+                font-weight: 400;
+                color: #333333;
+                span {
+                  margin-left: 5px;
+                }
+              }
+            }
+          }
+  
+          .route_div {
+            display: flex;
+            .center_route {
+              display: flex;
+              flex-direction: column;
+              width: 140px;
+              .flight_airport {
+                font-size: 14px;
+                font-weight: 400;
+                color: #333333;
+                white-space: nowrap;
+              }
+              .flight_time {
+                font-size: 24px;
+                font-weight: bold;
+                color: #333333;
+              }
+            }
+            .flight_icon {
+              width: 154px;
+              height: 28px;
+              object-fit: contain;
+              background: url("../../../static/flight_fly.png") no-repeat center center;
+              background-size: contain;
+            }
+          }
+          .flight_entry {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            width: 28%;
+            .entry_item {
+              font-size: 14px;
+              font-weight: 400;
+              color: #5b7cf0;
+              &:first-child {
+                cursor: pointer;
+              }
+            }
+          }
+        }
+        .open {
+          width: 84px;
+          height: 26px;
+          background: #3a3b50;
+          border-radius: 5px 5px 0px 0px;
+          margin: auto;
+          color: #fff;
+          text-align: center;
+          padding-top: 2px;
+          cursor: pointer;
+        }
+        .open_content {
+          border-radius: 0px 0px 5px 5px;
+          border-top: 2px dotted #dadde2;
+          .content_div_open {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 25px 24px;
+            .open_left {
               display: flex;
               align-items: center;
-              justify-content: space-between;
-              padding: 24px 24px 21px;
-              .flight_message {
-                width: 28%;
-                .flight_type {
-                  background: #5b7cf0;
-                  border-radius: 2px;
-                  color: #fff;
-                  font-weight: 400;
-                  font-size: 12px;
-                  padding: 0 5px;
-                  margin-right: 16px;
-                  display: inline-flex;
-                  position: relative;
-                  top: -5px;
-                }
-                .flight_route {
-                  display: inline-flex;
-                  flex-direction: column;
-                  .flight_address {
-                    font-size: 28px;
-                    font-weight: bold;
-                    color: #333333;
-                  }
-                  .flight_date {
-                    font-size: 14px;
-                    font-weight: 400;
-                    color: #333333;
-                    span {
-                      margin-left: 5px;
-                    }
-                  }
-                }
-              }
-      
-              .route_div {
+              width: 28%;
+              .left_div {
                 display: flex;
-                .center_route {
-                  display: flex;
-                  flex-direction: column;
-                  width: 140px;
-                  .flight_airport {
-                    font-size: 14px;
-                    font-weight: 400;
-                    color: #333333;
-                    white-space: nowrap;
-                  }
-                  .flight_time {
-                    font-size: 24px;
-                    font-weight: bold;
-                    color: #333333;
-                  }
-                }
-                .flight_icon {
-                  width: 154px;
-                  height: 28px;
-                  object-fit: contain;
-                  background: url("../../../static/flight_fly.png") no-repeat center center;
-                  background-size: contain;
-                }
-              }
-              .flight_entry {
-                display: flex;
-                align-items: center;
-                justify-content: flex-end;
-                width: 28%;
-                .entry_item {
-                  font-size: 14px;
-                  font-weight: 400;
-                  color: #5b7cf0;
+                flex-direction: column;
+                margin-right: 5px;
+                .open_left_date {
+                  display: inline-flex;
+                  align-items: center;
                   &:first-child {
-                    cursor: pointer;
+                    margin-bottom: 29px;
                   }
-                }
-              }
-            }
-            .open {
-              width: 84px;
-              height: 26px;
-              background: #3a3b50;
-              border-radius: 5px 5px 0px 0px;
-              margin: auto;
-              color: #fff;
-              text-align: center;
-              padding-top: 2px;
-              cursor: pointer;
-            }
-            .open_content {
-              border-radius: 0px 0px 5px 5px;
-              border-top: 2px dotted #dadde2;
-              .content_div_open {
-                display: flex;
-                align-items: center;
-                justify-content: space-between;
-                padding: 25px 24px;
-                .open_left {
-                  display: flex;
-                  align-items: center;
-                  width: 28%;
-                  .left_div {
-                    display: flex;
-                    flex-direction: column;
-                    margin-right: 5px;
-                    .open_left_date {
-                      display: inline-flex;
-                      align-items: center;
-                      &:first-child {
-                        margin-bottom: 29px;
-                      }
-                      > span {
-                        font-size: 12px;
-                        font-weight: 400;
-                        color: #878791;
-                      }
-                      > p {
-                        margin-left: 8px;
-                        font-size: 14px;
-                        font-weight: bold;
-                        color: #333333;
-                      }
-                    }
-                    .open_left_address {
-                      font-size: 14px;
-                      font-weight: bold;
-                      color: #333333;
-                      &:first-child {
-                        margin-bottom: 29px;
-                      }
-                    }
-                  }
-                  .left_icon {
-                    width: 15px;
-                    height: 56px;
-                    object-fit: contain;
-                    background: url("../../../static/flight_fly_colomn.png") no-repeat center
-                      center;
-                    background-size: contain;
-                    margin: 0 10px;
-                  }
-                }
-                .open_middle {
-                  display: flex;
-                  align-items: center;
-                  .middle_icon {
-                    width: 24px;
-                    height: 24px;
-                    margin-right: 8px;
-                    img {
-                      width: 100%;
-                      height: 100%;
-                      object-fit: contain;
-                    }
-                  }
-                  .middle_fly_type {
-                    font-size: 12px;
-                    font-weight: 400;
-                    color: #333333;
-                    margin-right: 8px;
-                  }
-                  .middle_fly_modal {
+                  > span {
                     font-size: 12px;
                     font-weight: 400;
                     color: #878791;
-                    border-bottom: 1px dotted #afafb5;
-                    margin-right: 8px;
                   }
-                  .middle_fly_cabin {
-                    font-size: 12px;
-                    font-weight: 400;
+                  > p {
+                    margin-left: 8px;
+                    font-size: 14px;
+                    font-weight: bold;
                     color: #333333;
-                    margin-right: 8px;
-                  }
-                  .middle_fly_share {
-                    width: 36px;
-                    height: 18px;
-                    background: #928cd2;
-                    border-radius: 2px;
-                    color: #fff;
-                    padding: 0 3px;
-                    margin-right: 8px;
-                  }
-                  .middle_fly_meal {
-                    width: 13px;
-                    height: 15px;
-                    object-fit: contain;
-                    background: url("../../../static/flight_meal.png") no-repeat center center;
-                    background-size: contain;
                   }
                 }
-                .open_right {
-                  display: flex;
-                  align-items: center;
-                  justify-content: center;
-                  width: 28%;
-                  .right_icon {
-                    width: 16px;
-                    height: 16px;
-                    object-fit: contain;
-                    background: url("../../../static/flight_time.png") no-repeat center center;
-                    background-size: contain;
-                    margin-right: 4px;
-                  }
-                  .right_consume {
-                    font-size: 12px;
-                    font-weight: 400;
-                    color: #333333;
+                .open_left_address {
+                  font-size: 14px;
+                  font-weight: bold;
+                  color: #333333;
+                  &:first-child {
+                    margin-bottom: 29px;
                   }
                 }
               }
+              .left_icon {
+                width: 15px;
+                height: 56px;
+                object-fit: contain;
+                background: url("../../../static/flight_fly_colomn.png") no-repeat center
+                  center;
+                background-size: contain;
+                margin: 0 10px;
+              }
             }
+            .open_middle {
+              display: flex;
+              align-items: center;
+              .middle_icon {
+                width: 24px;
+                height: 24px;
+                margin-right: 8px;
+                img {
+                  width: 100%;
+                  height: 100%;
+                  object-fit: contain;
+                }
+              }
+              .middle_fly_type {
+                font-size: 12px;
+                font-weight: 400;
+                color: #333333;
+                margin-right: 8px;
+              }
+              .middle_fly_modal {
+                font-size: 12px;
+                font-weight: 400;
+                color: #878791;
+                border-bottom: 1px dotted #afafb5;
+                margin-right: 8px;
+              }
+              .middle_fly_cabin {
+                font-size: 12px;
+                font-weight: 400;
+                color: #333333;
+                margin-right: 8px;
+                margin-left: 5px;
+              }
+              .middle_fly_share {
+                width: 36px;
+                height: 18px;
+                background: #928cd2;
+                border-radius: 2px;
+                color: #fff;
+                padding: 0 3px;
+                margin-right: 8px;
+              }
+              .middle_fly_meal {
+                width: 13px;
+                height: 15px;
+                object-fit: contain;
+                background: url("../../../static/flight_meal.png") no-repeat center center;
+                background-size: contain;
+              }
+            }
+            .open_right {
+              display: flex;
+              align-items: center;
+              justify-content: center;
+              width: 28%;
+              .right_icon {
+                width: 16px;
+                height: 16px;
+                object-fit: contain;
+                background: url("../../../static/flight_time.png") no-repeat center center;
+                background-size: contain;
+                margin-right: 4px;
+              }
+              .right_consume {
+                font-size: 12px;
+                font-weight: 400;
+                color: #333333;
+              }
+            }
+          }
         }
+      }
     }
 }

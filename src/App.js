@@ -2,7 +2,7 @@
  * @Description: 主模块
  * @Author: wish.WuJunLong
  * @Date: 2021-01-11 15:03:54
- * @LastEditTime: 2021-03-18 17:46:21
+ * @LastEditTime: 2021-04-12 15:37:46
  * @LastEditors: mzr
  */
 import React, { Fragment } from "react";
@@ -18,7 +18,8 @@ import AccountCenter from "./pages/accountCenter/accountCenter"; //个人中心
 import OrderList from "./pages/orderList/orderList"; // 订单列表
 import InlandDetail from "./pages/orderList/inlandDetail"; //国内列表详情
 
-import RefundDetail from "./pages/orderList/refundDetail"; //国内退票详情
+import OrderRefund from "./pages/orderList/orderRefund"; //国内订单退票
+import RefundDetail from './pages/orderList/refundDetail'; //国内退票详情
 
 import FlightList from "./pages/flightList"; // 航班查询列表
 import FlightScheduled from "./pages/flightScheduled"; // 机票预订页面
@@ -45,8 +46,9 @@ function App() {
             <Route exact path="/orderPay" component={OrderPay}></Route>
             <Route exact path="/FlightScheduled" component={FlightScheduled}></Route>
             <Route exact path="/flightList" component={FlightList} />
-            <Route exact path="/refundDetail" component={RefundDetail}/>
+            <Route exact path="/orderRefund" component={OrderRefund}/>
             <Route exact path="/inlandDetail" component={InlandDetail} />
+            <Route exact path="/refundDetail" component={RefundDetail}/>
             <Route exact path="/orderList" component={OrderList} />
             <Route exact path="/accountCenter" component={AccountCenter} />
             <Route exact path="/announceNotice" component={AnnounceNoticeList} /> 

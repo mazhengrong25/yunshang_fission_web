@@ -1,3 +1,170 @@
 .refundList {
-    
+    height: 100%;
+    background: rgba(240, 241, 245, 1);
+    display: flex;
+    justify-content: center;
+    .list_div {
+        width: 968px;
+        background-color: #fff;
+        border-radius: 5px;
+        .list_title {
+          font-size: 16px;
+          font-weight: bold;
+          color: #333333;
+          border-bottom: 1px solid #dadde2;
+          padding: 21px 24px;
+        }
+        .list_nav {
+          display: flex;
+          flex-wrap: wrap;
+          padding-top: 34px;
+          .nav_item {
+            display: flex;
+            align-items: center;
+            margin: 0px 14px 23px 0px;
+            .item_title {
+              font-size: 14px;
+              font-weight: 400;
+              color: #333333;
+              margin-right: 10px;
+              width: 77px;
+              text-align: right;
+            }
+            .ant-btn {
+              width: 112px;
+              height: 40px;
+              background: #5b7cf0;
+              opacity: 1;
+              border-radius: 5px;
+              color: #ffffff;
+              font-weight: bold;
+              border-color: #5b7cf0;
+            }
+            .ant-picker-input > input {
+              font-size: 12px;
+            }
+            .item_import {
+              width: 200px;
+              .ant-input-affix-wrapper {
+                height: 40px;
+                border-radius: 5px;
+                -webkit-border-radius: 5px;
+                -moz-border-radius: 5px;
+                -ms-border-radius: 5px;
+                -o-border-radius: 5px;
+              }
+              .ant-select {
+                width: 200px;
+                height: 40px;
+              }
+            }
+          }
+        }
+        .order_table {
+          padding-left: 24px;
+          padding-right: 24px;
+          .table_pagination {
+            display: flex;
+            justify-content: flex-end;
+            padding: 30px;
+          }
+          .ant-table-thead > tr > th {
+            background: #ebedf2;
+          }
+          .ant-table-container table > thead > tr:first-child th:first-child,
+          .ant-table-container table > tbody > tr td:first-child {
+            padding-left: 16px;
+          }
+        }
+        .route {
+          font-size: 12px;
+          font-weight: 400;
+          color: #333333;
+          display: flex;
+          align-items: center;
+          .direction {
+            width: 15px;
+            margin: 0 3px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            img {
+              width: 100%;
+              height: 100%;
+              object-fit: contain;
+            }
+          }
+        }
+        .route_time {
+          display: flex;
+          flex-direction: column;
+          font-size: 12px;
+          font-weight: 400;
+          color: #333333;
+        }
+        .action_div {
+          display: flex;
+          .action_detail {
+            width: 40px;
+            height: 22px;
+            border-radius: 11px;
+            border: 1px solid #dadde2;
+            background-size: 15px 3px;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+  
+            > span {
+              width: 15px;
+              height: 3px;
+              background: url("../../../static/action_detail.png") no-repeat center center;
+              background-size: contain;
+            }
+  
+            &:hover {
+              background-color: #5b7cf0;
+              border-color: #5b7cf0;
+              color: #fff;
+              > span {
+                background: url("../../../static/action_detail_hover.png") no-repeat center
+                  center;
+                background-size: contain;
+              }
+            }
+          }
+          .ant-tag {
+            width: 40px;
+            height: 22px;
+            background: #f87c2e;
+            border-radius: 11px;
+            font-weight: 400;
+            font-size: 12px;
+            cursor: pointer;
+          }
+          .ticket_issue {
+            .ant-tag {
+              background: #fff;
+              &:hover {
+                background-color: #5b7cf0;
+                border-color: #5b7cf0;
+                color: #fff;
+              }
+            }
+          }
+        }
+        .table_passenger {
+          width: 86px;
+          overflow: hidden;
+          white-space: nowrap;
+          text-overflow: ellipsis;
+          .table_passenger_list {
+            &:not(:last-child) {
+              &::after {
+                content: "/";
+              }
+            }
+          }
+        }
+    }
 }

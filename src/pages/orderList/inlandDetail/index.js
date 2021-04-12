@@ -2,8 +2,8 @@
  * @Description: 国内订单详情
  * @Author: mzr
  * @Date: 2021-02-04 15:19:50
- * @LastEditTime: 2021-04-06 19:16:03
- * @LastEditors: wish.WuJunLong
+ * @LastEditTime: 2021-04-08 15:18:28
+ * @LastEditors: mzr
  */
 import React, { Component } from "react";
 
@@ -994,12 +994,14 @@ export default class index extends Component {
               visible={this.state.showRefund}
               onCancel={() => this.setState({ showRefund: false })}
               footer={[
-                <Button onClick={() => this.setState({ showRefund: false })}>
-                  取消
-                </Button>,
-                <Button type="primary" onClick={() => this.jumpRefundDetail()}>
-                  确定
-                </Button>,
+                <div key="inlandDetailModal">
+                  <Button key="back" onClick={() => this.setState({ showRefund: false })}>
+                    取消
+                  </Button>
+                  <Button key="submit" type="primary" onClick={() => this.jumpRefundDetail()}>
+                    确定
+                  </Button>
+                </div>
               ]}
             >
               <div className="refund_group">

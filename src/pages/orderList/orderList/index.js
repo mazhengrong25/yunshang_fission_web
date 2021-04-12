@@ -2,7 +2,7 @@
  * @Description: 订单列表菜单栏
  * @Author: mzr
  * @Date: 2021-02-25 17:20:46
- * @LastEditTime: 2021-04-08 14:02:52
+ * @LastEditTime: 2021-04-12 10:35:12
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -111,7 +111,7 @@ export default class index extends Component {
 
                     <div className="list_div">
                         {this.state.menuItem === "inland_ticket" ? (<InlandList history={this.props.history}></InlandList>) :
-                            this.state.menuItem === "inland_refund" ? (<InlandRefund ></InlandRefund>) : ""
+                            this.state.menuItem === "inland_refund" ? (<InlandRefund history={this.props.history}></InlandRefund>) : ""
                         }
                       
                     </div>

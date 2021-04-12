@@ -2,7 +2,7 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
- * @LastEditTime: 2021-04-08 14:17:04
+ * @LastEditTime: 2021-04-12 15:02:21
  * @LastEditors: mzr
  */
 import React, { Component } from "react";
@@ -93,7 +93,7 @@ export default class index extends Component {
 
   // 跳转到退票详情页面
   jumpRefundDetail(e) {
-    this.props.history.push(`/refundDetail?detail=${e}`);
+    this.props.history.push(`/orderRefund?detail=${e}`);
   }
 
   // 分页
@@ -269,6 +269,7 @@ export default class index extends Component {
                                   ? singleDirectionIcon
                                   : mulDirectionIcon
                               }
+                              alt="单向图标"
                             ></img>
                           </div>
 
