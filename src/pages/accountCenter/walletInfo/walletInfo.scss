@@ -122,15 +122,16 @@
         margin-top: 14px;
       }
       .table_content {
-        height: 280px;
         border: 1px solid #f0f1f5;
         .row {
           display: inline-flex;
+          &:not(:last-child){
+            border-bottom: 1px solid #f0f1f5;
+          }
           .col_fir {
             width: 112px;
             height: 40px;
             border-right: 1px solid #f0f1f5;
-            border-bottom: 1px solid #f0f1f5;
             padding: 12px 8px;
             font-size: 12px;
             font-weight: 400;
@@ -139,7 +140,6 @@
           .col_sec {
             width: 312px;
             height: 40px;
-            border-bottom: 1px solid #f0f1f5;
             padding: 12px 8px;
             font-size: 12px;
             font-weight: 400;

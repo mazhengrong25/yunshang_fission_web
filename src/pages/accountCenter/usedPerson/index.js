@@ -2,7 +2,7 @@
  * @Description: 个人中心---常用人员
  * @Author: mzr
  * @Date: 2021-03-11 11:45:49
- * @LastEditTime: 2021-04-09 19:00:14
+ * @LastEditTime: 2021-04-13 11:31:40
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -19,6 +19,7 @@ import {
   Popover,
   Row,
   Col,
+  Tooltip,
 } from "antd";
 
 import "./usedPerson.scss";
@@ -30,6 +31,9 @@ import EditBtn from "../../../static/edit_btn.png";
 import BlueWarn from "../../../static/warn_blue.png";
 import ModalColse from "../../../static/modalColse.png";
 import AddCert from "../../../static/add_cert.png";
+
+import GroupSettingIcon from "../../../static/banner_action.png"; // 分组设置图标
+import GroupActiveIcon from "../../../static/banner_action_icon.png"; // 分组选中图标
 
 const { Option } = Select;
 const { Search } = Input;
@@ -46,6 +50,7 @@ export default class index extends Component {
       selectedRowKeys: [],
 
       dataList: [], // 常用人员列表
+      getPassengerLoading: true, // 常用人员加载
       groupList: [], // 分组列表
       divItem: [newPassengerList], // 添加证件列表
 
@@ -110,6 +115,7 @@ export default class index extends Component {
     }
 
     await this.$axios.post("/api/passenger/index", data).then((res) => {
+      this.setState({ getPassengerLoading: false });
       if (res.errorcode === 10000) {
         let newPage = this.state.paginationData;
         newPage.total = res.data.total;
@@ -157,7 +163,7 @@ export default class index extends Component {
         // 判断
         if (this.state.groupList.indexOf("未分组") === -1) {
           let newGroupList = this.state.groupList;
-          newGroupList.push({
+          newGroupList.unshift({
             group_name: "未分组",
             id: 0,
           });
@@ -411,8 +417,9 @@ export default class index extends Component {
   }
 
   // 弹窗---编辑分组
-  editGroup() {
+  editGroup(val) {
     this.setState({
+      groupName: val,
       showGroup: true,
       groupClass: false,
     });
@@ -564,7 +571,10 @@ export default class index extends Component {
                     trigger="click"
                     content={() => (
                       <div className="divide_div">
-                        <div className="edit_modal" onClick={() => this.editGroup()}>
+                        <div
+                          className="edit_modal"
+                          onClick={() => this.editGroup(item.group_name)}
+                        >
                           编辑分组
                         </div>
                         <div className="edit_modal" onClick={() => this.deleteRroup()}>
@@ -574,9 +584,18 @@ export default class index extends Component {
                     )}
                   >
                     <div className="list_action">
-                      <div className="action_doted"></div>
-                      <div className="action_doted"></div>
-                      <div className="action_doted"></div>
+                      <div className="action_doted">
+                        <img
+                          className="active_icon"
+                          src={GroupActiveIcon}
+                          alt="分组选中图标"
+                        ></img>
+                        <img
+                          className="setting_icon"
+                          src={GroupSettingIcon}
+                          alt="分组设置图标"
+                        ></img>
+                      </div>
                     </div>
                   </Popover>
                 </div>
@@ -608,16 +627,21 @@ export default class index extends Component {
                   pagination={false}
                   rowSelection={rowSelection}
                   dataSource={this.state.dataList}
-                  locale={{
-                    emptyText: (
-                      <div className="table_emptyText">
-                        <p>当前分组暂无人员，请去添加</p>
-                        <Button type="link" onClick={() => this.addPerson()}>
-                          +新增人员
-                        </Button>
-                      </div>
-                    ),
-                  }}
+                  loading={this.state.getPassengerLoading}
+                  locale={
+                    this.state.getPassengerLoading
+                      ? {}
+                      : {
+                          emptyText: (
+                            <div className="table_emptyText">
+                              <p>当前分组暂无人员，请去添加</p>
+                              <Button type="link" onClick={() => this.addPerson()}>
+                                +新增人员
+                              </Button>
+                            </div>
+                          ),
+                        }
+                  }
                 >
                   <Column
                     title="姓名"
@@ -648,7 +672,11 @@ export default class index extends Component {
                     width="24%"
                     title="备注"
                     dataIndex="remark"
-                    render={(text) => text || "-"}
+                    render={(text) => (
+                      <Tooltip title={text}>
+                        <span className="person_remark">{text || "-"}</span>
+                      </Tooltip>
+                    )}
                   ></Column>
                   <Column
                     title="操作"

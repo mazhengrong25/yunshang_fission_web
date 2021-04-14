@@ -84,16 +84,27 @@
             color: #5b7cf0;
             background-color: #f3f3f7;
             transition: all 0.3s;
-            &:hover {
-              .list_action {
-                opacity: 1;
+
+            .list_action {
+              opacity: 1;
+              &:hover {
+                .list_action {
+                  .action_doted {
+                    .active_icon {
+                      display: none;
+                    }
+                    .setting_icon {
+                      display: block;
+                    }
+                  }
+                }
               }
-            }
-            &:not(:hover) {
-              .list_action {
-                opacity: 1;
-                .action_doted {
-                  position: absolute;
+              .action_doted {
+                .active_icon {
+                  display: block;
+                }
+                .setting_icon {
+                  display: none;
                 }
               }
             }
@@ -101,7 +112,14 @@
           &:hover {
             background-color: #f3f3f7;
             .list_action {
-              opacity: 1;
+              .action_doted {
+                .active_icon {
+                  display: none;
+                }
+                .setting_icon {
+                  display: block;
+                }
+              }
             }
           }
 
@@ -115,18 +133,45 @@
             align-items: center;
             justify-content: center;
             padding: 14px;
-            opacity: 0;
             width: 50px;
-            height: 4px;
             position: relative;
-            .action_doted {
-              width: 4px;
-              height: 4px;
-              background-color: #5b7cf0;
-              border-radius: 50%;
-              margin-right: 1px;
-            }
             cursor: pointer;
+            &.ant-popover-open {
+              .action_doted {
+                .active_icon {
+                  display: none;
+                }
+                .setting_icon {
+                  display: block;
+                }
+              }
+            }
+            &:hover {
+              &:not(.ant-popover-open) {
+                .action_doted {
+                  .active_icon {
+                    display: none;
+                  }
+                  .setting_icon {
+                    display: block;
+                  }
+                }
+              }
+            }
+            .action_doted {
+              .active_icon {
+                display: none;
+                width: 5px;
+                height: 5px;
+                object-fit: contain;
+              }
+              .setting_icon {
+                display: none;
+                width: 13px;
+                height: 3px;
+                object-fit: contain;
+              }
+            }
           }
         }
       }
@@ -183,6 +228,14 @@
         .content_list {
           padding-top: 24px;
           .person_table {
+            min-height: 510px;
+            .person_remark {
+              max-width: 150px;
+              display: inline-block;
+              overflow: hidden;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+            }
             .ant-table-tbody {
               .ant-table-cell {
                 font-size: 12px;
@@ -412,9 +465,9 @@
 // 气泡卡片
 .group_popover .ant-popover-content .ant-popover-inner-content {
   width: 88px;
-  height: 88px;
   border-radius: 5px;
   background-color: #fff;
+  padding: 8px 0;
 }
 .ant-popover-placement-bottomLeft {
   .ant-popover-content {
@@ -423,17 +476,6 @@
     }
   }
 }
-
-// .group_popover .ant-popover-placement-bottomLeft .ant-popover-hidden {
-
-// }
-// .group_popover {
-//   .ant-popover-placement-bottomLeft {
-//     left: -250px;
-//     top: -960px;
-
-//   }
-// }
 
 .group_popover .ant-popover-placement-bottom,
 .group_popover .ant-popover-placement-bottomLeft,
@@ -445,10 +487,7 @@
 .group_popover {
   padding-top: 0 !important;
   .divide_div {
-    width: 88px;
-    height: 88px;
     border-radius: 5px;
-    margin: -16px;
     .edit_modal {
       padding: 8px 16px;
       cursor: pointer;

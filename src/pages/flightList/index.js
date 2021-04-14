@@ -2,7 +2,7 @@
  * @Description: 机票列表
  * @Author: wish.WuJunLong
  * @Date: 2021-02-05 18:31:03
- * @LastEditTime: 2021-04-10 18:34:42
+ * @LastEditTime: 2021-04-14 16:46:52
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -25,8 +25,6 @@ import { SmileOutlined } from "@ant-design/icons";
 
 import QueueAnim from "rc-queue-anim";
 
-import AirIcon from "../../static/flight_fly.png"
-
 import SelectCity from "../../components/SelectCity"; // 选择城市组件
 
 import "./flightList.scss";
@@ -43,9 +41,9 @@ import searchAfternoonActive from "../../static/search_afternoon_active.png";
 import searchNight from "../../static/search_night.png";
 import searchNightActive from "../../static/search_night_active.png";
 
-import AircraftTypePopover from "../../components/AircraftTypePopover"; // 航班信息 机型信息组件
-import RefundsAndChangesPopover from "../../components/RefundsAndChangesPopover"; // 退改签说明弹窗
-import PriceBreakdownPopover from "../../components/PriceBreakdownPopover"; // 价格明细弹窗
+import AirCard from "../../components/AirCard"; // 航班卡片
+
+import AirCabinCard from "../../components/AirCabinCard"; // 舱位卡片
 
 const { Option } = Select;
 export default class index extends Component {
@@ -114,16 +112,18 @@ export default class index extends Component {
       searchCabin: this.state.urlData.cabin ? [this.state.urlData.cabin] : ["all"],
     });
 
-
-    if(!this.state.urlData.start || !this.state.urlData.end || !this.state.urlData.date){
+    if (
+      !this.state.urlData.start ||
+      !this.state.urlData.end ||
+      !this.state.urlData.date
+    ) {
       this.setState({
         editFlightType: true,
         skeletonList: [],
         flightListStatus: false,
-      })
-      return message.warning('航班查询信息不完整，请完善查询信息后重新查询')
+      });
+      return message.warning("航班查询信息不完整，请完善查询信息后重新查询");
     }
-
 
     await this.getFlightList();
     this.getAirlineList();
@@ -157,7 +157,7 @@ export default class index extends Component {
           skeletonList: [],
         });
       } else {
-        message.warning(res.msg)
+        message.warning(res.msg);
         this.setState({
           flightListStatus: false,
         });
@@ -360,7 +360,7 @@ export default class index extends Component {
   }
 
   // 获取舱位信息
-  openCabinBox(val) {
+  openCabinBox = (val) => {
     this.setState({
       segmentsKey: val,
       cabinList: [],
@@ -426,21 +426,21 @@ export default class index extends Component {
         cabinList: [],
       });
     }
-  }
+  };
 
   // 打开舱位
-  openMoreCabin(val) {
+  openMoreCabin = (val) => {
     this.setState({
       openCabinName: val !== this.state.openCabinName ? val : "",
     });
-  }
+  };
 
   // 打开更多舱位
-  openCabinIndexStatus(number) {
+  openCabinIndexStatus = (number) => {
     this.setState({
       openCabinIndex: number,
     });
-  }
+  };
 
   // 航班列表排序
   sortFlightList = (e) => {
@@ -559,7 +559,7 @@ export default class index extends Component {
   };
 
   // 预定机票 - 验价
-  jumpTicketDetail(val) {
+  jumpTicketDetail = (val) => {
     this.setState({
       scheduledStatus: val.data,
       scheduledAllBtn: true,
@@ -577,7 +577,7 @@ export default class index extends Component {
         this.props.history.push(`/flightScheduled?key=${res.data.keys}`);
       }
     });
-  }
+  };
   // 航班筛选栏展开收起
   openNavMenu(val) {
     let data = this.state.navShow;
@@ -912,232 +912,28 @@ export default class index extends Component {
                       {/* 判断当前数据是否显示 如没有当前参数则判断时候为为筛选状态 */}
                       {(item.searchType || this.state.searchTime === "notTime") &&
                       (item.searchAir || this.state.searchAir.indexOf("all") !== -1) ? (
-                        <div className="list_card">
-                          <div className="card_air">
-                            <img
-                              className="air_icon"
-                              src={`${this.$url}` + item.segments[0].image}
-                              alt="航班logo"
-                            />
-
-                            <div className="air_message">
-                              <div className="air_name">
-                                {item.segments[0].airline_info.airline.replace(
-                                  /航空.*/,
-                                  "航空"
-                                )}
-                              </div>
-
-                              <AircraftTypePopover
-                                aircraftTypeData={item.segments[0]}
-                              ></AircraftTypePopover>
-                              {item.segments[0].hasMeal ? (
-                                <div className="air_meals"></div>
-                              ) : (
-                                ""
-                              )}
-                            </div>
-                          </div>
-
-                          <div className="flight_message">
-                            <div className="message_info">
-                              <div className="time">
-                                {this.$moment(item.segments[0].depTime).format("HH:mm")}
-                              </div>
-                              <div className="address">
-                                {item.segments[0].depAirport_CN.city_name}
-                                {item.segments[0].depAirport_CN.air_port_name}
-                                {item.segments[0].depTerminal}
-                              </div>
-                            </div>
-                            <div className="message_time">
-                              <div className="time_date">
-                                {Math.floor(item.segments[0].duration / 60)}h
-                                {Math.floor(item.segments[0].duration % 60)}m
-                              </div>
-                              <div className="time_icon">
-                                <img src={AirIcon} alt="航程图标"></img>
-                              </div>
-                            </div>
-                            <div className="message_info">
-                              <div className="time">
-                                {this.$moment(
-                                  item.segments[item.segments.length - 1].arrTime
-                                ).format("HH:mm")}
-                              </div>
-                              <div className="address">
-                                {
-                                  item.segments[item.segments.length - 1].arrAirport_CN
-                                    .city_name
-                                }
-                                {
-                                  item.segments[item.segments.length - 1].arrAirport_CN
-                                    .air_port_name
-                                }
-                                {item.segments[item.segments.length - 1].arrTerminal}
-                              </div>
-                            </div>
-                          </div>
-
-                          {item.available_cabin > 0 ? (
-                            <>
-                              <div className="flight_account">
-                                <p>&yen;</p>
-                                <div>{item.min_price}</div>
-                                <span>起</span>
-                              </div>
-                              <Button
-                                className="cabin_switch"
-                                onClick={() => this.openCabinBox(item.segments_key)}
-                                loading={
-                                  item.segments_key === this.state.segmentsKey &&
-                                  this.state.cabinList.length < 1
-                                }
-                              >
-                                {this.state.segmentsKey === item.segments_key &&
-                                this.state.cabinList.length > 1
-                                  ? "收起"
-                                  : this.state.segmentsKey === item.segments_key &&
-                                    this.state.cabinList.length < 1
-                                  ? "加载中"
-                                  : "展开"}
-                              </Button>
-                            </>
-                          ) : (
-                            <div className="not_cabin">售罄</div>
-                          )}
-                        </div>
+                        <AirCard
+                          airMessage={item}
+                          segmentsKey={this.state.segmentsKey}
+                          cabinListLength={this.state.cabinList.length}
+                          openCabinBox={this.openCabinBox}
+                        ></AirCard>
                       ) : (
                         ""
                       )}
                       {this.state.cabinList.length > 0 &&
                       this.state.segmentsKey === item.segments_key ? (
-                        <div className="cabin_content">
-                          {this.state.cabinList.map((oitem) =>
-                            oitem.data.map((pitem, pindex) =>
-                              (pindex < this.state.openCabinIndex &&
-                                item.segments_key + oitem.name ===
-                                  this.state.openCabinName) ||
-                              pindex === 0 ? (
-                                <div key={oitem.name + "__" + pindex}>
-                                  <div className="cabin_list">
-                                    <div className="list_info">
-                                      <div
-                                        className="list_name"
-                                        style={{
-                                          cursor:
-                                            pindex === 0 && oitem.data.length > 1
-                                              ? "pointer"
-                                              : "",
-                                          fontWeight:
-                                            pindex === 0 && oitem.data.length > 1
-                                              ? "bold"
-                                              : "",
-                                        }}
-                                        onClick={() =>
-                                          this.openMoreCabin(
-                                            item.segments_key + oitem.name
-                                          )
-                                        }
-                                      >
-                                        {oitem.name} {pitem.cabinInfo.cabinCode}{" "}
-                                        {pitem.discount}
-                                        {pindex === 0 && oitem.data.length > 1 ? (
-                                          <div className="more_cabin_btn">
-                                            <img
-                                              style={{
-                                                transform: `rotate(${
-                                                  item.segments_key + oitem.name ===
-                                                  this.state.openCabinName
-                                                    ? 180
-                                                    : 0
-                                                }deg)`,
-                                              }}
-                                              src={MoreCabinBtn}
-                                              alt="展开更多舱位"
-                                            ></img>
-                                          </div>
-                                        ) : (
-                                          ""
-                                        )}
-                                      </div>
-                                      <div className="list_message">
-                                        <RefundsAndChangesPopover
-                                          refundsAndChangesData={pitem.ruleInfos}
-                                        ></RefundsAndChangesPopover>
-                                        <span></span>
-                                        <p className="not_rule">
-                                          {pitem.cabinInfo.baggage}
-                                        </p>
-                                      </div>
-                                    </div>
-
-                                    <div className="list_option">
-                                      <div className="list_account">
-                                        <PriceBreakdownPopover
-                                          priceBreakdownPopoverData={pitem.cabinPrices}
-                                        ></PriceBreakdownPopover>
-
-                                        {pitem.cabinPrices.ADT.rulePrice.reward ? (
-                                          <div className="incentive_money">
-                                            奖励 &yen;
-                                            {pitem.cabinPrices.ADT.rulePrice.reward}
-                                          </div>
-                                        ) : (
-                                          ""
-                                        )}
-                                      </div>
-                                      <div className="option_box">
-                                        <Button
-                                          className="list_btn"
-                                          type="primary"
-                                          loading={
-                                            this.state.scheduledStatus === pitem.data
-                                          }
-                                          disabled={
-                                            this.state.scheduledStatus === pitem.data ||
-                                            this.state.scheduledAllBtn
-                                          }
-                                          onClick={() => this.jumpTicketDetail(pitem)}
-                                        >
-                                          {this.state.scheduledStatus === pitem.data
-                                            ? "验价中"
-                                            : "预定"}
-                                        </Button>
-                                        {pitem.cabinInfo.cabinNum < 9 ? (
-                                          <p>余 {pitem.cabinInfo.cabinNum} 张</p>
-                                        ) : (
-                                          ""
-                                        )}
-                                      </div>
-                                    </div>
-                                  </div>
-
-                                  {this.state.openCabinIndex < oitem.data.length &&
-                                  this.state.openCabinIndex - 1 === pindex &&
-                                  pindex !== 0 ? (
-                                    <div
-                                      key={oitem.name + "_" + pindex}
-                                      className="open_more_cabin_btn"
-                                    >
-                                      <span
-                                        onClick={() =>
-                                          this.openCabinIndexStatus(oitem.data.length)
-                                        }
-                                      >
-                                        展开更多
-                                      </span>
-                                    </div>
-                                  ) : (
-                                    ""
-                                  )}
-                                </div>
-                              ) : (
-                                ""
-                              )
-                            )
-                          )}
-                        </div>
+                        <AirCabinCard
+                          cabinList={this.state.cabinList}
+                          openCabinIndex={this.state.openCabinIndex}
+                          openCabinName={this.state.openCabinName}
+                          scheduledStatus={this.state.scheduledStatus}
+                          scheduledAllBtn={this.state.scheduledAllBtn}
+                          segments_key={item.segments_key}
+                          openMoreCabin={this.openMoreCabin}
+                          jumpTicketDetail={this.jumpTicketDetail}
+                          openCabinIndexStatus={this.openCabinIndexStatus}
+                        ></AirCabinCard>
                       ) : (
                         ""
                       )}

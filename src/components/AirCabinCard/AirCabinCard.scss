@@ -1,0 +1,157 @@
+.cabin_content {
+  background: rgba($color: #fff, $alpha: 0.8);
+  border-radius: 5px;
+  padding: 16px 24px 0;
+  position: relative;
+  top: -16px;
+  z-index: 0;
+
+  .cabin_list {
+    display: flex;
+    align-items: center;
+    height: 96px;
+    &::before {
+      content: "";
+      display: block;
+      width: 25%;
+    }
+    &:not(:last-child) {
+      border-bottom: 1px solid #dadde2;
+    }
+
+    .list_info {
+      flex: 1;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      .list_name {
+        font-size: 14px;
+        // font-weight: bold;
+        color: #333333;
+        display: flex;
+        align-items: center;
+        .more_cabin_btn {
+          width: 16px;
+          height: 16px;
+          background: #dadde2;
+          border-radius: 2px;
+          display: inline-flex;
+          align-items: center;
+          justify-content: center;
+          margin-left: 11px;
+
+          img {
+            width: 9px;
+            height: 5px;
+            object-fit: contain;
+            transition: all 0.3s;
+            -webkit-transition: all 0.3s;
+            -moz-transition: all 0.3s;
+            -ms-transition: all 0.3s;
+            -o-transition: all 0.3s;
+          }
+        }
+      }
+      .list_message {
+        display: inline-flex;
+        align-items: center;
+        font-size: 14px;
+        font-weight: 400;
+        color: #5b7cf0;
+        > p {
+          margin: 0;
+          &:not(.not_rule) {
+            cursor: pointer;
+          }
+        }
+        > span {
+          display: inline-block;
+          width: 1px;
+          height: 16px;
+          background: #5b7cf0;
+          opacity: 0.2;
+          margin: 0 8px;
+        }
+        .not_rule {
+          color: #5b7cf0;
+        }
+      }
+    }
+    .list_option {
+      width: 25%;
+      display: inline-flex;
+      align-items: center;
+      justify-content: flex-end;
+      .list_account {
+        width: 70px;
+        text-align: right;
+        > div {
+          font-size: 16px;
+          color: #5b7cf0;
+          span {
+            display: inline-block;
+            margin-left: 5px;
+            font-size: 24px;
+            height: 26px;
+            line-height: 24px;
+            font-weight: bold;
+            border-bottom: 1px dashed #5b7cf0;
+            &:hover {
+              cursor: pointer;
+            }
+          }
+        }
+        .incentive_money {
+          display: inline-block;
+          margin-top: 8px;
+          height: 18px;
+          padding: 0 7px;
+          line-height: 18px;
+          background: rgba($color: #f8a978, $alpha: 0.8);
+          border-radius: 2px;
+          font-size: 12px;
+          font-weight: 400;
+          color: #ffffff;
+          text-align: center;
+        }
+      }
+      .option_box {
+        position: relative;
+        margin-left: 16px;
+        .list_btn {
+          min-width: 72px;
+          height: 32px;
+          border-color: #5b7cf0;
+          background: #5b7cf0;
+          border-radius: 5px;
+          &:disabled {
+            background: #f5f5f5;
+            border-color: #d9d9d9;
+          }
+        }
+        > p {
+          position: absolute;
+          font-size: 12px;
+          font-weight: 400;
+          color: #f36969;
+          margin: 2px 0 0;
+          width: 100%;
+          text-align: center;
+        }
+      }
+    }
+  }
+  .open_more_cabin_btn {
+    text-align: right;
+    margin-top: 10px;
+    padding-bottom: 10px;
+    padding-right: 10px;
+    border-bottom: 1px solid #dadde2;
+    span {
+      cursor: pointer;
+      &:hover {
+        color: #5b7cf0;
+      }
+    }
+  }
+}
