@@ -2,7 +2,7 @@
  * @Description: 改签页面
  * @Author: wish.WuJunLong
  * @Date: 2021-04-13 13:47:27
- * @LastEditTime: 2021-04-14 19:30:21
+ * @LastEditTime: 2021-04-14 19:36:47
  * @LastEditors: wish.WuJunLong
  */
 
@@ -81,7 +81,7 @@ export default class index extends Component {
       scheduledStatus: "", // 舱位验价按钮状态
       scheduledAllBtn: false, // 所有验价按钮状态
 
-      segmentsKeys: '', // 验价Key
+      segmentsKeys: "", // 验价Key
     };
   }
 
@@ -331,6 +331,15 @@ export default class index extends Component {
     });
   };
 
+  // 返回改签列表
+  returnChangeList() {
+    try {
+      this.props.history.go(-1);
+    } catch (error) {
+      this.props.history.push(`/changeDetail?detail=${this.state.urlData.detail}`);
+    }
+  }
+
   // 改签申请提交
   submitChangeOrder() {
     let ticketMessage = this.state.newTicketMessageList;
@@ -352,26 +361,26 @@ export default class index extends Component {
 
     let segments = [];
 
-    ticketMessage.forEach((item,index) => {
-        segments.push({
-          flight_data: this.$moment(item.segments.depTime).format("YYYY-MM-DDTHH:mm:ss"), //类型：String  必有字段  备注：起飞日期
-          departure: item.segments.depAirport, //类型：String  必有字段  备注：起飞机场
-          arrival: item.segments.arrAirport, //类型：String  必有字段  备注：到达机场
-          flight_no: item.segments.flightNumber, //类型：String  必有字段  备注：航班号
-          time: item.segments.departureTime, //类型：String  必有字段  备注：起飞时间
-          model: item.segments.aircraft_code, //类型：String  必有字段  备注：机型
-          cabin: item.segments.cabinCode, //类型：String  必有字段  备注：舱位
-          price: item.segments.price, //类型：Number  必有字段  备注：票价
-          arr_time: this.$moment(item.segments.arrTime).format("YYYY-MM-DDTHH:mm:ss"), //类型：String  必有字段  备注：到达时间
-          policy_id: item.segments.policy_id, //类型：String  必有字段  备注：政策ID
-          flight_time: item.segments.duration, //类型：String  必有字段  备注：飞行时间
-          departure_term: item.segments.depTerminal, //类型：String  必有字段  备注：出发航站楼
-          arrival_term: item.segments.arrTerminal, //类型：String  必有字段  备注：到达航站楼
-          cabin_level_key: item.segments.cabin, //类型：String  必有字段  备注：舱位等级
-          keys: this.state.segmentsKeys, //类型：String  可有字段  备注：无
-          old_segment_id: this.state.orderDetail.ticket_segments[index].id, //类型：Number  必有字段  备注：旧航段ID
-        });
-    })
+    ticketMessage.forEach((item, index) => {
+      segments.push({
+        flight_data: this.$moment(item.segments.depTime).format("YYYY-MM-DDTHH:mm:ss"), //类型：String  必有字段  备注：起飞日期
+        departure: item.segments.depAirport, //类型：String  必有字段  备注：起飞机场
+        arrival: item.segments.arrAirport, //类型：String  必有字段  备注：到达机场
+        flight_no: item.segments.flightNumber, //类型：String  必有字段  备注：航班号
+        time: item.segments.departureTime, //类型：String  必有字段  备注：起飞时间
+        model: item.segments.aircraft_code, //类型：String  必有字段  备注：机型
+        cabin: item.segments.cabinCode, //类型：String  必有字段  备注：舱位
+        price: item.segments.price, //类型：Number  必有字段  备注：票价
+        arr_time: this.$moment(item.segments.arrTime).format("YYYY-MM-DDTHH:mm:ss"), //类型：String  必有字段  备注：到达时间
+        policy_id: item.segments.policy_id, //类型：String  必有字段  备注：政策ID
+        flight_time: item.segments.duration, //类型：String  必有字段  备注：飞行时间
+        departure_term: item.segments.depTerminal, //类型：String  必有字段  备注：出发航站楼
+        arrival_term: item.segments.arrTerminal, //类型：String  必有字段  备注：到达航站楼
+        cabin_level_key: item.segments.cabin, //类型：String  必有字段  备注：舱位等级
+        keys: this.state.segmentsKeys, //类型：String  可有字段  备注：无
+        old_segment_id: this.state.orderDetail.ticket_segments[index].id, //类型：Number  必有字段  备注：旧航段ID
+      });
+    });
 
     let data = {
       params: {
@@ -388,15 +397,14 @@ export default class index extends Component {
       segments: segments, // 改签航段信息
     };
 
-    this.$axios.post('/api/change/order',data)
-      .then(res => {
-        if(res.errorcode === 10000){
-          message.success(res.msg)
-          this.props.history.push(`/changeDetail?key=${res.data.order_no}`);
-        }else {
-          message.warning(res.msg)
-        }
-      })
+    this.$axios.post("/api/change/order", data).then((res) => {
+      if (res.errorcode === 10000) {
+        message.success(res.msg);
+        this.props.history.push(`/changeDetail?key=${res.data.order_no}`);
+      } else {
+        message.warning(res.msg);
+      }
+    });
     console.log(data);
   }
 
@@ -729,7 +737,7 @@ export default class index extends Component {
                   ))}
 
                 <div className="change_submit_box">
-                  <Button>关闭</Button>
+                  <Button onClick={() => this.returnChangeList()}>关闭</Button>
                   <Button type="primary" onClick={() => this.submitChangeOrder()}>
                     提交申请
                   </Button>

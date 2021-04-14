@@ -2,8 +2,8 @@
  * @Description: 订单退票
  * @Author: mzr
  * @Date: 2021-04-06 13:47:26
- * @LastEditTime: 2021-04-12 14:58:41
- * @LastEditors: mzr
+ * @LastEditTime: 2021-04-14 19:36:26
+ * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from 'react'
 
@@ -213,7 +213,7 @@ export default class index extends Component {
         try {
             this.props.history.go(-1);
         } catch (error) {
-            this.props.history.push("/refundDetail?detail=this.state.urlData.detail");
+            this.props.history.push(`/refundDetail?detail=${this.state.urlData.detail}`);
         }
     }
     
