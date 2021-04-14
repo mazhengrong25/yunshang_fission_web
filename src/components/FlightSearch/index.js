@@ -2,7 +2,7 @@
  * @Description: 机票搜索
  * @Author: wish.WuJunLong
  * @Date: 2021-01-12 14:07:43
- * @LastEditTime: 2021-04-08 14:50:41
+ * @LastEditTime: 2021-04-14 20:02:39
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -18,6 +18,7 @@ const { Option } = Select;
 let timeout;
 let currentValue;
 
+let timeOutStatus
 export default class index extends Component {
   constructor(props) {
     super(props);
@@ -110,12 +111,21 @@ export default class index extends Component {
   }
   // 出发城市选择框失去焦点
   clearFromCity = () => {
+    
     this.setState({ searchCityList: [] });
   };
 
   // 城市选择器获取焦点时
   openCityModal = async (val) => {
+    clearTimeout(timeOutStatus)
     await this.setState({ cityModal: val === "start", cityToModal: val === "end" });
+    timeOutStatus = setTimeout(() => {
+      if (val === "start") {
+        this.startInput.focus();
+      } else {
+        this.endInput.focus();
+      }
+    }, 500);
   };
 
   // 获取机场列表
