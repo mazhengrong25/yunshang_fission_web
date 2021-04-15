@@ -1,0 +1,178 @@
+.list_card {
+  height: 128px;
+  background: #ffffff;
+  box-shadow: 0px 5px 20px #ebedf2;
+  position: relative;
+  margin-bottom: 8px;
+  padding: 32px 24px 24px;
+  display: flex;
+  justify-content: space-between;
+  z-index: 1;
+  &.skeleton_card {
+    padding: 0 24px 10px;
+  }
+  &::after {
+    content: "";
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    box-shadow: inset 0px 4px 10px #ebedf2;
+    right: 135px;
+    position: absolute;
+    top: -8px;
+    background: #f0f1f5;
+  }
+  &::before {
+    content: "";
+    display: block;
+    width: 16px;
+    height: 16px;
+    border-radius: 50%;
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -ms-border-radius: 50%;
+    -o-border-radius: 50%;
+    box-shadow: inset 0px 4px 10px #ebedf2;
+    right: 135px;
+    position: absolute;
+    bottom: -8px;
+    background: #f0f1f5;
+  }
+
+  .card_air {
+    display: flex;
+    align-items: flex-start;
+    width: 25%;
+    padding-top: 10px;
+    .air_icon {
+      width: 32px;
+      height: 32px;
+      object-fit: contain;
+    }
+    .air_message {
+      margin-left: 16px;
+      .air_name {
+        font-size: 12px;
+        font-weight: 400;
+        color: #333333;
+        margin-bottom: 3px;
+      }
+      .air_number {
+        font-size: 12px;
+        font-weight: 400;
+        color: #878791;
+        margin-bottom: 7px;
+        border-bottom: 1px dashed #afafb5;
+        cursor: pointer;
+        display: inline-block;
+      }
+      .air_meals {
+        width: 14px;
+        height: 16px;
+        background: url("../../static/flight_meal.png") no-repeat center center;
+        background-size: contain;
+      }
+    }
+  }
+  .flight_message {
+    display: flex;
+    justify-content: center;
+    flex: 1;
+    .message_info {
+      text-align: center;
+      flex: 1;
+      .time {
+        font-size: 24px;
+        font-weight: bold;
+        color: #333333;
+        margin-bottom: 5px;
+      }
+      .address {
+        font-size: 12px;
+        font-weight: 400;
+        color: #333333;
+      }
+    }
+    .message_time {
+      position: relative;
+      margin: 0 40px;
+      .time_date {
+        position: absolute;
+        top: -20px;
+        width: 100%;
+        text-align: center;
+
+        font-size: 12px;
+        font-weight: 400;
+        color: #878791;
+      }
+      .time_icon {
+        width: 155px;
+        height: 30px;
+        margin-top: 5px;
+        img {
+          width: 100%;
+          height: 100%;
+          object-fit: contain;
+        }
+      }
+    }
+  }
+
+  .not_cabin {
+    display: flex;
+    width: 25%;
+    justify-content: flex-end;
+    font-size: 30px;
+    color: #ccc;
+  }
+
+  .flight_account {
+    font-weight: bold;
+    color: #5b7cf0;
+    display: flex;
+    align-items: baseline;
+    width: 25%;
+    justify-content: flex-end;
+    p {
+      margin: 0;
+      font-size: 20px;
+    }
+    div {
+      font-size: 28px;
+      font-weight: bold;
+      margin: 0 6px 0 3px;
+    }
+    span {
+      font-size: 14px;
+      font-weight: 400;
+    }
+  }
+
+  .cabin_switch {
+    position: absolute !important;
+    bottom: 0;
+    left: 50%;
+    margin-left: -42px;
+    width: 84px;
+    height: 26px;
+    background: #3a3b50 !important;
+    border-radius: 5px 5px 0px 0px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 12px;
+    font-weight: 400;
+    color: #ffffff !important;
+    cursor: pointer;
+    border: none;
+    &:hover {
+      border: none;
+    }
+  }
+}

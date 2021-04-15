@@ -168,6 +168,13 @@ img {
 
 // 选择器
 .ant-select {
+  &.ant-select:focus,
+  &.ant-select-focused {
+    .ant-select-selector {
+      border-color: #5b7cf0 !important;
+      box-shadow: 0 0 0 2px rgba(91, 124, 240, 0.2);
+    }
+  }
   &:hover {
     .ant-select-selector {
       border-color: #5b7cf0 !important;

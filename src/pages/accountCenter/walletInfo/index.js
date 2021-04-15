@@ -2,7 +2,7 @@
  * @Description: 个人中心---钱包流水
  * @Author: mzr
  * @Date: 2021-03-10 10:30:20
- * @LastEditTime: 2021-04-08 18:36:26
+ * @LastEditTime: 2021-04-12 17:02:23
  * @LastEditors: wish.WuJunLong
  */
 import React, { Component } from "react";
@@ -307,7 +307,7 @@ export default class index extends Component {
                         </div>
                       )}
                     >
-                      <div className="details_btn">详情</div>
+                      <span className="details_btn">详情</span>
                     </Popover>
                   )}
                 ></Column>
