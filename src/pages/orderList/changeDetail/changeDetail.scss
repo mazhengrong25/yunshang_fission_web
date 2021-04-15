@@ -1,4 +1,4 @@
-.inland_refund_Detail {
+.inland_change_Detail {
     background: rgba(240, 241, 245, 1);
     display: flex;
     align-items: center;
@@ -342,6 +342,13 @@
               }
             }
           }
+          .ticket_part {
+            display: flex;
+            flex-direction: column;
+            font-size: 12px;
+            font-weight: 400;
+            color: #333333;
+          }
         }
         .payment_div {
           padding: 24px;
@@ -411,6 +418,18 @@
               position: relative;
               top: -5px;
             }
+            .flight_type_old {
+                background: #BDBDC1;
+                border-radius: 2px;
+                color: #fff;
+                font-weight: 400;
+                font-size: 12px;
+                padding: 0 5px;
+                margin-right: 16px;
+                display: inline-flex;
+                position: relative;
+                top: -5px;
+            }
             .flight_route {
               display: inline-flex;
               flex-direction: column;
@@ -461,13 +480,59 @@
             align-items: center;
             justify-content: flex-end;
             width: 28%;
-            .entry_item {
-              font-size: 14px;
-              font-weight: 400;
-              color: #5b7cf0;
-              &:first-child {
-                cursor: pointer;
-              }
+            // .entry_item {
+            //   font-size: 14px;
+            //   font-weight: 400;
+            //   color: #5b7cf0;
+            //   &:first-child {
+            //     cursor: pointer;
+            //   }
+            // }
+            .middle_icon {
+                width: 24px;
+                height: 24px;
+                margin-right: 8px;
+                img {
+                    width: 100%;
+                    height: 100%;
+                    object-fit: contain;
+                }
+            }
+            .middle_fly_type {
+                font-size: 12px;
+                font-weight: 400;
+                color: #333333;
+                margin-right: 8px;
+            }
+            .middle_fly_modal {
+                font-size: 12px;
+                font-weight: 400;
+                color: #878791;
+                border-bottom: 1px dotted #afafb5;
+                margin-right: 8px;
+            }
+            .middle_fly_cabin {
+                font-size: 12px;
+                font-weight: 400;
+                color: #333333;
+                margin-right: 8px;
+                margin-left: 5px;
+            }
+            .middle_fly_share {
+                width: 36px;
+                height: 18px;
+                background: #928cd2;
+                border-radius: 2px;
+                color: #fff;
+                padding: 0 3px;
+                margin-right: 8px;
+            }
+            .middle_fly_meal {
+                width: 13px;
+                height: 15px;
+                object-fit: contain;
+                background: url("../../../static/flight_meal.png") no-repeat center center;
+                background-size: contain;
             }
           }
         }
@@ -538,52 +603,52 @@
             .open_middle {
               display: flex;
               align-items: center;
-              .middle_icon {
-                width: 24px;
-                height: 24px;
-                margin-right: 8px;
-                img {
-                  width: 100%;
-                  height: 100%;
-                  object-fit: contain;
-                }
-              }
-              .middle_fly_type {
-                font-size: 12px;
-                font-weight: 400;
-                color: #333333;
-                margin-right: 8px;
-              }
-              .middle_fly_modal {
-                font-size: 12px;
-                font-weight: 400;
-                color: #878791;
-                border-bottom: 1px dotted #afafb5;
-                margin-right: 8px;
-              }
-              .middle_fly_cabin {
-                font-size: 12px;
-                font-weight: 400;
-                color: #333333;
-                margin-right: 8px;
-                margin-left: 5px;
-              }
-              .middle_fly_share {
-                width: 36px;
-                height: 18px;
-                background: #928cd2;
-                border-radius: 2px;
-                color: #fff;
-                padding: 0 3px;
-                margin-right: 8px;
-              }
-              .middle_fly_meal {
-                width: 13px;
-                height: 15px;
-                object-fit: contain;
-                background: url("../../../static/flight_meal.png") no-repeat center center;
-                background-size: contain;
-              }
+            //   .middle_icon {
+            //     width: 24px;
+            //     height: 24px;
+            //     margin-right: 8px;
+            //     img {
+            //       width: 100%;
+            //       height: 100%;
+            //       object-fit: contain;
+            //     }
+            //   }
+            //   .middle_fly_type {
+            //     font-size: 12px;
+            //     font-weight: 400;
+            //     color: #333333;
+            //     margin-right: 8px;
+            //   }
+            //   .middle_fly_modal {
+            //     font-size: 12px;
+            //     font-weight: 400;
+            //     color: #878791;
+            //     border-bottom: 1px dotted #afafb5;
+            //     margin-right: 8px;
+            //   }
+            //   .middle_fly_cabin {
+            //     font-size: 12px;
+            //     font-weight: 400;
+            //     color: #333333;
+            //     margin-right: 8px;
+            //     margin-left: 5px;
+            //   }
+            //   .middle_fly_share {
+            //     width: 36px;
+            //     height: 18px;
+            //     background: #928cd2;
+            //     border-radius: 2px;
+            //     color: #fff;
+            //     padding: 0 3px;
+            //     margin-right: 8px;
+            //   }
+            //   .middle_fly_meal {
+            //     width: 13px;
+            //     height: 15px;
+            //     object-fit: contain;
+            //     background: url("../../../static/flight_meal.png") no-repeat center center;
+            //     background-size: contain;
+            //   }
             }
             .open_right {
               display: flex;

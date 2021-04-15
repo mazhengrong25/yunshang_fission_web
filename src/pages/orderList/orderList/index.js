@@ -2,7 +2,7 @@
  * @Description: 订单列表菜单栏
  * @Author: mzr
  * @Date: 2021-02-25 17:20:46
- * @LastEditTime: 2021-04-12 10:35:12
+ * @LastEditTime: 2021-04-14 09:20:11
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -13,6 +13,7 @@ import './orderList.scss'
 
 import InlandList from '../inlandList' // 国内列表
 import InlandRefund from '../inlandRefund' // 国内退票
+import InlandChange from '../inlandChange' // 国内改签
 
 const { SubMenu } = Menu;
 
@@ -111,7 +112,8 @@ export default class index extends Component {
 
                     <div className="list_div">
                         {this.state.menuItem === "inland_ticket" ? (<InlandList history={this.props.history}></InlandList>) :
-                            this.state.menuItem === "inland_refund" ? (<InlandRefund history={this.props.history}></InlandRefund>) : ""
+                            this.state.menuItem === "inland_refund" ? (<InlandRefund history={this.props.history}></InlandRefund>) : 
+                                this.state.menuItem === "inland_change" ? (<InlandChange history={this.props.history}></InlandChange>) : ""
                         }
                       
                     </div>

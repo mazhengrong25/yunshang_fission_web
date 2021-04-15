@@ -2,13 +2,8 @@
  * @Description: 国内订单-机票订单
  * @Author: mzr
  * @Date: 2021-02-04 15:19:03
-<<<<<<< HEAD
  * @LastEditTime: 2021-04-12 16:39:51
  * @LastEditors: mzr
-=======
- * @LastEditTime: 2021-04-12 16:36:11
- * @LastEditors: wish.WuJunLong
->>>>>>> 8774032f6494999674d8ab23349385b4efe617d0
  */
 import React, { Component } from "react";
 

@@ -1,4 +1,4 @@
-.refundList {
+.changeList {
     height: 100%;
     background: rgba(240, 241, 245, 1);
     display: flex;
@@ -29,16 +29,16 @@
               margin-right: 10px;
               width: 77px;
               text-align: right;
-              // 票号 订单号
-              .ant-select .ant-select-selector {
-                  border: none !important;
-              }
-              .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
-                  margin-right: 10px;
-              }
-              .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
-                  box-shadow: none;
-              }
+                // 票号 订单号
+                .ant-select .ant-select-selector {
+                    border: none !important;
+                }
+                .ant-select-single:not(.ant-select-customize-input) .ant-select-selector {
+                    margin-right: 10px;
+                }
+                .ant-select-focused:not(.ant-select-disabled).ant-select:not(.ant-select-customize-input) .ant-select-selector {
+                    box-shadow: none;
+                }
             }
             .ant-btn {
               width: 112px;
