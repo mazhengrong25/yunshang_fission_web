@@ -2,7 +2,7 @@
  * @Description: 国内机票-退票列表
  * @Author: mzr
  * @Date: 2021-04-08 13:47:33
- * @LastEditTime: 2021-04-15 11:06:53
+ * @LastEditTime: 2021-04-15 13:53:37
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -45,8 +45,6 @@ export default class index extends Component {
                 pnr_code:"", // pnr
                 order_status:0, // 退票状态
                 created_at:this.$moment().subtract(10, "days").format("YYYY-MM-DD"), // 日期
-                input_type:0, // 票号，订单号选值
-                order_value:"", // 票号，订单号输入值
             },
         };
     }
@@ -66,7 +64,6 @@ export default class index extends Component {
             start_date:this.state.searchFrom.created_at,                //类型：String  可有字段  备注：申请日期开始，默认为今日00:00  2021-01-11
             end_date:"2021-04-08",                //类型：String  可有字段  备注：申请日期结束，默认为今日23:00  2021-04-08
             ticket_no:this.state.searchFrom.ticket_no,                //类型：String  可有字段  备注：票号
-            order_no:this.state.searchFrom.order_no,
             pnr_code:this.state.searchFrom.pnr_code,                //类型：String  可有字段  备注：编码
             PassengerName:this.state.searchFrom.passengerName,                //类型：String  可有字段  备注：乘客名称
             order_status:this.state.searchFrom.order_status,                //类型：String  可有字段  备注：退款状态 1申请中 2 已处理3已取消
@@ -128,19 +125,9 @@ export default class index extends Component {
     };
 
     // 查询 筛选
-    async serachBtn() {
-        
-        // 订单号 票号处理
-        let data = this.state.searchFrom
-        data['ticket_no'] = data.input_type === 0 ? data.order_value : ""
-        data['order_no'] = data.input_type === 1 ? data.order_value : ''
-
-        await this.setState({
-            searchFrom: data
-        }) 
-
+    serachBtn() {
         sessionStorage.setItem("refundList", JSON.stringify(this.state.searchFrom));
-        await this.getRefundList();
+        this.getRefundList();
     }
 
     // 跳转到详情页面
@@ -198,21 +185,13 @@ export default class index extends Component {
                             </div>
                         </div>
                         <div className="nav_item">
-                            <div className="item_title">
-                                <Select
-                                    value={this.state.searchFrom.input_type}
-                                    onChange={this.SelectItem.bind(this, "input_type")}
-                                >
-                                    <Option value={0}>票号</Option>
-                                    <Option value={1}>订单号</Option>
-                                </Select>
-                            </div>
+                            <div className="item_title">票号</div>
                             <div className="item_import">
                                 <Input
-                                    placeholder="请输入票号/订单号"
+                                    placeholder="请输入票号"
                                     allowClear
-                                    value={this.state.searchFrom.order_value}
-                                    onChange={this.InputItem.bind(this, "order_value")}
+                                    value={this.state.searchFrom.ticket_no}
+                                    onChange={this.InputItem.bind(this, "ticket_no")}
                                 />
                             </div>
                         </div>
@@ -334,13 +313,10 @@ export default class index extends Component {
                                         {
                                             <div className="route_time">
                                             <div className="depart_time">
-                                                {render.ticket_segments[0].departure_time}
+                                                {this.$moment(render.ticket_segments[0].departure_time).format("YYYY-MM-DD hh-mm")}
                                             </div>
                                             <div className="arrive_time">
-                                                {
-                                                render.ticket_segments[render.ticket_segments.length - 1]
-                                                    .arrive_time
-                                                }
+                                                {this.$moment( render.ticket_segments[render.ticket_segments.length - 1].arrive_time).format("YYYY-MM-DD hh-mm")}
                                             </div>
                                             </div>
                                         }

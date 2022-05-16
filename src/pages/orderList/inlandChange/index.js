@@ -2,7 +2,7 @@
  * @Description: 国内订单 --- 改签列表
  * @Author: mzr
  * @Date: 2021-04-14 09:11:08
- * @LastEditTime: 2021-04-15 11:46:32
+ * @LastEditTime: 2021-04-16 10:16:45
  * @LastEditors: mzr
  */
 import React, { Component } from 'react'
@@ -17,7 +17,12 @@ import {
     Table,
     DatePicker,
     Pagination,
+    Tag,
+    message,
 } from 'antd'
+
+// 取消弹窗
+import WarningModal from "../../../components/WarningModal";
 
 import singleDirectionIcon from "../../../static/single_direction.png"; // 单程图标
 import mulDirectionIcon from "../../../static/mul_direction.png"; // 往返图标
@@ -32,6 +37,8 @@ export default class index extends Component {
         super(props);
         this.state = {
             changeData: [], // 改签列表
+
+            orderId: '', // 改签ID
 
             paginationData: {
                 current_page: 1, // 当前页数
@@ -48,7 +55,10 @@ export default class index extends Component {
                 ticket_no: "", // 票号  不可以
                 order_input: '', // 订单号，票号的输入值
                 order_status: 0 // 订单号，票号取值
-            }
+            },
+
+            showCancel: false, // 取消弹窗显示
+            showInput: "" // 取消原因
         };
     }
 
@@ -174,6 +184,46 @@ export default class index extends Component {
         this.props.history.push(`/changeDetail?detail=${e}`);
     }
 
+    // 打开取消弹窗
+    openCancelModal(val) {
+
+        this.setState({
+            orderId: val,
+            showInput: "",
+            showCancel: true
+        })
+    }
+
+    // 取消弹窗 原因
+    changeCancelModal = (val) => {
+        this.setState({
+            showInput: val,
+        })
+    }
+
+    // 取消订单
+    cancelOrder = (val) => {
+        if (!val) {
+            return message.warning('请填写取消原因')
+        }
+        let newData = val
+        let data = {
+            order_no: this.state.orderId,                //类型：String  必有字段  备注：改签订单号
+            reason: newData             //类型：String  可有字段  备注：取消原因
+        }
+        this.$axios.post("/api/change/cancel", data).then((res) => {
+            console.log(res)
+            if (res.errorcode === 10000) {
+                message.success(res.msg)
+                this.setState({
+                    showCancel: false
+                })
+            } else {
+                message.warning(res.msg)
+            }
+        })
+    }
+
     render() {
         return (
             <div className="changeList">
@@ -194,7 +244,7 @@ export default class index extends Component {
                         <div className="nav_item">
                             <div className="item_title">
                                 <Select
-                                    style={{width: 90}}
+                                    style={{ width: 90 }}
                                     value={this.state.searchFrom.order_status}
                                     onChange={this.SelectItem.bind(this, "order_status")}
                                 >
@@ -312,13 +362,10 @@ export default class index extends Component {
                                         {
                                             <div className="route_time">
                                                 <div className="depart_time">
-                                                    {render.change_segments[0].departure_time}
+                                                    {this.$moment(render.change_segments[0].departure_time).format("YYYY-MM-DD hh:mm")}
                                                 </div>
                                                 <div className="arrive_time">
-                                                    {
-                                                        render.change_segments[render.change_segments.length - 1]
-                                                            .arrive_time
-                                                    }
+                                                    {this.$moment(render.change_segments[render.change_segments.length - 1].arrive_time).format("YYYY-MM-DD hh:mm")}
                                                 </div>
                                             </div>
                                         }
@@ -341,10 +388,21 @@ export default class index extends Component {
                                 width={"17%"}
                                 title="支付时间"
                                 dataIndex="pay_time"
-                                render={(text) => (
-                                    <>{
-                                        <div className="route_time">{text}</div>
-                                    }</>)}
+                                render={(text, render) => (
+                                    <>
+                                        {text ? (
+                                            <div className="route_time">{this.$moment(text).format("YYYY-MM-DD hh:mm")}</div>
+                                        ) :
+                                            (
+                                                <div className="pay_status">{render.pay_status === 1 ? '未支付' :
+                                                    render.pay_status === 2 ? '已支付' :
+                                                        render.pay_status === 3 ? '已退款' :
+                                                            render.pay_status === 4 ? '已取消' : render.pay_status}</div>
+                                            )
+                                        }
+
+                                    </>
+                                )}
                             ></Column>
                             <Column
                                 title="状态"
@@ -363,9 +421,21 @@ export default class index extends Component {
                             ></Column>
                             <Column
                                 title="操作"
-                                width={"5%"}
+                                width={"10%"}
                                 render={(text, render) => (
                                     <div className="action_div">
+                                        {
+                                            render.pay_status === 1 && render.change_status === 1 ?
+                                                (
+                                                    <div
+                                                        className="ticket_issue"
+                                                        onClick={() => this.openCancelModal(render.order_no)}
+                                                    >
+                                                        <Tag>取消</Tag>
+                                                    </div>
+
+                                                ) : ''
+                                        }
                                         <div
                                             className="action_detail"
                                             onClick={() => this.jumpDetail(render.order_no)}
@@ -391,6 +461,21 @@ export default class index extends Component {
                         </div>
                     </div>
                 </div>
+                {/* 取消订单弹窗 */}
+                <WarningModal
+                    modalStatus={this.state.showCancel}
+                    modalInput={true}
+                    modalInputMessage={this.state.showInput}
+                    modalInputDesc="请填写取消原因"
+                    modalMessage="是否确认取消当前订单？"
+                    changeModalInput={this.changeCancelModal}
+                    modalSubmit={this.cancelOrder}
+                    modalClose={() =>
+                        this.setState({
+                            showCancel: false,
+                        })
+                    }
+                ></WarningModal>
             </div>
         )
     }

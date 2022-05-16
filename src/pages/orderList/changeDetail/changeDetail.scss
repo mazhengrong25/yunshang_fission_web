@@ -51,12 +51,14 @@
         background: #ffffff;
         border-radius: 5px;
         margin-bottom: 16px;
-        padding: 24px;
+        padding: 24px 24px 20px;
         .order_space {
           display: flex;
+          align-items: baseline;
           justify-content: space-between;
           &:not(:last-child) {
-            margin-bottom: 27px;
+            margin-bottom: 16px;
+            // line-height: 24px;
           }
           .order_message {
             display: flex;
@@ -321,25 +323,17 @@
             justify-content: center;
             margin: 24px 10px;
             .back_btn {
-              margin-right: 16px;
-              .ant-btn {
-                width: 112px;
-                height: 40px;
-                border: 1px solid #dadde2;
-                border-radius: 5px;
-              }
-            }
-            .btn_item {
-              margin-right: 16px;
-              .ant-btn {
-                width: 112px;
-                height: 40px;
-                border: 1px solid #dadde2;
-                border-radius: 5px;
-                background: #5b7cf0;
-                border-color: #5b7cf0;
-                color: #fff;
-              }
+                .ant-btn {
+                    width: 112px;
+                    height: 40px;
+                    border: 1px solid #dadde2;
+                    border-radius: 5px;
+                    &:hover,
+                    &:focus {
+                      border: 1px solid #5b7cf0;
+                      color: #5b7cf0;
+                    }
+                  }
             }
           }
           .ticket_part {
